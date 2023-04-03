@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AzureAuthController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,6 +24,9 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/login/azure/callback', [AzureAuthController::class, 'handleOauthResponse'])
+    ->middleware(['web']);
 
 Route::middleware([
     'auth:sanctum',

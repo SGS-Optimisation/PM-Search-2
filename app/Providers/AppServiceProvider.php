@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Team;
+use App\Services\Azure\Auth\AssignRoles;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \Metrogistics\AzureSocialite\UserFactory::userCallback(function($new_user){
+            $new_user->save();
+        });
     }
 }
