@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Laravel\Nova\Panel;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -16,6 +19,16 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
+
+        \Outl1ne\NovaSettings\NovaSettings::addSettingsFields([
+            Panel::make('Matomo Tracking', [
+                Boolean::make('Enable', 'matomo_tracking_enabled')
+                    ->required()->default(false),
+                Text::make('Matomo Host', 'matomo_host')
+                    ->default('https://ma.sgsco.com'),
+                Text::make('Matomo Site ID', 'matomo_site_id'),
+            ])
+        ], [], 'features');
     }
 
     /**
@@ -68,7 +81,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         return [
             \Vyuldashev\NovaPermission\NovaPermissionTool::make(),
-
+            new \Outl1ne\NovaSettings\NovaSettings
         ];
     }
 
