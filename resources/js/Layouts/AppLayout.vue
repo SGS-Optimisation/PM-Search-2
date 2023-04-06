@@ -8,6 +8,7 @@ import DropdownLink from '@/Components/Jetstream/DropdownLink.vue';
 import NavLink from '@/Components/Jetstream/NavLink.vue';
 import ResponsiveNavLink from '@/Components/Jetstream/ResponsiveNavLink.vue';
 import { defineComponent } from "vue";
+import route from "ziggy-js";
 
 defineProps({
     title: String,
@@ -30,7 +31,6 @@ const logout = () => {
 
 <template>
     <div>
-        <Head :title="title" />
 
         <Banner />
 

@@ -70,7 +70,7 @@ class GeneratePublicLinksForReportImages
             $entry['image_lrg'] = \Storage::disk('azure')->temporaryUrl($image_lrg, now()->addYear());
             $entry['image_sml'] = \Storage::disk('azure')->temporaryUrl($image_sml, now()->addYear());
         } catch (\Exception $e) {
-            logger('no image in entry');
+            logger('error getting image in entry: ' . $e->getMessage());
         }
     }
 }

@@ -1,6 +1,8 @@
+@import url("ribbons.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 body {
     font-family: (--font-family);

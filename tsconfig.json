@@ -1,28 +1,27 @@
 {
     "compilerOptions": {
         "noImplicitAny": false,
+        "importsNotUsedAsValues": "remove",
         "target": "esnext",
         "module": "esnext",
         "moduleResolution": "node",
         "strict": true,
+        "skipLibCheck": true, // Skip type checking of declaration files
         "jsx": "preserve",
         "sourceMap": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "allowJs": true,
         "lib": ["esnext", "dom"],
-        "types": ["@types/node", "@types/ziggy-js", "vite/client"],
+        "types": ["@types/node", "@types/ziggy-js", "vite/client", "unplugin-vue-define-options/macros-global"],
         "paths": {
             "@/*": ["./resources/js/*"]
         },
-        "outDir": "./public/build/assets"
+        "outDir": "./public/build/assets",
+        "baseUrl": "./"
     },
     "typeRoots": ["./node_modules/@types", "resources/js/types"],
     "extends": "@vue/tsconfig/tsconfig.web.json",
-    "include": [
-        "resources/js/**/*.ts",
-        "resources/js/**/*.d.ts",
-        "resources/js/**/*.vue"
-    ],
+    "include": ["resources/js/**/*"], // Frontend paths pattern,
     "exclude": ["node_modules", "public"]
 }
