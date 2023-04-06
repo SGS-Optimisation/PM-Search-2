@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "importsNotUsedAsValues": "remove",
         "noImplicitAny": false,
         "target": "esnext",
         "module": "esnext",
