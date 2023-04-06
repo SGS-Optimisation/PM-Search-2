@@ -44,10 +44,10 @@ const height = computed(() => {
                 <span :title="item.tag"
                       class="text-xxs text-white font-semibold text-center"
                       :class="{
-                    'bg-indigo-400': item.tag === 'barcodesearch',
-                    'bg-yellow-400' : item.tag === 'docsearch',
-                    'bg-red-400' : item.tag === 'visualsearch',
-                    'bg-blue-400' : item.tag === 'entitysearch'
+                    'bg-indigo-400': item.tag === 'barcode_search',
+                    'bg-yellow-400' : item.tag === 'doc_search',
+                    'bg-red-400' : item.tag === 'visual_search',
+                    'bg-blue-400' : item.tag === 'entity_search'
                 }">
                     {{ item.tag.substring(0, 3) }}
                 </span>

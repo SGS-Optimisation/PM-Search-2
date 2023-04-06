@@ -24,6 +24,10 @@ module.exports = {
         'h-screen',
         'h-64',
         'h-48',
-        'h-36'
+        'h-36',
+        'bg-indigo-400',
+        'bg-yellow-400',
+        'bg-red-400',
+        'bg-blue-400',
     ]
 };

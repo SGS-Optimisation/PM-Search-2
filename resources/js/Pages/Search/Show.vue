@@ -11,6 +11,8 @@ import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
 import {router} from '@inertiajs/vue3'
 import route from "ziggy-js";
 import ReportItem from "@/Components/Search/ReportItem.vue";
+import FullModal from "@/Components/Utility/FullModal.vue";
+import ViewSearchEntry from "@/Components/Search/ViewSearchEntry.vue";
 
 defineOptions({layout: AppLayout})
 
@@ -67,14 +69,29 @@ const props = defineProps({
 })
 
 const items = ref();
+const gridSize = ref(3);
+const imageSize = ref('sml');
+const backgroundMode = ref('cover');
+const perPage = ref(40);
+
+const isOpen = ref(false);
+const currentEntry = ref();
 
 onMounted(() => {
-    //ProductService.getProducts().then((data) => (products.value = data.slice(0, 12)));
     items.value = props.report;
 });
 
-function openEntryModal(e: Event) {
-    console.log('click event', e);
+function openEntryModal(item) {
+    console.log('click event', item);
+    isOpen.value = true;
+    currentEntry.value = item;
+}
+
+function closeEntryModal() {
+    isOpen.value = false;
+    setTimeout(() => {
+        currentEntry.value = null;
+    }, 300);
 }
 
 const layout = ref('grid');
@@ -86,14 +103,44 @@ const layout = ref('grid');
     <Head title="Search Result"/>
 
     <div class="card">
-        <DataView :value="items" :layout="layout" paginator :rows="40">
+        <DataView :value="items" :layout="layout" paginator :rows="perPage">
+            <template #header>
+                <div class="flex justify-content-end">
 
+                    <DataViewLayoutOptions v-model="layout" />
+                </div>
+            </template>
             <template #grid="slotProps">
-                <ReportItem :item="slotProps.data"></ReportItem>
+                <ReportItem
+                    :item="slotProps.data"
+                    :grid-size="gridSize"
+                    :image-size="imageSize"
+                    :background-mode="backgroundMode"
+                    @on-click-view="openEntryModal"
+                />
             </template>
 
         </DataView>
     </div>
+
+    <FullModal :visible.sync="isOpen" position="full" @keydown.esc="closeEntryModal">
+        <template #header>
+            <template v-if="currentEntry">
+                <p class="font-bold mr-3">
+                    Viewing
+                    <a class="text-blue-500 hover:text-blue-700"
+                       target="_blank"
+                       :href="'https://pm.mysgs.sgsco.com/Job/' + currentEntry.formatted_job_number"
+                    >
+                        {{ currentEntry.formatted_job_number }}
+                    </a>
+                </p>
+            </template>
+        </template>
+        <ViewSearchEntry :entry="currentEntry" :config="fields_config"
+                           @exit="closeEntryModal"
+        />
+    </FullModal>
 
 
 </template>
