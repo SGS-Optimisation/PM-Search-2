@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Welcome from "@/Components/Welcome.vue";
+import Welcome from '@/Components/Jetstream/Welcome.vue';
 
 defineProps({
     latestSearches: Array,
 });
+
 
 </script>
 

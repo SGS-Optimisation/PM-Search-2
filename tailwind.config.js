@@ -19,4 +19,11 @@ module.exports = {
     },
 
     plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+
+    safelist: [
+        'h-screen',
+        'h-64',
+        'h-48',
+        'h-36'
+    ]
 };
