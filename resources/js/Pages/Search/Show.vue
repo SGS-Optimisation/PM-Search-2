@@ -1,18 +1,23 @@
 <script lang="ts" setup>
 import {Head, useForm, usePage} from "@inertiajs/vue3";
-import {defineComponent, watch, ref, reactive, onMounted} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted, onBeforeMount} from "vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
 import {computed} from "@vue/reactivity";
+import AutoComplete from "primevue/autocomplete";
+import Slider from 'primevue/slider';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
 import DataView from "primevue/dataview";
 import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
+import InputSwitch from "primevue/inputswitch";
+import SelectButton from 'primevue/selectbutton';
 import {router} from '@inertiajs/vue3'
 import route from "ziggy-js";
 import ReportItem from "@/Components/Search/ReportItem.vue";
 import FullModal from "@/Components/Utility/FullModal.vue";
 import ViewSearchEntry from "@/Components/Search/ViewSearchEntry.vue";
+import {configStore} from "@/store/config-store";
 
 defineOptions({layout: AppLayout})
 
@@ -69,6 +74,11 @@ const props = defineProps({
 })
 
 const items = ref();
+
+const preferences = computed(() => {
+    return configStore.getResultsPagePreferences()
+});
+
 const gridSize = ref(3);
 const imageSize = ref('sml');
 const backgroundMode = ref('cover');
@@ -77,9 +87,23 @@ const perPage = ref(40);
 const isOpen = ref(false);
 const currentEntry = ref();
 
+
+
+onBeforeMount( () => {
+    configStore.getResultsPagePreferences();
+});
+
 onMounted(() => {
     items.value = props.report;
+    console.log('preferences', preferences.value);
+
 });
+
+
+
+function completePerPage(e) {
+    perPage.value = parseInt(e.query);
+}
 
 function openEntryModal(item) {
     console.log('click event', item);
@@ -105,9 +129,38 @@ const layout = ref('grid');
     <div class="card">
         <DataView :value="items" :layout="layout" paginator :rows="perPage">
             <template #header>
-                <div class="flex justify-content-end">
+                <div class="flex justify-between">
+                    <div class="flex pt-2">
 
-                    <DataViewLayoutOptions v-model="layout" />
+                        <div class="mx-2">
+                            <span class="p-float-label">
+                                <AutoComplete v-model="perPage"
+                                              :dropdown="true" :suggestions="[20, 40, 100, 1000]"
+                                              @complete="completePerPage"
+                                              :inputStyle="{width: '5em'}"
+                                />
+                                <label for="ac">Per Page</label>
+                            </span>
+                        </div>
+                        <div class="mx-2">
+                            <label>Grid Size</label>
+                            <Slider class="w-14rem" v-model="gridSize" :step="1" :min="1" :max="4"/>
+                        </div>
+                        <div class="mx-2 flex flex-col">
+                            <SelectButton v-model="backgroundMode"
+                                          :options="[{value: 'cover', 'label': 'Zoom'}, {value: 'contain', 'label': 'Fit'}]"
+                                          optionLabel="label" option-value="value" aria-labelledby="basic" />
+
+                        </div>
+                        <div class="mx-2 flex flex-col">
+                            <SelectButton v-model="imageSize"
+                                          :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
+                                          optionLabel="label" option-value="value" aria-labelledby="basic" />
+<!--                            <InputSwitch v-model="imageSize"  true-value="sml" false-value="lrg"/>-->
+                        </div>
+                    </div>
+
+                    <DataViewLayoutOptions v-model="layout"/>
                 </div>
             </template>
             <template #grid="slotProps">
@@ -138,7 +191,7 @@ const layout = ref('grid');
             </template>
         </template>
         <ViewSearchEntry :entry="currentEntry" :config="fields_config"
-                           @exit="closeEntryModal"
+                         @exit="closeEntryModal"
         />
     </FullModal>
 

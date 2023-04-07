@@ -5,6 +5,8 @@ import _ from 'lodash';
 interface Config extends Object {
     fields: Array<any>,
     bridgeFields: Array<any>,
+
+    resultsPagePreferences: Object,
 }
 
 class ConfigStore extends PersistentStore<Config> {
@@ -12,6 +14,7 @@ class ConfigStore extends PersistentStore<Config> {
         return {
             fields: [],
             bridgeFields: [],
+            resultsPagePreferences: {}
         };
     }
 
@@ -29,6 +32,14 @@ class ConfigStore extends PersistentStore<Config> {
 
     getBridgeFields() {
         return this.state.bridgeFields;
+    }
+
+    setResultsPagePreferences(preferences) {
+        this.state.resultsPagePreferences = preferences;
+    }
+
+    getResultsPagePreferences() {
+        return this.state.resultsPagePreferences;
     }
 
 

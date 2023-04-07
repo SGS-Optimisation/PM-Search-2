@@ -31,11 +31,15 @@ const height = computed(() => {
         4: '36'
     }[props.gridSize]
 })
+
+const colClass = computed(()=>{
+    return 'col-' + (12/props.gridSize);
+})
 </script>
 
 <template>
     <!-- Article -->
-    <div class="col-4 p-2">
+    <div class="p-2" :class="colClass">
 
         <article class="p-4 border-1 surface-border surface-card border-round relative shadow-lg"
                  @click="$emit('on-click-view', item)">
