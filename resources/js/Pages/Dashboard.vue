@@ -31,7 +31,7 @@ defineProps({
                     <ul v-if="latestSearches.length">
                         <li v-for="search in latestSearches">
                             <a class="text-blue-500 hover:text-blue-700 underline"
-                               href="#">
+                               :href="route('search.show', [search.id])">
                                 [{{ search.search_mode }}]
                                 <span v-if="search.search_mode == 'text'">
                                     {{ search.search_data.search_string.join(' ' + search.search_data.operator.toUpperCase() + ' ') }}

@@ -17,7 +17,7 @@ import route from "ziggy-js";
 import ReportItem from "@/Components/Search/ReportItem.vue";
 import FullModal from "@/Components/Utility/FullModal.vue";
 import ViewSearchEntry from "@/Components/Search/ViewSearchEntry.vue";
-import {configStore} from "@/store/config-store";
+import {userPreferencesStore} from "@/stores/userPreferencesStore";
 
 defineOptions({layout: AppLayout})
 
@@ -75,9 +75,8 @@ const props = defineProps({
 
 const items = ref();
 
-const preferences = computed(() => {
-    return configStore.getResultsPagePreferences()
-});
+
+const userPreferences = userPreferencesStore();
 
 const gridSize = ref(3);
 const imageSize = ref('sml');
@@ -88,18 +87,9 @@ const isOpen = ref(false);
 const currentEntry = ref();
 
 
-
-onBeforeMount( () => {
-    configStore.getResultsPagePreferences();
-});
-
 onMounted(() => {
     items.value = props.report;
-    console.log('preferences', preferences.value);
-
 });
-
-
 
 function completePerPage(e) {
     perPage.value = parseInt(e.query);
@@ -127,14 +117,14 @@ const layout = ref('grid');
     <Head title="Search Result"/>
 
     <div class="card">
-        <DataView :value="items" :layout="layout" paginator :rows="perPage">
+        <DataView :value="items" :layout="layout" paginator :rows="userPreferences.perPage">
             <template #header>
                 <div class="flex justify-between">
                     <div class="flex pt-2">
 
                         <div class="mx-2">
                             <span class="p-float-label">
-                                <AutoComplete v-model="perPage"
+                                <AutoComplete v-model="userPreferences.perPage"
                                               :dropdown="true" :suggestions="[20, 40, 100, 1000]"
                                               @complete="completePerPage"
                                               :inputStyle="{width: '5em'}"
@@ -144,16 +134,16 @@ const layout = ref('grid');
                         </div>
                         <div class="mx-2">
                             <label>Grid Size</label>
-                            <Slider class="w-14rem" v-model="gridSize" :step="1" :min="1" :max="4"/>
+                            <Slider class="w-14rem" v-model="userPreferences.gridSize" :step="1" :min="1" :max="4"/>
                         </div>
                         <div class="mx-2 flex flex-col">
-                            <SelectButton v-model="backgroundMode"
+                            <SelectButton v-model="userPreferences.backgroundMode"
                                           :options="[{value: 'cover', 'label': 'Zoom'}, {value: 'contain', 'label': 'Fit'}]"
                                           optionLabel="label" option-value="value" aria-labelledby="basic" />
 
                         </div>
                         <div class="mx-2 flex flex-col">
-                            <SelectButton v-model="imageSize"
+                            <SelectButton v-model="userPreferences.imageSize"
                                           :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
                                           optionLabel="label" option-value="value" aria-labelledby="basic" />
 <!--                            <InputSwitch v-model="imageSize"  true-value="sml" false-value="lrg"/>-->
@@ -166,9 +156,9 @@ const layout = ref('grid');
             <template #grid="slotProps">
                 <ReportItem
                     :item="slotProps.data"
-                    :grid-size="gridSize"
-                    :image-size="imageSize"
-                    :background-mode="backgroundMode"
+                    :grid-size="userPreferences.gridSize"
+                    :image-size="userPreferences.imageSize"
+                    :background-mode="userPreferences.backgroundMode"
                     @on-click-view="openEntryModal"
                 />
             </template>

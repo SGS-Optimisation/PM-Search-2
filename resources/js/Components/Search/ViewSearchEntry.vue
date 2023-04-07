@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Fieldset from 'primevue/fieldset';
-import {configStore} from "@/store/config-store";
+import {configStore} from "@/stores/config-store";
 import {ref, onMounted, computed} from "vue";
 const emit = defineEmits(['next', 'prev', 'exit']);
 

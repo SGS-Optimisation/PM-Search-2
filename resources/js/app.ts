@@ -11,8 +11,13 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import type { DefineComponent } from "vue";
 import PrimeVue from 'primevue/config';
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
 
 // @ts-ignore
 createInertiaApp({
@@ -23,6 +28,7 @@ createInertiaApp({
             .use(plugin)
             .use(PrimeVue)
             .use(ZiggyVue, (window as any).Ziggy)
+            .use(pinia)
             .mount(el);
     },
     progress: {

@@ -10,7 +10,7 @@ import ResponsiveNavLink from '@/Components/Jetstream/ResponsiveNavLink.vue';
 import { defineComponent } from "vue";
 import route from "ziggy-js";
 import axios from "axios";
-import {configStore} from "@/store/config-store";
+import {configStore} from "@/stores/config-store";
 
 defineProps({
     title: String,
