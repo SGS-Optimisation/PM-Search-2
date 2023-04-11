@@ -9,7 +9,13 @@ export const userPreferencesStore = defineStore(
         const backgroundMode = ref('cover')
         const perPage = ref(40)
 
-        return {gridSize, imageSize, backgroundMode, perPage}
+        const sortOrder = ref(-1)
+        const sortField = ref('Score')
+
+        return {
+            gridSize, imageSize, backgroundMode, perPage,
+            sortOrder, sortField,
+        }
     },
     {
         persist: true,
