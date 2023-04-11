@@ -15,8 +15,8 @@ const backgroundImage = computed(() => {
     return props.item['image_' + props.imageSize];
 })
 
-const backgroundStyle = computed(() => {
-    return `background: url(${backgroundImage.value}); background-size: ${props.backgroundMode}; background-repeat: no-repeat;`;
+const imageStyle = computed(() => {
+    return 'height:' + (props.backgroundMode === 'cover' ? 'fit-content' : 'inherit') + ';'
 })
 
 const bookedDate = computed(() => {
@@ -26,9 +26,9 @@ const bookedDate = computed(() => {
 const height = computed(() => {
     return {
         1: 'screen',
-        2: '64',
-        3: '48',
-        4: '36'
+        2: '72',
+        3: '64',
+        4: '48'
     }[props.gridSize]
 })
 
@@ -57,8 +57,12 @@ const colClass = computed(()=>{
                 </span>
             </div>
 
-            <a @click.prevent="" class="block" :class="'h-'+height" href="#">
-                <div class="block h-full" :style="backgroundStyle"></div>
+            <a @click.prevent="" class="flex justify-center block overflow-hidden" :class="'h-'+height" href="#">
+
+                    <img :src="backgroundImage" loading="lazy" class="responsive"
+                         :style="imageStyle"
+
+                    />
             </a>
 
             <div class="flex flex-col items-stretch">

@@ -22,6 +22,7 @@ module.exports = {
 
     safelist: [
         'h-screen',
+        'h-72',
         'h-64',
         'h-48',
         'h-36',

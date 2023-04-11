@@ -12,9 +12,12 @@ export const userPreferencesStore = defineStore(
         const sortOrder = ref(-1)
         const sortField = ref('Score')
 
+        const selectedTaxonomy = ref([]);
+
         return {
             gridSize, imageSize, backgroundMode, perPage,
             sortOrder, sortField,
+            selectedTaxonomy
         }
     },
     {
