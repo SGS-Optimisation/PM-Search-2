@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import {Head, useForm, usePage} from "@inertiajs/vue3";
 import {defineComponent, watch, ref, reactive} from "vue";
-import JetFormSection from '@/Components/Jetstream/FormSection';
-import JetInputError from '@/Components/Jetstream/InputError';
+import JetFormSection from '@/Components/Jetstream/FormSection.vue';
+import JetInputError from '@/Components/Jetstream/InputError.vue';
 //import VueTagsInput from '@johmun/vue-tags-input'; // npm i -D <name of package>
 import route from "ziggy-js";
 import InputSwitch from 'primevue/inputswitch';
@@ -77,7 +77,7 @@ function onChangeType(this: any, state) {
                             placeholder="Search"
                             @tags-changed="newTags => tags = newTags"
                         />
-                        <jet-input-error :message="form.error('search_string')" class="mt-2"/>
+                        <!-- <jet-input-error :message="form.error('search_string')" class="mt-2"/> -->
                     </div>
                 </div>
 
