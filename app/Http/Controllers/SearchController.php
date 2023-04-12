@@ -32,7 +32,7 @@ class SearchController extends Controller
 
     public function text(Request $request)
     {
-        return Jetstream::inertia()->render($request, 'Search/TextSearch', []);
+        return Jetstream::inertia()->render($request, 'Search/TextSearch', ['someprop' => 'somevalue']);
     }
 
     /**
