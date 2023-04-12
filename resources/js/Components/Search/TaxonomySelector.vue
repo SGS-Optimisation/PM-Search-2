@@ -85,7 +85,7 @@ function setSelected(value) {
         <span class="p-float-label">
 
             <MultiSelect v-model="selection"
-                         filter :resetFilterOnHide="true"
+                         filter :resetFilterOnHide="true" :autoFilterFocus="true"
                          @change="$emit('update:modelValue', $event.value)"
                          :options="sortedTerms"
                          display="chip"

@@ -2,6 +2,7 @@
 import moment from 'moment';
 import {computed} from "@vue/reactivity";
 
+
 const emit = defineEmits(['on-click-view']);
 
 const props = defineProps({
@@ -13,6 +14,14 @@ const props = defineProps({
 
 const backgroundImage = computed(() => {
     return props.item['image_' + props.imageSize];
+})
+
+const thumb = computed(() => {
+    return props.item['image_sml'];
+})
+
+const highres = computed(() => {
+    return props.item['image_lrg'];
 })
 
 const imageStyle = computed(() => {
@@ -32,8 +41,8 @@ const height = computed(() => {
     }[props.gridSize]
 })
 
-const colClass = computed(()=>{
-    return 'col-' + (12/props.gridSize);
+const colClass = computed(() => {
+    return 'col-' + (12 / props.gridSize);
 })
 </script>
 
@@ -58,11 +67,9 @@ const colClass = computed(()=>{
             </div>
 
             <a @click.prevent="" class="flex justify-center block overflow-hidden" :class="'h-'+height" href="#">
-
-                    <img :src="backgroundImage" loading="lazy" class="responsive"
-                         :style="imageStyle"
-
-                    />
+                <img :src="backgroundImage" loading="lazy" class="responsive"
+                     :style="imageStyle"
+                />
             </a>
 
             <div class="flex flex-col items-stretch">

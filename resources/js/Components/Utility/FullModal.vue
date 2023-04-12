@@ -3,7 +3,8 @@ import Sidebar from "primevue/sidebar";
 
 export default {
     extends: Sidebar,
-    name: "FullModal"
+    name: "FullModal",
+    emits: ['update:visible', 'show', 'hide', 'after-hide', 'prev', 'next'],
 }
 
 </script>
@@ -18,7 +19,7 @@ export default {
                             <slot name="header"></slot>
                         </div>
                         <button v-if="showCloseIcon"
-                                :ref="closeButtonRef" v-ripple autofocus type="button"
+                                :ref="closeButtonRef" v-ripple type="button"
                                 class="p-sidebar-close p-sidebar-icon p-link"
                                 :aria-label="closeAriaLabel"
                                 @click="hide" @keydown.esc="hide">

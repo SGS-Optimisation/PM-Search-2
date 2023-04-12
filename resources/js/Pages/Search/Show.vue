@@ -23,6 +23,7 @@ import {userPreferencesStore} from "@/stores/userPreferencesStore";
 import moment from "moment/moment";
 import TaxonomySelector from "@/Components/Search/TaxonomySelector.vue";
 import _ from "lodash";
+import 'primeflex/primeflex.css';
 
 defineOptions({layout: AppLayout})
 
@@ -87,7 +88,12 @@ function updateSelectedTaxonomy(taxonomy) {
     filters.value[taxonomy] = [];
 }
 
-function clearFilters(){
+function clearSelectedFields() {
+    clearFilters()
+    userPreferences.selectedTaxonomy = [];
+}
+
+function clearFilters() {
     for (const field in filters.value) {
         filters.value[field] = [];
     }
@@ -110,6 +116,20 @@ function closeEntryModal() {
     }, 300);
 }
 
+function nextEntry() {
+    let index = filteredSearchData.value.indexOf(currentEntry.value);
+    if (index < filteredSearchData.value.length - 1) {
+        currentEntry.value = filteredSearchData.value[index + 1];
+    }
+}
+
+function prevEntry() {
+    let index = filteredSearchData.value.indexOf(currentEntry.value);
+    if (index > 0) {
+        currentEntry.value = filteredSearchData.value[index - 1];
+    }
+}
+
 const filteredSearchData = ref<Object[]>([]);
 const allSearchOptions = ref<Object>({});
 const filteredSearchOptions = ref<Object>({});
@@ -129,12 +149,12 @@ function getSearchData() {
         if (terms.length > 0) {
             console.log('filtering', field, terms);
             data = data.filter((entry: Object) => {
-                if(terms.includes(entry[field])) {
+                if (terms.includes(entry[field])) {
                     console.log('FOUND');
                 }
 
                 return entry.hasOwnProperty(field)
-                && terms.includes(entry[field])
+                    && terms.includes(entry[field])
             });
         }
     }
@@ -196,10 +216,10 @@ const filteredResults = computed(() => {
                   :sortOrder="userPreferences.sortOrder" :sortField="userPreferences.sortField">
             <template #header>
                 <div class="flex flex-col mb-12">
-                    <div class="mb-5 mt-4">
-                        <span class="p-float-label">
+                    <div class="flex flex-row mb-5 mt-4">
+                        <span class="p-float-label grow">
                             <MultiSelect v-model="userPreferences.selectedTaxonomy" id="taxonomySelector"
-                                         filter
+                                         filter :resetFilterOnHide="true"
                                          @update:modelValue="updateSelectedTaxonomy"
                                          :options="availableFields"
                                          option-value="value" option-label="label"
@@ -208,9 +228,13 @@ const filteredResults = computed(() => {
                                          class="w-full"/>
                             <label for="taxonomySelector">Select Search Fields</label>
                         </span>
+                        <template v-if="userPreferences.selectedTaxonomy.length">
+                            <Button title="Clear fields" class="" icon="pi pi-times"
+                                    @click="clearSelectedFields"/>
+                        </template>
                     </div>
-                    <div class="mx-1 grid grid-4 gap-3">
-                        <div v-for="field in userPreferences.selectedTaxonomy" :key="field">
+                    <div class="grid">
+                        <div class="col-2" v-for="field in userPreferences.selectedTaxonomy" :key="field">
 
                             <TaxonomySelector :taxonomy-name="field"
                                               :filtered-terms="filteredSearchOptions[field]"
@@ -220,7 +244,7 @@ const filteredResults = computed(() => {
                         </div>
 
                         <template v-if="userPreferences.selectedTaxonomy.length">
-                            <Button class="" label="Clear Filters" icon="pi pi-times" @click="clearFilters"/>
+                            <Button class="" size="small" label="Clear Filters" icon="pi pi-times" @click="clearFilters"/>
                         </template>
                     </div>
                 </div>
@@ -243,9 +267,9 @@ const filteredResults = computed(() => {
                             <label>Grid Size</label>
                             <Slider class="w-14rem" v-model="userPreferences.gridSize" :step="1" :min="1" :max="4"/>
                         </div>
-                        <div class="mx-2 flex flex-col">
-                            <SelectButton v-model="userPreferences.backgroundMode"
-                                          :options="[{value: 'cover', 'label': 'Zoom'}, {value: 'contain', 'label': 'Fit'}]"
+                        <div class="mx-2 flex">
+                            <SelectButton v-model="userPreferences.backgroundMode" id="imageMode"
+                                          :options="[{value: 'cover', 'label': 'Cover'}, {value: 'contain', 'label': 'Fit'}]"
                                           optionLabel="label" option-value="value" aria-labelledby="basic"/>
 
                         </div>
@@ -292,14 +316,14 @@ const filteredResults = computed(() => {
 
                 <div class="flex mb-3">
                     <div class="max-w-7xl mx-auto sm:px-2">
-                        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-2">
+                        <div class="bg-white overflow-hidden shadow sm:rounded-lg px-2">
                             <p>
                                 <template v-if="filteredResults !== totalResults">
-                                    {{ filteredResults }} {{ filteredResults === 1 ? 'match' : 'matches'}}
+                                    {{ filteredResults }} {{ filteredResults === 1 ? 'match' : 'matches' }}
                                     filtered from {{ totalResults }}
                                 </template>
                                 <template v-else>
-                                    Found {{ totalResults }} {{ totalResults === 1 ? 'match' : 'matches'}}
+                                    Found {{ totalResults }} {{ totalResults === 1 ? 'match' : 'matches' }}
                                 </template>
                             </p>
                         </div>
@@ -320,24 +344,36 @@ const filteredResults = computed(() => {
         </DataView>
     </div>
 
-    <FullModal v-model:visible="isOpen" position="full">
+    <FullModal v-model:visible="isOpen" position="full" id="report-modal">
         <template #header>
             <template v-if="currentEntry">
-                <p class="font-bold mr-3">
-                    Viewing
-                    <a class="text-blue-500 hover:text-blue-700"
-                       target="_blank"
-                       :href="'https://pm.mysgs.sgsco.com/Job/' + currentEntry.formatted_job_number"
-                    >
-                        {{ currentEntry.formatted_job_number }}
-                    </a>
-                </p>
+                <div class="flex flex-row items-center">
+                    <span class="font-bold mr-3">
+                        Viewing
+                        <a class="text-blue-500 hover:text-blue-700"
+                           target="_blank"
+                           title="Open in MySGS"
+                           :href="'https://pm.mysgs.sgsco.com/Job/' + currentEntry.formatted_job_number"
+                        >
+                            {{ currentEntry.formatted_job_number }} <i class="pi pi-external-link"></i>
+                        </a>
+                    </span>
+
+                    <a class="p-button p-button-info p-button-outlined p-button-sm mx-2" href="#job-image">Image</a>
+                    <a class="p-button p-button-info p-button-outlined p-button-sm mx-2" href="#job-meta">Metada</a>
+                </div>
             </template>
         </template>
         <ViewSearchEntry :entry="currentEntry" :config="fields_config"
                          @exit="closeEntryModal"
+                         @next="nextEntry"
+                         @prev="prevEntry"
         />
     </FullModal>
 
 
 </template>
+
+<style>
+
+</style>
