@@ -1,50 +1,68 @@
 <script lang="ts" setup>
 
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import MultiSelect from "primevue/multiselect";
 
 const props = defineProps({
     taxonomyName: String,
     allTerms: Array,
-    fiteredTerms: Array,
+    filteredTerms: Array,
     modelValue: Array,
 })
 
 const emit = defineEmits(['termSelected', 'update:modelValue']);
 
 const selection = ref<String[]>([]);
+
+watch(() => props.modelValue, (value) => {
+    selection.value = value;
+});
+
 const sortedTerms = computed(() => {
 
-    if (props.allTerms === undefined || props.fiteredTerms === undefined) {
+    if (props.allTerms === undefined || props.filteredTerms === undefined) {
         return [];
     }
 
-    var filteredMatches = <Object>[];
+    var groupedTerms: Object[] = [];
+    var allOptions: Object[] = [];
+    var filteredMatches: Object[] = [];
 
-    if (selection.value.length > 0) {
-        filteredMatches = props.fiteredTerms.sort().map(term => {
+    if (props.filteredTerms.length !== props.allTerms.length) {
+
+        filteredMatches = props.filteredTerms.sort().map(term => {
             return {label: term, value: term}
         });
-    }
 
-    var otherOptions = <Object>[];
+        if (props.filteredTerms.length > 0) {
+            groupedTerms.push({
+                label: 'Matches',
+                items: filteredMatches
+            });
+        }
 
-    otherOptions = props.allTerms.sort().map(term => {
-        return {label: term, value: term}
-    })
+        allOptions = props.allTerms.filter(term => !props.filteredTerms.includes(term))
+            .sort().map(term => {
+                return {label: term, value: term}
+            });
 
-    var groupedTerms = [];
-    if (filteredMatches.length > 0) {
         groupedTerms.push({
-            label: 'Matches',
-            items: filteredMatches
+            label: 'Other Options',
+            items: allOptions
+        });
+
+    } else {
+        allOptions = props.allTerms.sort().map(term => {
+            return {label: term, value: term}
+        });
+
+        groupedTerms.push({
+            label: 'All Options',
+            items: allOptions
         });
     }
 
-    groupedTerms.push({
-            label: 'All Options',
-            items: otherOptions
-        })
+
 
     return groupedTerms;
 });
@@ -67,7 +85,8 @@ function setSelected(value) {
         <span class="p-float-label">
 
             <MultiSelect v-model="selection"
-                         filter @change="$emit('update:modelValue', $event.value)"
+                         filter :resetFilterOnHide="true"
+                         @change="$emit('update:modelValue', $event.value)"
                          :options="sortedTerms"
                          display="chip"
                          optionGroupLabel="label" optionGroupChildren="items"

@@ -87,6 +87,12 @@ function updateSelectedTaxonomy(taxonomy) {
     filters.value[taxonomy] = [];
 }
 
+function clearFilters(){
+    for (const field in filters.value) {
+        filters.value[field] = [];
+    }
+}
+
 function completePerPage(e) {
     perPage.value = parseInt(e.query);
 }
@@ -207,11 +213,15 @@ const filteredResults = computed(() => {
                         <div v-for="field in userPreferences.selectedTaxonomy" :key="field">
 
                             <TaxonomySelector :taxonomy-name="field"
-                                              :fitered-terms="filteredSearchOptions[field]"
+                                              :filtered-terms="filteredSearchOptions[field]"
                                               :all-terms="allSearchOptions[field]"
                                               v-model="filters[field]"
                             />
                         </div>
+
+                        <template v-if="userPreferences.selectedTaxonomy.length">
+                            <Button class="" label="Clear Filters" icon="pi pi-times" @click="clearFilters"/>
+                        </template>
                     </div>
                 </div>
 
