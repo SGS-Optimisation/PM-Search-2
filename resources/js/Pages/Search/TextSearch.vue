@@ -84,8 +84,7 @@ function onChangeType(this: any, state) {
                 <div class="">
                     <div class="flex flex-col">
                         <InputSwitch v-model="checked"
-                                     @on-switch="onChangeFilterCondition"
-                                     chooserMode=true
+                                     onchange="onChangeFilterCondition"
                                      :initial-state="form.operator==='and' ? '1' : '0'"
                                      left-text="OR"
                                      right-text="AND"/>
@@ -125,7 +124,7 @@ function onChangeType(this: any, state) {
                         <div class="col-span-2">
                             <div class="mt-3">
                                 <InputSwitch v-model="checked"
-                                             @on-switch="onChangePhraseMode"
+                                             onchange="onChangePhraseMode"
                                              name="Exact Phrase"
                                              :initial-state="form.isPhrase  ? '1' : '0'"
                                              left-text="No"
@@ -135,7 +134,7 @@ function onChangeType(this: any, state) {
                         <div class="col-span-2">
                             <div class="mt-3">
                                 <InputSwitch v-model="checked"
-                                             @on-switch="onChangeOCR"
+                                             onchange="onChangeOCR"
                                              name="OCR"
                                              :initial-state="form.isOCR ? '1' : '0'"
                                              left-text="No"
@@ -145,9 +144,8 @@ function onChangeType(this: any, state) {
                         <div class="col-span-2">
                             <div class="mt-3">
                                 <InputSwitch v-model="checked"
-                                             @on-switch="onChangeType"
+                                             onchange="onChangeType"
                                              name="Type"
-                                             chooserMode=true
                                              :initial-state="form.type==='thumbnail' ? '1' : '0'"
                                              left-text="MySGS"
                                              right-text="Thumbnail"/>
