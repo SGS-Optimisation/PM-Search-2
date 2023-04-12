@@ -256,7 +256,7 @@ const filteredResults = computed(() => {
                             <span class="p-float-label">
                                 <AutoComplete v-model="userPreferences.perPage"
                                               type="number"
-                                              :dropdown="true" :suggestions="[20, 40, 100, 1000]"
+                                              dropdown :suggestions="[20, 40, 100, 1000]"
                                               @complete="completePerPage"
                                               :inputStyle="{width: '5em'}"
                                 />

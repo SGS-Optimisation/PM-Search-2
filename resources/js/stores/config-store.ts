@@ -7,7 +7,7 @@ interface Config extends Object {
     bridgeFields: Array<any>,
 }
 
-class ConfigStore extends PersistentStore<Config> {
+class ConfigStore extends PersistentLocalStore<Config> {
     protected data(): Config {
         return {
             fields: [],

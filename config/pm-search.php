@@ -14,7 +14,8 @@ return [
 
     'bridge_view_fields' => [
         'color_name', 'book', 'color_type', 'hex_colors',
-        'description', 'font_name', 'layer_name'
+        'font_name', 'layer_name',
+        //'description',
     ],
 
     'fields-v1' => [
