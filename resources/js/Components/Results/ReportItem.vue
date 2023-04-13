@@ -37,12 +37,13 @@ const height = computed(() => {
         1: 'screen',
         2: '72',
         3: '64',
-        4: '48'
+        4: '48',
+        5: '32'
     }[props.gridSize]
 })
 
 const colClass = computed(() => {
-    return 'col-' + (12 / props.gridSize);
+    return props.gridSize === 5 ? 'col-2' : 'col-' + (12 / props.gridSize);
 })
 </script>
 

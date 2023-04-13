@@ -207,7 +207,7 @@ const filteredResults = computed(() => {
 </script>
 
 <template>
-
+    <Head title="Search results"/>
 
 
     <div class="card">
@@ -264,7 +264,7 @@ const filteredResults = computed(() => {
                         </div>
                         <div class="mx-2">
                             <label>Grid Size</label>
-                            <Slider class="w-14rem" v-model="userPreferences.gridSize" :step="1" :min="1" :max="4"/>
+                            <Slider class="w-14rem" v-model="userPreferences.gridSize" :step="1" :min="1" :max="5"/>
                         </div>
                         <div class="mx-2 flex">
                             <SelectButton v-model="userPreferences.backgroundMode" id="imageMode"

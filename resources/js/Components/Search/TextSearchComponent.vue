@@ -51,15 +51,17 @@ function doSearch(this: any) {
                     <div class="grow pr-2">
                         <vue3-tags-input
                             :tags="tags"
+                            :add-tag-on-keys="[13, 188]"
                             :max-tags=8
                             placeholder="Enter up to 8 terms, separated by a comma"
                             @on-tags-changed="handleChangeTag"
                         />
                     </div>
 
+                    <div class="w-max text-right">
                     <SelectButton v-model="form.operator" :options="operatorOptions"
                                   optionLabel="name" optionValue="value"/>
-
+                    </div>
                     <div class="ml-2">
                         <Button type="submit" @click="doSearch"
                                 label="Search" severity="success"/>

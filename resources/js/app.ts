@@ -7,14 +7,15 @@ import 'vue-image-zoomer/dist/style.css';
 import 'primeflex/primeflex.css';
 
 
-import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
-import type { DefineComponent } from "vue";
+import {createApp, h} from 'vue';
+import {createInertiaApp} from '@inertiajs/vue3';
+import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
+import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
+import type {DefineComponent} from "vue";
 import PrimeVue from 'primevue/config';
+import DialogService from 'primevue/dialogservice';
 import VueImageZoomer from 'vue-image-zoomer'
-import { createPinia } from 'pinia'
+import {createPinia} from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -26,10 +27,11 @@ pinia.use(piniaPluginPersistedstate)
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
-    setup({ el, App, props, plugin }) {
-         createApp({ render: () => h(App, props) })
+    setup({el, App, props, plugin}) {
+        createApp({render: () => h(App, props)})
             .use(plugin)
             .use(PrimeVue)
+            .use(DialogService)
             .use(ZiggyVue, (window as any).Ziggy)
             .use(pinia)
             .use(VueImageZoomer)
