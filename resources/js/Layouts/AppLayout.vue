@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import {onBeforeMount, onMounted, ref} from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/Jetstream/ApplicationMark.vue';
 import Banner from '@/Components/Jetstream/Banner.vue';
@@ -9,6 +9,8 @@ import NavLink from '@/Components/Jetstream/NavLink.vue';
 import ResponsiveNavLink from '@/Components/Jetstream/ResponsiveNavLink.vue';
 import { defineComponent } from "vue";
 import route from "ziggy-js";
+import axios from "axios";
+import {configStore} from "@/stores/config-store";
 
 defineProps({
     title: String,
@@ -27,6 +29,18 @@ const switchToTeam = (team) => {
 const logout = () => {
     router.post(route('logout'));
 };
+
+onBeforeMount(() => {
+    configStore.init();
+});
+
+onMounted(() => {
+    axios.get(route('api.configs')).then(({data}) => {
+        configStore.setFields(data.fields_config);
+        configStore.setBridgeFields(data.bridge_fields);
+    });
+});
+
 </script>
 
 <template>

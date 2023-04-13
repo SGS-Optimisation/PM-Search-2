@@ -2,7 +2,6 @@
     "compilerOptions": {
         "importsNotUsedAsValues": "remove",
         "noImplicitAny": false,
-        "importsNotUsedAsValues": "remove",
         "target": "esnext",
         "module": "esnext",
         "moduleResolution": "node",

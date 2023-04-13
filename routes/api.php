@@ -17,3 +17,21 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::name('api.')
+    ->middleware([
+        'auth:sanctum',
+        //'verified',
+        //'user.permissions',
+        //'cache.headers:public;max_age=3600;etag',
+    ])->group(function () {
+        Route::get('/configs', function(){
+            return [
+                'fields_config' => config('pm-search.fields'),
+                'bridge_fields' => config('pm-search.bridge_view_fields'),
+            ];
+        })->name('configs');
+    });
+
+

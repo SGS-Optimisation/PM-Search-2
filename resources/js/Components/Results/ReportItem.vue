@@ -2,6 +2,7 @@
 import moment from 'moment';
 import {computed} from "@vue/reactivity";
 
+
 const emit = defineEmits(['on-click-view']);
 
 const props = defineProps({
@@ -15,8 +16,16 @@ const backgroundImage = computed(() => {
     return props.item['image_' + props.imageSize];
 })
 
-const backgroundStyle = computed(() => {
-    return `background: url(${backgroundImage.value}); background-size: ${props.backgroundMode}; background-repeat: no-repeat;`;
+const thumb = computed(() => {
+    return props.item['image_sml'];
+})
+
+const highres = computed(() => {
+    return props.item['image_lrg'];
+})
+
+const imageStyle = computed(() => {
+    return 'height:' + (props.backgroundMode === 'cover' ? 'fit-content' : 'inherit') + ';'
 })
 
 const bookedDate = computed(() => {
@@ -26,16 +35,20 @@ const bookedDate = computed(() => {
 const height = computed(() => {
     return {
         1: 'screen',
-        2: '64',
-        3: '48',
-        4: '36'
+        2: '72',
+        3: '64',
+        4: '48'
     }[props.gridSize]
+})
+
+const colClass = computed(() => {
+    return 'col-' + (12 / props.gridSize);
 })
 </script>
 
 <template>
     <!-- Article -->
-    <div class="col-4 p-2">
+    <div class="p-2" :class="colClass">
 
         <article class="p-4 border-1 surface-border surface-card border-round relative shadow-lg"
                  @click="$emit('on-click-view', item)">
@@ -44,17 +57,19 @@ const height = computed(() => {
                 <span :title="item.tag"
                       class="text-xxs text-white font-semibold text-center"
                       :class="{
-                    'bg-indigo-400': item.tag === 'barcodesearch',
-                    'bg-yellow-400' : item.tag === 'docsearch',
-                    'bg-red-400' : item.tag === 'visualsearch',
-                    'bg-blue-400' : item.tag === 'entitysearch'
+                    'bg-indigo-400': item.tag === 'barcode_search',
+                    'bg-yellow-400' : item.tag === 'doc_search',
+                    'bg-red-400' : item.tag === 'visual_search',
+                    'bg-blue-400' : item.tag === 'entity_search'
                 }">
                     {{ item.tag.substring(0, 3) }}
                 </span>
             </div>
 
-            <a @click.prevent="" class="block" :class="'h-'+height" href="#">
-                <div class="block h-full" :style="backgroundStyle"></div>
+            <a @click.prevent="" class="flex justify-center block overflow-hidden" :class="'h-'+height" href="#">
+                <img :src="backgroundImage" loading="lazy" class="responsive"
+                     :style="imageStyle"
+                />
             </a>
 
             <div class="flex flex-col items-stretch">
