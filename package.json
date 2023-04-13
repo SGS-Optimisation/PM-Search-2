@@ -28,6 +28,7 @@
         "vue-image-zoomer": "^2.2.3",
         "vue-load-image": "^1.1.0",
         "vue-picture-cropper": "^0.6.1",
+        "vue3-tags-input": "^1.0.7",
         "ziggy-js": "^1.5.0"
     },
     "dependencies": {

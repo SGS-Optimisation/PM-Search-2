@@ -16,12 +16,12 @@ import MultiSelect from "primevue/multiselect";
 import SelectButton from 'primevue/selectbutton';
 import {router} from '@inertiajs/vue3'
 import route from "ziggy-js";
-import ReportItem from "@/Components/Search/ReportItem.vue";
+import ReportItem from "@/Components/Results/ReportItem.vue";
 import FullModal from "@/Components/Utility/FullModal.vue";
-import ViewSearchEntry from "@/Components/Search/ViewSearchEntry.vue";
+import ViewSearchEntry from "@/Components/Results/ViewSearchEntry.vue";
 import {userPreferencesStore} from "@/stores/userPreferencesStore";
 import moment from "moment/moment";
-import TaxonomySelector from "@/Components/Search/TaxonomySelector.vue";
+import TaxonomySelector from "@/Components/Results/TaxonomySelector.vue";
 import _ from "lodash";
 import 'primeflex/primeflex.css';
 
