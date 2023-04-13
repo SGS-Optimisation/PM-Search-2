@@ -20,17 +20,19 @@ defineProps({
 
     <Head title="Dashboard"/>
 
-    <div class="py-6">
-        <div class="mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-4 gap-4">
-                <div class="col-span-3">
+    <div class="py-6 mx-auto ">
+        <div class="w-full sm:px-6 lg:px-8">
+            <div class="grid">
+                <div class="col-8">
                     <TextSearchComponent/>
 
                     <div class="mt-8">
                         <ImageSearchComponent/>
                     </div>
                 </div>
-                <LatestSearch :latest-searches="latestSearches"/>
+                <div class="col-4">
+                    <LatestSearch :latest-searches="latestSearches"/>
+                </div>
             </div>
 
         </div>

@@ -51,7 +51,7 @@ class TextSearchWebService
 
         logger('text search with data: '. json_encode($data));
 
-        $this->response = Http::post($url, $data);
+        $this->response = Http::timeout(60)->post($url, $data);
 
         return json_decode($this->response->body());
     }

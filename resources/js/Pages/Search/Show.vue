@@ -23,7 +23,6 @@ import {userPreferencesStore} from "@/stores/userPreferencesStore";
 import moment from "moment/moment";
 import TaxonomySelector from "@/Components/Results/TaxonomySelector.vue";
 import _ from "lodash";
-import 'primeflex/primeflex.css';
 
 defineOptions({layout: AppLayout})
 

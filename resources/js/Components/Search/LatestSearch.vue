@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import DataView from "primevue/dataview";
+import {Link} from "@inertiajs/vue3";
 
 defineProps({
     latestSearches: Array,
@@ -25,7 +26,8 @@ defineProps({
                                :title="slotProps.data.search_mode === 'text' ? 'Text search' : 'Image search'"
                             ></i>
                         </span>
-                        <a class="text-blue-500 hover:text-blue-700 underline"
+
+                        <Link class="text-blue-500 hover:text-blue-700 underline"
                            :href="route('search.show', [slotProps.data.id])">
 
                             <span v-if="slotProps.data.search_mode === 'text'">
@@ -34,22 +36,12 @@ defineProps({
                             <span v-else>
                                 {{ slotProps.data.working_data.original_filename }}
                             </span>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </template>
 
 
         </DataView>
-
-        <ul v-if="latestSearches.length">
-            <li v-for="search in latestSearches">
-
-            </li>
-
-        </ul>
-        <p v-else>
-            Nothing to show
-        </p>
     </div>
 </template>

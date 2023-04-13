@@ -4,7 +4,7 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import 'primevue/resources/themes/mira/theme.css';
 import 'vue-image-zoomer/dist/style.css';
-
+import 'primeflex/primeflex.css';
 
 
 import { createApp, h } from 'vue';
