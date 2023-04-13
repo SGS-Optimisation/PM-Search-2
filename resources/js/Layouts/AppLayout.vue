@@ -66,6 +66,12 @@ onMounted(() => {
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
+                                <NavLink :href="route('search.text')" :active="route().current('search.text')">
+                                    Text Search
+                                </NavLink>
+                                <NavLink :href="route('search.image')" :active="route().current('search.image')">
+                                    Image Search
+                                </NavLink>
                             </div>
                         </div>
 

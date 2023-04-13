@@ -209,7 +209,7 @@ const filteredResults = computed(() => {
 
 <template>
 
-    <Head title="Search Result"/>
+
 
     <div class="card">
         <DataView :value="filteredSearchData" :layout="layout" paginator :rows="userPreferences.perPage"
