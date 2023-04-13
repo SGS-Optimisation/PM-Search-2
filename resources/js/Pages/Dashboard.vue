@@ -26,7 +26,9 @@ defineProps({
                 <div class="col-span-3">
                     <TextSearchComponent/>
 
-                    <ImageSearchComponent/>
+                    <div class="mt-8">
+                        <ImageSearchComponent/>
+                    </div>
                 </div>
                 <LatestSearch :latest-searches="latestSearches"/>
             </div>

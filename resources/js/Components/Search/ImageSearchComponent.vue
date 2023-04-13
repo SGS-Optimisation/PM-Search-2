@@ -132,20 +132,14 @@ function submitSearch() {
             </template>
             <template #form>
 
-                <div class="col-span-4">
+                <div class="col-span-6">
 
-                    <div class="flex justify-center">
+                    <div class="flex justify-start">
                         <FileUpload mode="basic" name="imageSearch" ref="uploadInput"
                                     :url="route('image-search')"
                                     chooseLabel="Select Image"
                                     accept="image/*" :maxFileSize="1000000"
                                     @select="selectFile"/>
-
-                        <div class="px-2">
-                            <Button type="submit" @click="submitSearch"
-                                    :disabled="!hasDocument"
-                                    label="Search" severity="success"/>
-                        </div>
 
                         <div class="px-2 flex flex-col">
                             <div v-for="tech of searchTechs" :key="tech.name" class="px-2">
@@ -155,6 +149,12 @@ function submitSearch() {
 
                                 <label class="ml-1 text-sm" :for="tech.name">{{ tech.label }}</label>
                             </div>
+                        </div>
+
+                        <div class="px-2">
+                            <Button type="submit" @click="submitSearch"
+                                    :disabled="!hasDocument"
+                                    label="Search" severity="success"/>
                         </div>
                     </div>
                     <div class="flex justify-center px-12 pt-2">
