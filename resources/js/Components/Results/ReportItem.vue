@@ -51,7 +51,7 @@ const colClass = computed(() => {
     <!-- Article -->
     <div class="p-2" :class="colClass">
 
-        <article class="p-4 border-1 surface-border surface-card border-round relative shadow-lg"
+        <article class="hover:drop-shadow-2xl p-4 border-1 surface-border surface-card border-round relative shadow-sm"
                  @click="$emit('on-click-view', item)">
 
             <div class="ribbon z-0" v-if="item.tag !== '' && item.tag !== 'textsearch'">
@@ -85,14 +85,14 @@ const colClass = computed(() => {
                     </p>
                 </header>
 
-                <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                <footer class="flex items-center justify-between leading-none">
                     <p class="ml-2 text-sm">
                         {{ item.variety }}<br>
                         {{ item.package_type }}<br>
                     </p>
                     <p class="mr-2 text-sm text-right">
                         {{ item.JobId }}<br>
-                        <span class="text-xs">&#128467; {{ bookedDate }}</span>
+                        <span class="text-xs whitespace-nowrap">&#128467; {{ bookedDate }}</span>
                     </p>
                 </footer>
             </div>

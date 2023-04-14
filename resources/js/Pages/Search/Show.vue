@@ -210,12 +210,25 @@ const filteredResults = computed(() => {
     <Head title="Search results"/>
 
 
-    <div class="card">
-        <DataView :value="filteredSearchData" :layout="layout" paginator :rows="userPreferences.perPage"
-                  :sortOrder="userPreferences.sortOrder" :sortField="userPreferences.sortField">
-            <template #header>
-                <div class="flex flex-col mb-12">
-                    <div class="flex flex-row mb-5 mt-4">
+    <div class="md:grid md:grid-cols-4 lg:grid-cols-5">
+        <div class="md:col-span-1 lg:col-span-1">
+            <div class="flex my-3">
+                <div class="max-w-7xl mx-auto sm:px-2">
+                    <div class="bg-white shadow sm:rounded-lg px-2">
+                        <p>
+                            <template v-if="filteredResults !== totalResults">
+                                {{ filteredResults }} {{ filteredResults === 1 ? 'match' : 'matches' }}
+                                filtered from {{ totalResults }}
+                            </template>
+                            <template v-else>
+                                Found {{ totalResults }} {{ totalResults === 1 ? 'match' : 'matches' }}
+                            </template>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-options flex flex-col mb-12 p-2 mt-12 sticky top-0 ">
+                <div class="flex flex-col mb-5 mt-4">
                         <span class="p-float-label grow">
                             <MultiSelect v-model="userPreferences.selectedTaxonomy" id="taxonomySelector"
                                          filter :resetFilterOnHide="true"
@@ -227,31 +240,39 @@ const filteredResults = computed(() => {
                                          class="w-full"/>
                             <label for="taxonomySelector">Select Search Fields</label>
                         </span>
-                        <template v-if="userPreferences.selectedTaxonomy.length">
-                            <Button title="Clear fields" class="" icon="pi pi-times"
-                                    @click="clearSelectedFields"/>
-                        </template>
-                    </div>
-                    <div class="grid">
-                        <div class="col-2" v-for="field in userPreferences.selectedTaxonomy" :key="field">
-
-                            <TaxonomySelector :taxonomy-name="field"
-                                              :filtered-terms="filteredSearchOptions[field]"
-                                              :all-terms="allSearchOptions[field]"
-                                              v-model="filters[field]"
-                            />
-                        </div>
-
-                        <template v-if="userPreferences.selectedTaxonomy.length">
-                            <Button class="" size="small" label="Clear Filters" icon="pi pi-times" @click="clearFilters"/>
-                        </template>
-                    </div>
+                    <template v-if="userPreferences.selectedTaxonomy.length">
+                        <Button class="px-3" size="small" label="Remove Filter Fields" icon="pi pi-times"
+                                @click="clearSelectedFields"/>
+                    </template>
                 </div>
 
-                <div class="flex mb-3 justify-between">
-                    <div class="flex pt-2">
+                <div class="flex flex-col">
+                    <div class="px-3 py-3" v-for="field in userPreferences.selectedTaxonomy" :key="field">
 
-                        <div class="mx-2">
+                        <TaxonomySelector :taxonomy-name="field"
+                                          :filtered-terms="filteredSearchOptions[field]"
+                                          :all-terms="allSearchOptions[field]"
+                                          v-model="filters[field]"
+                        />
+                    </div>
+
+                    <template v-if="userPreferences.selectedTaxonomy.length">
+                        <Button class="px-3" size="small" label="Clear Filters" icon="pi pi-times"
+                                @click="clearFilters"/>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <div class="md:col-span-3 lg:col-span-4 mt-2">
+            <DataView :value="filteredSearchData" :layout="layout" paginator paginatorPosition="bottom"
+                      :rows="userPreferences.perPage"
+                      :sortOrder="userPreferences.sortOrder" :sortField="userPreferences.sortField">
+                <template #header>
+
+                    <div class="grid-options flex pt-3 mb-3 justify-between ">
+                        <div class="flex pt-2">
+
+                            <div class="mx-2">
                             <span class="p-float-label">
                                 <AutoComplete v-model="userPreferences.perPage"
                                               type="number"
@@ -261,28 +282,28 @@ const filteredResults = computed(() => {
                                 />
                                 <label for="ac">Per Page</label>
                             </span>
-                        </div>
-                        <div class="mx-2">
-                            <label>Grid Size</label>
-                            <Slider class="w-14rem" v-model="userPreferences.gridSize" :step="1" :min="1" :max="5"/>
-                        </div>
-                        <div class="mx-2 flex">
-                            <SelectButton v-model="userPreferences.backgroundMode" id="imageMode"
-                                          :options="[{value: 'cover', 'label': 'Cover'}, {value: 'contain', 'label': 'Fit'}]"
-                                          optionLabel="label" option-value="value" aria-labelledby="basic"/>
+                            </div>
+                            <div class="mx-2">
+                                <label>Grid Size</label>
+                                <Slider class="w-14rem" v-model="userPreferences.gridSize" :step="1" :min="1" :max="5"/>
+                            </div>
+                            <div class="mx-2 flex">
+                                <SelectButton v-model="userPreferences.backgroundMode" id="imageMode"
+                                              :options="[{value: 'cover', 'label': 'Cover'}, {value: 'contain', 'label': 'Fit'}]"
+                                              optionLabel="label" option-value="value" aria-labelledby="basic"/>
 
+                            </div>
+                            <div class="mx-2 flex flex-col">
+                                <SelectButton v-model="userPreferences.imageSize"
+                                              :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
+                                              optionLabel="label" option-value="value" aria-labelledby="basic"/>
+                                <!--                            <InputSwitch v-model="imageSize"  true-value="sml" false-value="lrg"/>-->
+                            </div>
                         </div>
-                        <div class="mx-2 flex flex-col">
-                            <SelectButton v-model="userPreferences.imageSize"
-                                          :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
-                                          optionLabel="label" option-value="value" aria-labelledby="basic"/>
-                            <!--                            <InputSwitch v-model="imageSize"  true-value="sml" false-value="lrg"/>-->
-                        </div>
-                    </div>
 
-                    <div class="flex  pt-2">
-                        <div class="flex mx-4">
-                            <div class="flex flex-row">
+                        <div class="flex  pt-2">
+                            <div class="flex mx-4">
+                                <div class="flex flex-row">
 
                                 <span class="p-float-label">
                                     <Dropdown v-model="userPreferences.sortField"
@@ -294,55 +315,42 @@ const filteredResults = computed(() => {
                                     <label for="sort">Sorting</label>
                                 </span>
 
-                                <div class="flex flex-col ml-2">
-                                    <a class="cursor-pointer" @click="userPreferences.sortOrder = 1"
-                                       :class="{'text-blue-500': userPreferences.sortOrder === 1}">
-                                        <i class="pi pi-chevron-up"></i>
+                                    <div class="flex flex-col ml-2">
+                                        <a class="cursor-pointer" @click="userPreferences.sortOrder = 1"
+                                           :class="{'text-blue-500': userPreferences.sortOrder === 1}">
+                                            <i class="pi pi-chevron-up"></i>
 
-                                    </a>
-                                    <a class="cursor-pointer" @click="userPreferences.sortOrder = -1"
-                                       :class="{'text-blue-500': userPreferences.sortOrder === -1}">
-                                        <i class="pi pi-chevron-down"></i>
-                                    </a>
+                                        </a>
+                                        <a class="cursor-pointer" @click="userPreferences.sortOrder = -1"
+                                           :class="{'text-blue-500': userPreferences.sortOrder === -1}">
+                                            <i class="pi pi-chevron-down"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="justify-items-end">
-                            <DataViewLayoutOptions v-model="layout"/>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex mb-3">
-                    <div class="max-w-7xl mx-auto sm:px-2">
-                        <div class="bg-white overflow-hidden shadow sm:rounded-lg px-2">
-                            <p>
-                                <template v-if="filteredResults !== totalResults">
-                                    {{ filteredResults }} {{ filteredResults === 1 ? 'match' : 'matches' }}
-                                    filtered from {{ totalResults }}
-                                </template>
-                                <template v-else>
-                                    Found {{ totalResults }} {{ totalResults === 1 ? 'match' : 'matches' }}
-                                </template>
-                            </p>
+                            <div class="justify-items-end">
+                                <DataViewLayoutOptions v-model="layout"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </template>
 
-            <template #grid="slotProps">
-                <ReportItem
-                    :item="slotProps.data"
-                    :grid-size="userPreferences.gridSize"
-                    :image-size="userPreferences.imageSize"
-                    :background-mode="userPreferences.backgroundMode"
-                    @on-click-view="openEntryModal"
-                />
-            </template>
 
-        </DataView>
+                </template>
+
+                <template #grid="slotProps">
+                    <ReportItem
+                        :item="slotProps.data"
+                        :grid-size="userPreferences.gridSize"
+                        :image-size="userPreferences.imageSize"
+                        :background-mode="userPreferences.backgroundMode"
+                        @on-click-view="openEntryModal"
+                    />
+                </template>
+
+            </DataView>
+        </div>
+
     </div>
-
     <FullModal v-model:visible="isOpen" position="full" id="report-modal">
         <template #header>
             <template v-if="currentEntry">
@@ -374,5 +382,14 @@ const filteredResults = computed(() => {
 </template>
 
 <style>
+.p-dataview-header {
+    @apply relative;
+}
 
+.p-dataview .p-dataview-content {
+    background: none;
+}
+
+#taxonomySelector {
+}
 </style>
