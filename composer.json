@@ -22,6 +22,7 @@
         "matthewbdaly/laravel-azure-storage": "^2.0",
         "metrogistics/laravel-azure-ad-oauth": "dev-master",
         "optimistdigital/nova-settings": "^5.1",
+        "predis/predis": "^2.1",
         "spatie/pdf-to-image": "^2.2",
         "tightenco/ziggy": "^1.0",
         "vyuldashev/nova-permission": "^3.2"
