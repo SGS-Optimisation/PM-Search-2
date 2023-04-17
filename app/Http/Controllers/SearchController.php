@@ -47,9 +47,6 @@ class SearchController extends Controller
         $tscs = new TextSearchCreationService(
             $request->search_string,
             $request->get('operator', 'and'),
-            $request->get('isPhrase', true),
-            $request->get('isOCR', false),
-            $request->get('type', TextSearchCreationService::TEXT_SEARCH_TYPE_THUMBNAIL),
             $request->user());
         $tscs->handle();
         $tscs->getReport();

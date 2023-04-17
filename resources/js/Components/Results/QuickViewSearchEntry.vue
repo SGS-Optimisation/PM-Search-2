@@ -46,7 +46,7 @@ const titleCase = (str) => window.titleCase(str);
                         <td class="font-bold text-xs whitespace-nowrap">{{ titleCase(field) }}</td>
                         <td class="md:grow">
                             <template v-if="field==='formatted_job_number'">
-                                <a class="text-blue-500 hover:text-blue-700"
+                                <a class="text-blue-500 hover:text-blue-700" target="_blank"
                                    :href="'https://pm.mysgs.sgsco.com/Job/' + entry[field]"
                                 >
                                     {{ entry[field] }}

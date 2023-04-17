@@ -110,7 +110,7 @@ function next() {
                             <div class="p-2 border even:bg-blue-100 even:border-white">
                                 <p class="font-bold">{{ titleCase(field) }}</p>
                                 <template v-if="field==='formatted_job_number'">
-                                    <a class="text-blue-500 hover:text-blue-700"
+                                    <a class="text-blue-500 hover:text-blue-700" target="_blank"
                                        :href="'https://pm.mysgs.sgsco.com/Job/' + entry[field]"
                                     >
                                         {{ entry[field] }}

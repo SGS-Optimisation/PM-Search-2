@@ -30,6 +30,8 @@ Route::name('api.')
             return [
                 'fields_config' => config('pm-search.fields'),
                 'bridge_fields' => config('pm-search.bridge_view_fields'),
+                'autocomplete_suggester_url' => config('pm-search.autocomplete_suggester_url'),
+                'advanced_search_fields' => config('pm-search.advanced_search'),
             ];
         })->name('configs');
     });

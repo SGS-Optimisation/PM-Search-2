@@ -1,10 +1,24 @@
 <script lang="ts" setup>
 import DataView from "primevue/dataview";
 import {Link} from "@inertiajs/vue3";
+import Tag from "primevue/tag";
+import {configStore} from "@/stores/config-store";
 
-defineProps({
+const props = defineProps({
     latestSearches: Array,
 })
+
+function formatAdvancedSearchField(field, value) {
+    const config = configStore.getAdvancedSearchFields()[field];
+
+    if(configStore.getAdvancedSearchFields()[field].type === 'date') {
+        value = JSON.parse(value);
+        value = (new Date(value[0])).toLocaleDateString() + ' - ' + (new Date(value[1])).toLocaleDateString();
+    }
+
+    return config.key + ':' + value;
+}
+
 </script>
 
 <template>
@@ -31,7 +45,18 @@ defineProps({
                            :href="route('search.show', [slotProps.data.id])">
 
                             <span v-if="slotProps.data.search_mode === 'text'">
-                                {{slotProps.data.search_data.search_string.join(' ' + slotProps.data.search_data.operator.toUpperCase() + ' ') }}
+                                <template v-if="slotProps.data.search_data.hasOwnProperty('search_string')">
+                                    {{slotProps.data.search_data.search_string.join(' ' + slotProps.data.search_data.operator.toUpperCase() + ' ') }}
+                                </template>
+                                <template v-else>
+                                    {{slotProps.data.search_data.textsearchstrings.join(' ' + slotProps.data.search_data.textsearchoperator.toUpperCase() + ' ') }}
+
+                                    <template v-if="slotProps.data.search_data.hasOwnProperty('fields')">
+                                        <Tag v-for="(value, field) in slotProps.data.search_data.fields" :key="field" class="ml-1 mb-1"
+                                             severity=""
+                                             :value="formatAdvancedSearchField(field, value)" rounded></Tag>
+                                    </template>
+                                </template>
                             </span>
                             <span v-else>
                                 {{ slotProps.data.working_data.original_filename }}

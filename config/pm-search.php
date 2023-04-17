@@ -3,6 +3,7 @@
 return [
     'image_search_url' => env('PM_SEARCH_IMAGE_ENDPOINT'),
     'text_search_url' => env('PM_SEARCH_TEXT_ENDPOINT'),
+    'autocomplete_suggester_url' => env('AUTOCOMPLETE_SUGGESTER'),
 
 
     'image_search_techs' => [
@@ -113,10 +114,18 @@ return [
         'file_name' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
         //'ocrtext' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
         'dieline' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
-        'score' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'float', 'position'=> 100],
+        'score' => ['search' => false, 'display' => false, 'type' => 'list', 'response_type' => 'float', 'position'=> 100],
         'tag' => ['search' => false, 'display' => false, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
         'language_count' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
         'languages' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 2],
+    ],
+
+    'advanced_search' => [
+        'portfolio_group_name' => ['key' => 'portfolio', 'type' => 'autocomplete'],
+        'printer_name' => ['key' => 'printer', 'type' => 'autocomplete'],
+        'customer_name' => ['key' => 'customer', 'type' => 'autocomplete'],
+        'brand' => ['key' => 'brand', 'type' => 'text'],
+        'booked_date' => ['key' => 'date', 'type' => 'date'],
     ],
 
     'color_name_mappings' => [

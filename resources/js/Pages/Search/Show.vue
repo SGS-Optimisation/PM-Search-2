@@ -248,7 +248,7 @@ function getSearchData() {
 
     </div>
 
-    <Sidebar v-model:visible="visibleQuickDetails" position="right" class="w-full md:w-20rem lg:w-30rem">
+    <Sidebar v-model:visible="visibleQuickDetails" position="left" class="w-full md:w-20rem lg:w-30rem">
         <QuickViewSearchEntry :entry="quickViewEntry" :config="fields_config"/>
 
     </Sidebar>
