@@ -14,6 +14,8 @@ import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
 import type {DefineComponent} from "vue";
 import PrimeVue from 'primevue/config';
 import DialogService from 'primevue/dialogservice';
+import Tooltip from 'primevue/tooltip';
+
 import VueImageZoomer from 'vue-image-zoomer'
 import {createPinia} from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -29,6 +31,7 @@ createInertiaApp({
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
     setup({el, App, props, plugin}) {
         createApp({render: () => h(App, props)})
+            .directive('tooltip', Tooltip)
             .use(plugin)
             .use(PrimeVue)
             .use(DialogService)

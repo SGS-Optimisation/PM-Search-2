@@ -1,30 +1,22 @@
 <script lang="ts" setup>
 import {Head, useForm, usePage} from "@inertiajs/vue3";
-import {defineComponent, watch, ref, reactive, onMounted, onBeforeMount} from "vue";
-import AppLayout from '@/Layouts/AppLayout.vue';
-import {computed} from "@vue/reactivity";
+import {defineComponent, watch, ref, reactive, onMounted, onBeforeMount, provide} from "vue";
 import AutoComplete from "primevue/autocomplete";
 import Slider from 'primevue/slider';
-import Dialog from 'primevue/dialog';
-import Button from 'primevue/button';
-import Checkbox from 'primevue/checkbox';
 import DataView from "primevue/dataview";
 import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
 import Dropdown from "primevue/dropdown";
-import InputSwitch from "primevue/inputswitch";
-import MultiSelect from "primevue/multiselect";
 import SelectButton from 'primevue/selectbutton';
-import {router} from '@inertiajs/vue3'
-import route from "ziggy-js";
+import Sidebar from "primevue/sidebar";
 import ReportItem from "@/Components/Results/ReportItem.vue";
 import FullModal from "@/Components/Utility/FullModal.vue";
 import ViewSearchEntry from "@/Components/Results/ViewSearchEntry.vue";
 import {userPreferencesStore} from "@/stores/userPreferencesStore";
 import moment from "moment/moment";
-import TaxonomySelector from "@/Components/Results/TaxonomySelector.vue";
 import _ from "lodash";
-
-defineOptions({layout: AppLayout})
+import ResultsSidebar from "@/Components/Results/ResultsSidebar.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import QuickViewSearchEntry from "@/Components/Results/QuickViewSearchEntry.vue";
 
 const props = defineProps({
     search_id: {type: Number, required: true},
@@ -41,11 +33,7 @@ const props = defineProps({
     meta: {type: Object, required: false},
 })
 
-const availableFields = computed(() => {
-    return Object.keys(props.fields).map((key) => {
-        return {value: key, label: titleCase(key)}
-    });
-})
+defineOptions({layout: AppLayout})
 
 const items = ref();
 const userPreferences = userPreferencesStore();
@@ -54,13 +42,21 @@ const perPage = ref(40);
 const sortOptions = ref([{label: 'Score', value: 'score'}, {label: 'Booked Date', value: 'booked_date_fmt'}]);
 const isOpen = ref(false);
 const currentEntry = ref();
+const quickViewEntry = ref();
 const filters = ref<Object>({});
+const filteredSearchData = ref<Object[]>([]);
+
+const filterText = ref<String>('');
+const visibleQuickDetails = ref(false);
+
+provide('filters', {filters, filteredSearchData, filterText});
+provide('fields', {fields: props.fields, fields_config: props.fields_config});
+provide('report', props.report);
 
 watch(
-    () => filters,
+    () => [filters, filterText],
     (newValue, oldValue) => {
         filteredSearchData.value = getSearchData();
-        filteredSearchOptions.value = getFilterOptions();
     },
     {deep: true}
 )
@@ -79,24 +75,7 @@ onMounted(() => {
     })
 
     filteredSearchData.value = getSearchData();
-    allSearchOptions.value = getFilterOptions();
-    filteredSearchOptions.value = getFilterOptions();
 });
-
-function updateSelectedTaxonomy(taxonomy) {
-    filters.value[taxonomy] = [];
-}
-
-function clearSelectedFields() {
-    clearFilters()
-    userPreferences.selectedTaxonomy = [];
-}
-
-function clearFilters() {
-    for (const field in filters.value) {
-        filters.value[field] = [];
-    }
-}
 
 function completePerPage(e) {
     perPage.value = parseInt(e.query);
@@ -106,6 +85,12 @@ function openEntryModal(item) {
     console.log('click event', item);
     isOpen.value = true;
     currentEntry.value = item;
+}
+
+function openQuickView(item) {
+    console.log('click event', item);
+    visibleQuickDetails.value = true;
+    quickViewEntry.value = item;
 }
 
 function closeEntryModal() {
@@ -129,10 +114,6 @@ function prevEntry() {
     }
 }
 
-const filteredSearchData = ref<Object[]>([]);
-const allSearchOptions = ref<Object>({});
-const filteredSearchOptions = ref<Object>({});
-const filterText = ref<String>('');
 
 function getSearchData() {
 
@@ -140,7 +121,7 @@ function getSearchData() {
         if (!filterText.value || filterText.value === '') {
             return true;
         }
-        return Object.values(entry).some((val) => val.toLowerCase().indexOf(filterText.value.toLowerCase()) !== -1);
+        return Object.values(entry).some((val) => val.toString().toLowerCase().indexOf(filterText.value.toLowerCase()) !== -1);
     })
 
     for (const field in filters.value) {
@@ -162,48 +143,6 @@ function getSearchData() {
 }
 
 
-function getFilterOptions() {
-    console.log('filtering options');
-    var options = {};
-
-    for (const i in filteredSearchData.value) {
-        let entry = filteredSearchData.value[i];
-        for (const j in Object.keys(entry)) {
-            let field = Object.keys(entry)[j];
-
-            if (!Object.keys(props.fields).includes(field)) {
-                continue;
-            }
-
-            if (!options.hasOwnProperty(field)) {
-                options[field] = [];
-            }
-
-            let values = entry[field];
-            if (!Array.isArray(values)) {
-                values = [values];
-            }
-
-            for (var value of values) {
-                if (!options[field].includes(value)) {
-                    options[field].push(value);
-                }
-            }
-        }
-    }
-
-    return options;
-}
-
-const totalResults = computed(() => {
-    return props.report.length;
-})
-
-
-const filteredResults = computed(() => {
-    return filteredSearchData.value.length;
-})
-
 </script>
 
 <template>
@@ -211,71 +150,21 @@ const filteredResults = computed(() => {
 
 
     <div class="md:grid md:grid-cols-4 lg:grid-cols-5">
-        <div class="md:col-span-1 lg:col-span-1">
-            <div class="flex my-3">
-                <div class="max-w-7xl mx-auto sm:px-2">
-                    <div class="bg-white shadow sm:rounded-lg px-2">
-                        <p>
-                            <template v-if="filteredResults !== totalResults">
-                                {{ filteredResults }} {{ filteredResults === 1 ? 'match' : 'matches' }}
-                                filtered from {{ totalResults }}
-                            </template>
-                            <template v-else>
-                                Found {{ totalResults }} {{ totalResults === 1 ? 'match' : 'matches' }}
-                            </template>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="filter-options flex flex-col mb-12 p-2 mt-12 sticky top-0 ">
-                <div class="flex flex-col mb-5 mt-4">
-                        <span class="p-float-label grow">
-                            <MultiSelect v-model="userPreferences.selectedTaxonomy" id="taxonomySelector"
-                                         filter :resetFilterOnHide="true"
-                                         @update:modelValue="updateSelectedTaxonomy"
-                                         :options="availableFields"
-                                         option-value="value" option-label="label"
-                                         display="chip"
-                                         placeholder="Searchable Fields"
-                                         class="w-full"/>
-                            <label for="taxonomySelector">Select Search Fields</label>
-                        </span>
-                    <template v-if="userPreferences.selectedTaxonomy.length">
-                        <Button class="px-3" size="small" label="Remove Filter Fields" icon="pi pi-times"
-                                @click="clearSelectedFields"/>
-                    </template>
-                </div>
 
-                <div class="flex flex-col">
-                    <div class="px-3 py-3" v-for="field in userPreferences.selectedTaxonomy" :key="field">
+        <ResultsSidebar/>
 
-                        <TaxonomySelector :taxonomy-name="field"
-                                          :filtered-terms="filteredSearchOptions[field]"
-                                          :all-terms="allSearchOptions[field]"
-                                          v-model="filters[field]"
-                        />
-                    </div>
-
-                    <template v-if="userPreferences.selectedTaxonomy.length">
-                        <Button class="px-3" size="small" label="Clear Filters" icon="pi pi-times"
-                                @click="clearFilters"/>
-                    </template>
-                </div>
-            </div>
-        </div>
-        <div class="md:col-span-3 lg:col-span-4 mt-2">
+        <div class="results-content md:col-span-3 lg:col-span-4 mt-2">
             <DataView :value="filteredSearchData" :layout="layout" paginator paginatorPosition="bottom"
                       :rows="userPreferences.perPage"
                       :sortOrder="userPreferences.sortOrder" :sortField="userPreferences.sortField">
                 <template #header>
 
-                    <div class="grid-options flex pt-3 mb-3 justify-between ">
+                    <div class="grid-options flex pt-2 justify-between ">
                         <div class="flex pt-2">
 
                             <div class="mx-2">
                             <span class="p-float-label">
                                 <AutoComplete v-model="userPreferences.perPage"
-                                              type="number"
                                               dropdown :suggestions="[20, 40, 100, 1000]"
                                               @complete="completePerPage"
                                               :inputStyle="{width: '5em'}"
@@ -317,12 +206,17 @@ const filteredResults = computed(() => {
 
                                     <div class="flex flex-col ml-2">
                                         <a class="cursor-pointer" @click="userPreferences.sortOrder = 1"
-                                           :class="{'text-blue-500': userPreferences.sortOrder === 1}">
+                                           :class="{'text-blue-800': userPreferences.sortOrder === 1,
+                                                    'text-gray-200': userPreferences.sortOrder === -1,
+                                                    }"
+                                        >
                                             <i class="pi pi-chevron-up"></i>
 
                                         </a>
                                         <a class="cursor-pointer" @click="userPreferences.sortOrder = -1"
-                                           :class="{'text-blue-500': userPreferences.sortOrder === -1}">
+                                           :class="{'text-blue-800': userPreferences.sortOrder === -1,
+                                           'text-gray-200': userPreferences.sortOrder === 1
+                                        }">
                                             <i class="pi pi-chevron-down"></i>
                                         </a>
                                     </div>
@@ -341,9 +235,11 @@ const filteredResults = computed(() => {
                     <ReportItem
                         :item="slotProps.data"
                         :grid-size="userPreferences.gridSize"
+                        :extra-class="visibleQuickDetails && quickViewEntry.formatted_job_number !== slotProps.data.formatted_job_number ? 'blur-sm': ''"
                         :image-size="userPreferences.imageSize"
                         :background-mode="userPreferences.backgroundMode"
                         @on-click-view="openEntryModal"
+                        @on-click-quick-view="openQuickView"
                     />
                 </template>
 
@@ -351,6 +247,11 @@ const filteredResults = computed(() => {
         </div>
 
     </div>
+
+    <Sidebar v-model:visible="visibleQuickDetails" position="right" class="w-full md:w-20rem lg:w-30rem">
+        <QuickViewSearchEntry :entry="quickViewEntry" :config="fields_config"/>
+
+    </Sidebar>
     <FullModal v-model:visible="isOpen" position="full" id="report-modal">
         <template #header>
             <template v-if="currentEntry">
@@ -382,12 +283,25 @@ const filteredResults = computed(() => {
 </template>
 
 <style>
-.p-dataview-header {
-    @apply relative;
+
+.grid-options {
+    @apply text-xs;
+}
+
+.p-float-label .p-inputwrapper-filled ~ label {
+    top: -0.3rem;
+}
+
+.p-dataview .p-dataview-header {
+    padding: 0.5rem 1rem;
+}
+
+.results-sidebar, .p-dataview .p-dataview-header, .p-paginator {
+    @apply bg-indigo-50;
 }
 
 .p-dataview .p-dataview-content {
-    background: none;
+    @apply bg-neutral-200;
 }
 
 #taxonomySelector {

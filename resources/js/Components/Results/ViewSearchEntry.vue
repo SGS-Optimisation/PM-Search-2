@@ -19,6 +19,20 @@ const props = defineProps({
     }
 })
 
+const sortedConfig = computed(() => {
+    var sortedKeys = Object.keys(props.config).sort((a, b) => {
+        return props.config[a].position - props.config[b].position;
+    });
+
+    var sortedObj = {};
+    for(const key in sortedKeys) {
+        sortedObj[sortedKeys[key]] = props.config[sortedKeys[key]];
+    }
+
+    return sortedObj;
+
+});
+
 const modal = ref(null);
 
 onMounted(() => {
@@ -89,10 +103,12 @@ function next() {
             </div>
 
             <Fieldset legend="Details" id="job-meta">
-                <div class="text-sm grid grid-flow-col">
-                    <template v-for="(params, field) in config">
+                <div class="text-sm md:grid md:grid-flow-row-dense md:grid-cols-6 md:grid-rows-4">
+
+                    <template v-for="(params, field) in sortedConfig">
                         <template v-if="params.display && !bridge_fields.includes(field)">
-                            <div class="col-2"><b>{{ titleCase(field) }}</b>:
+                            <div class="p-2 border even:bg-blue-100 even:border-white">
+                                <p class="font-bold">{{ titleCase(field) }}</p>
                                 <template v-if="field==='formatted_job_number'">
                                     <a class="text-blue-500 hover:text-blue-700"
                                        :href="'https://pm.mysgs.sgsco.com/Job/' + entry[field]"

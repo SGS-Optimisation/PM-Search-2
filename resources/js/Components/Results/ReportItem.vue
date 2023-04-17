@@ -3,13 +3,14 @@ import moment from 'moment';
 import {computed} from "@vue/reactivity";
 
 
-const emit = defineEmits(['on-click-view']);
+const emit = defineEmits(['on-click-view', 'on-click-quick-view']);
 
 const props = defineProps({
     item: {type: Object, required: true},
     backgroundMode: {type: String, default: 'cover'},
     imageSize: {type: String, default: 'sml'},
     gridSize: {type: Number, default: 3},
+    extraClass: {type: String, default: ''},
 });
 
 const backgroundImage = computed(() => {
@@ -43,7 +44,7 @@ const height = computed(() => {
 })
 
 const colClass = computed(() => {
-    return props.gridSize === 5 ? 'col-2' : 'col-' + (12 / props.gridSize);
+    return props.gridSize === 5 ? 'col-2' : 'col-' + (12 / props.gridSize) + ' ' + props.extraClass;
 })
 </script>
 
@@ -51,8 +52,7 @@ const colClass = computed(() => {
     <!-- Article -->
     <div class="p-2" :class="colClass">
 
-        <article class="hover:drop-shadow-2xl p-4 border-1 surface-border surface-card border-round relative shadow-sm"
-                 @click="$emit('on-click-view', item)">
+        <article class="hover:drop-shadow-2xl p-4 border-1 surface-border surface-card border-round relative shadow-sm">
 
             <div class="ribbon z-0" v-if="item.tag !== '' && item.tag !== 'textsearch'">
                 <span :title="item.tag"
@@ -67,13 +67,18 @@ const colClass = computed(() => {
                 </span>
             </div>
 
-            <a @click.prevent="" class="flex justify-center block overflow-hidden" :class="'h-'+height" href="#">
+            <a @click.prevent="$emit('on-click-view', item)"
+               v-tooltip.top="'Open fullscreen image'"
+               class="flex justify-center block overflow-hidden"
+               :class="'h-'+height" href="#">
                 <img :src="backgroundImage" loading="lazy" class="responsive"
                      :style="imageStyle"
                 />
             </a>
 
-            <div class="flex flex-col items-stretch">
+            <div class="flex flex-col items-stretch cursor-pointer"
+                 v-tooltip.bottom="'Open quick view'"
+                 @click="$emit('on-click-quick-view', item)">
                 <header class="flex items-center justify-between leading-tight p-2 md:p-4">
                     <h1 class="text-lg">
                         <a class="no-underline hover:underline text-black cursor-pointer">
