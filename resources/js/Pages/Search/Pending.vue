@@ -14,13 +14,13 @@ const props = defineProps({
 });
 
 onMounted(() => {
-    axios.get(route('search.status', props.search.search.id))
+    axios.get(route('search.status', props.search.id))
         .then(({data}) => {
-            console.log(data + "got till here");
+            console.log(data);
             if (data.processed) {
                 //this.$inertia.visit(
                 axios.get(
-                    route('search.show', props.search.search.id),
+                    route('search.show', props.search.id),
                     {method: 'GET'}
                     //{replace: true}
                 );
