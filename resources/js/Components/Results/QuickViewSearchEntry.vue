@@ -39,6 +39,14 @@ const bridge_fields = computed(() => {
     return configStore.getBridgeFields();
 })
 
+function isEcode(str) {
+    return str.match(/^[0-9]{6}[eE]$/);
+}
+
+const ecode = computed(() => {
+    return parseInt(props.entry.pcm_type_profile_name.toString().toLowerCase().replace('e', ''));
+})
+
 const titleCase = (str) => window.titleCase(str);
 
 </script>
@@ -59,8 +67,16 @@ const titleCase = (str) => window.titleCase(str);
                                     {{ entry[field] }}
                                 </a>
                             </template>
+                            <template v-else-if="field==='pcm_type_profile_name' && isEcode(entry[field])">
+                                <a class="text-blue-500 hover:text-blue-700" target="_blank"
+                                   :href="'https://cmf.sgsco.com/color-profile/' + ecode"
+                                   v-tooltip="'Open color profile in CMF'"
+                                >
+                                    {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
+                                </a>
+                            </template>
                             <template v-else>
-                                {{ entry[field] }}
+                                {{ entry[field].toString() }}
                             </template>
                         </td>
                     </tr>

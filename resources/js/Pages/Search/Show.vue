@@ -82,14 +82,12 @@ function completePerPage(e) {
 }
 
 function openEntryModal(item) {
-    console.log('click event', item);
     visibleQuickDetails.value=false;
     isOpen.value = true;
     currentEntry.value = item;
 }
 
 function openQuickView(item) {
-    console.log('click event', item);
     visibleQuickDetails.value = true;
     quickViewEntry.value = item;
 }
@@ -128,11 +126,7 @@ function getSearchData() {
     for (const field in filters.value) {
         let terms = filters.value[field];
         if (terms.length > 0) {
-            console.log('filtering', field, terms);
             data = data.filter((entry: Object) => {
-                if (terms.includes(entry[field])) {
-                    console.log('FOUND');
-                }
 
                 return entry.hasOwnProperty(field)
                     && terms.includes(entry[field])
@@ -302,7 +296,7 @@ function getSearchData() {
 }
 
 .p-dataview .p-dataview-content {
-    @apply bg-neutral-200;
+    @apply bg-neutral-200 p-2;
 }
 
 #taxonomySelector {

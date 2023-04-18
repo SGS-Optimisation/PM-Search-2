@@ -26,7 +26,13 @@ const highres = computed(() => {
 })
 
 const imageStyle = computed(() => {
-    return 'height:' + (props.backgroundMode === 'cover' ? 'fit-content' : 'inherit') + ';'
+    if (props.backgroundMode === 'contain') {
+        return "height: auto; object-fit: cover"
+    }
+    if (props.backgroundMode === 'cover') {
+        return "height: fit-content; margin: auto"
+
+    }
 })
 
 const bookedDate = computed(() => {
@@ -91,7 +97,8 @@ function openMysgs() {
 
             <!-- External links -->
             <div class="flex px-2 mt-2 justify-between leading-none">
-                <a @click.prevent="openMysgs" class="text-blue-500 hover:text-blue-700 whitespace-nowrap" target="_blank"
+                <a @click.prevent="openMysgs" class="text-blue-500 hover:text-blue-700 whitespace-nowrap"
+                   target="_blank"
                    :href="'https://pm.mysgs.sgsco.com/Job/' + item.formatted_job_number"
                    v-tooltip="'Open job in MySGS'"
                 >
@@ -122,17 +129,17 @@ function openMysgs() {
                     <div class="md:grid grid-flow-row auto-rows-max gap-y-1">
                         <span title="Brand">{{ item.brand }}</span>
                         <span title="Variety">{{ item.variety }}</span>
-                        <span v-if="item.number_of_colors" title="Number of Colors">{{ item.number_of_colors }} colors</span>
+                        <span v-if="item.number_of_colors" title="Number of Colors">🌈 {{ item.number_of_colors }}</span>
                     </div>
 
                     <div class="md:grid grid-flow-row auto-rows-max gap-y-1 text-right">
                         <template v-if="!isEcode(item.pcm_type_profile_name)">
-                            <span class="bg-blue-100 px-1"  title="Profile Name">{{ item.pcm_type_profile_name }}</span>
+                            <span class="bg-blue-100 px-1" title="Profile Name">{{ item.pcm_type_profile_name }}</span>
                         </template>
 
                         <span v-if="item.customer_design_ref" title="Design / End User Reference">
                             <i class="text-xs pi pi-ticket"></i>
-                            {{item.customer_design_ref}}
+                            {{ item.customer_design_ref }}
                         </span>
 
                         <span title="Print Process">{{ item.print_process }}</span>
