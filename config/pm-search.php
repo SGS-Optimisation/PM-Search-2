@@ -121,10 +121,15 @@ return [
     ],
 
     'advanced_search' => [
+        'brand' => ['key' => 'brand', 'type' => 'autocomplete'],
         'portfolio_group_name' => ['key' => 'portfolio', 'type' => 'autocomplete'],
-        'printer_name' => ['key' => 'printer', 'type' => 'autocomplete'],
+        'simplified_group_name' => ['key' => 'simplified', 'type' => 'autocomplete'],
+        'promotion' => ['key' => 'promo', 'type' => 'autocomplete'],
+        'range_name' => ['key' => 'range', 'type' => 'autocomplete'],
+        'substrate' => ['key' => 'substrate', 'type' => 'autocomplete'],
+        'variety' => ['key' => 'variety', 'type' => 'autocomplete'],
         'customer_name' => ['key' => 'customer', 'type' => 'autocomplete'],
-        'brand' => ['key' => 'brand', 'type' => 'text'],
+        'printer_name' => ['key' => 'printer', 'type' => 'autocomplete'],
         'booked_date' => ['key' => 'date', 'type' => 'date'],
     ],
 
