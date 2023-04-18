@@ -49,6 +49,12 @@ const filteredSearchData = ref<Object[]>([]);
 const filterText = ref<String>('');
 const visibleQuickDetails = ref(false);
 
+const backgroundModes = ref([
+    {value: 'cover', 'label': 'Cover'},
+    {value: 'contain', 'label': 'Fit'},
+    {value: 'zoom', 'label': 'Zoom'},
+]);
+
 provide('filters', {filters, filteredSearchData, filterText});
 provide('fields', {fields: props.fields, fields_config: props.fields_config});
 provide('report', props.report);
@@ -173,7 +179,7 @@ function getSearchData() {
                             </div>
                             <div class="mx-2 flex">
                                 <SelectButton v-model="userPreferences.backgroundMode" id="imageMode"
-                                              :options="[{value: 'cover', 'label': 'Cover'}, {value: 'contain', 'label': 'Fit'}]"
+                                              :options="backgroundModes"
                                               optionLabel="label" option-value="value" aria-labelledby="basic"/>
 
                             </div>

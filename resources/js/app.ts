@@ -3,7 +3,7 @@ import '../css/app.css';
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import 'primevue/resources/themes/mira/theme.css';
-import 'vue-image-zoomer/dist/style.css';
+import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css';
 import 'primeflex/primeflex.css';
 
 

@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import moment from 'moment';
 import {computed} from "@vue/reactivity";
+import InnerImageZoom from 'vue-inner-image-zoom';
+
 
 
 const emit = defineEmits(['on-click-view', 'on-click-quick-view']);
@@ -25,13 +27,16 @@ const highres = computed(() => {
     return props.item['image_lrg'];
 })
 
+const zoomSrc = computed(() => {
+    return props.gridSize === 1 ? highres.value : thumb.value;
+})
+
 const imageStyle = computed(() => {
     if (props.backgroundMode === 'contain') {
-        return "height: auto; object-fit: cover"
+        return "height: fit-content; margin: auto"
     }
     if (props.backgroundMode === 'cover') {
-        return "height: fit-content; margin: auto"
-
+        return "height: auto; object-fit: cover"
     }
 })
 
@@ -90,10 +95,18 @@ function openMysgs() {
                v-tooltip.top="'Open fullscreen image'"
                class="flex justify-center block overflow-hidden"
                :class="'h-'+height" href="#">
-                <img :src="backgroundImage" loading="lazy" class="responsive"
+                <inner-image-zoom
+                    v-if="backgroundMode==='zoom'"
+                    :src="zoomSrc"
+                    :zoomSrc="highres"
+                    zoomType="hover"
+                    className="my-auto"
+                />
+                <img v-else :src="backgroundImage" loading="lazy" class="responsive"
                      :style="imageStyle"
                 />
             </a>
+
 
             <!-- External links -->
             <div class="flex px-2 mt-2 justify-between leading-none">
