@@ -8,7 +8,7 @@ import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
 import Dropdown from "primevue/dropdown";
 import SelectButton from 'primevue/selectbutton';
 import Sidebar from "primevue/sidebar";
-import ReportItem from "@/Components/Results/ReportItem.vue";
+import ReportItem from "@/Components/Results/PreviewCard.vue";
 import FullModal from "@/Components/Utility/FullModal.vue";
 import ViewSearchEntry from "@/Components/Results/ViewSearchEntry.vue";
 import {userPreferencesStore} from "@/stores/userPreferencesStore";
@@ -83,6 +83,7 @@ function completePerPage(e) {
 
 function openEntryModal(item) {
     console.log('click event', item);
+    visibleQuickDetails.value=false;
     isOpen.value = true;
     currentEntry.value = item;
 }
@@ -249,7 +250,7 @@ function getSearchData() {
     </div>
 
     <Sidebar v-model:visible="visibleQuickDetails" position="left" class="w-full md:w-20rem lg:w-30rem">
-        <QuickViewSearchEntry :entry="quickViewEntry" :config="fields_config"/>
+        <QuickViewSearchEntry :entry="quickViewEntry" :config="fields_config" @request-full-view="openEntryModal"/>
 
     </Sidebar>
     <FullModal v-model:visible="isOpen" position="full" id="report-modal">

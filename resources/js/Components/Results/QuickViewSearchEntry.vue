@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Fieldset from "primevue/fieldset";
+import Button from "primevue/button";
 import {computed} from "vue";
 import {configStore} from "@/stores/config-store";
 
@@ -14,6 +15,11 @@ const props = defineProps({
     }
 })
 
+const emit = defineEmits(['request-full-view']);
+
+function openFullView() {
+    emit('request-full-view', props.entry);
+}
 
 const sortedConfig = computed(() => {
     var sortedKeys = Object.keys(props.config).sort((a, b) => {
@@ -39,6 +45,7 @@ const titleCase = (str) => window.titleCase(str);
 
 <template>
     <div>
+        <Button @click="openFullView" label="Full View" class="mb-4 w-full"/>
         <table class="table table-responsive border text-sm">
             <template v-for="(params, field) in sortedConfig">
                 <template v-if="params.display && !bridge_fields.includes(field)">
