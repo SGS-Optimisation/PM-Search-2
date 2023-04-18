@@ -3,8 +3,6 @@ import moment from 'moment';
 import {computed} from "@vue/reactivity";
 import InnerImageZoom from 'vue-inner-image-zoom';
 
-
-
 const emit = defineEmits(['on-click-view', 'on-click-quick-view']);
 
 const props = defineProps({
@@ -66,10 +64,6 @@ const ecode = computed(() => {
     return parseInt(props.item.pcm_type_profile_name.toString().toLowerCase().replace('e', ''));
 })
 
-function openMysgs() {
-    window.open('https://pm.mysgs.sgsco.com/Job/' + props.item.formatted_job_number, '_blank');
-}
-
 </script>
 
 <template>
@@ -110,7 +104,7 @@ function openMysgs() {
 
             <!-- External links -->
             <div class="flex px-2 mt-2 justify-between leading-none">
-                <a @click.prevent="openMysgs" class="text-blue-500 hover:text-blue-700 whitespace-nowrap"
+                <a class="text-blue-500 hover:text-blue-700 whitespace-nowrap"
                    target="_blank"
                    :href="'https://pm.mysgs.sgsco.com/Job/' + item.formatted_job_number"
                    v-tooltip="'Open job in MySGS'"

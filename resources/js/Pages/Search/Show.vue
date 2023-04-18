@@ -8,7 +8,8 @@ import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
 import Dropdown from "primevue/dropdown";
 import SelectButton from 'primevue/selectbutton';
 import Sidebar from "primevue/sidebar";
-import ReportItem from "@/Components/Results/PreviewCard.vue";
+import PreviewCard from "@/Components/Results/PreviewCard.vue";
+import PreviewRow from "@/Components/Results/PreviewRow.vue";
 import FullModal from "@/Components/Utility/FullModal.vue";
 import ViewSearchEntry from "@/Components/Results/ViewSearchEntry.vue";
 import {userPreferencesStore} from "@/stores/userPreferencesStore";
@@ -233,8 +234,20 @@ function getSearchData() {
                 </template>
 
                 <template #grid="slotProps">
-                    <ReportItem
+                    <PreviewCard
                         :item="slotProps.data"
+                        :grid-size="userPreferences.gridSize"
+                        :extra-class="visibleQuickDetails && quickViewEntry.formatted_job_number !== slotProps.data.formatted_job_number ? 'blur-sm': ''"
+                        :image-size="userPreferences.imageSize"
+                        :background-mode="userPreferences.backgroundMode"
+                        @on-click-view="openEntryModal"
+                        @on-click-quick-view="openQuickView"
+                    />
+                </template>
+                <template #list="slotProps">
+                    <PreviewRow
+                        :item="slotProps.data"
+                        :config="fields_config"
                         :grid-size="userPreferences.gridSize"
                         :extra-class="visibleQuickDetails && quickViewEntry.formatted_job_number !== slotProps.data.formatted_job_number ? 'blur-sm': ''"
                         :image-size="userPreferences.imageSize"
