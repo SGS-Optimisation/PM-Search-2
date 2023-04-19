@@ -16,7 +16,6 @@ import PrimeVue from 'primevue/config';
 import DialogService from 'primevue/dialogservice';
 import Tooltip from 'primevue/tooltip';
 
-import VueImageZoomer from 'vue-image-zoomer'
 import {createPinia} from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
@@ -37,7 +36,6 @@ createInertiaApp({
             .use(DialogService)
             .use(ZiggyVue, (window as any).Ziggy)
             .use(pinia)
-            .use(VueImageZoomer)
             .mount(el);
     },
     progress: {

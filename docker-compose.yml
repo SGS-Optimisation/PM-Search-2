@@ -1,30 +1,51 @@
 version: '3'
+
+networks:
+    laravel:
+        driver: bridge
+
+volumes:
+    laravel-mysql:
+        driver: local
+
 services:
-    laravel.test:
+    app:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.2
-            dockerfile: Dockerfile
+            context: ./dockerfiles
+            dockerfile: nginx.dockerfile
             args:
-                WWWGROUP: '${WWWGROUP}'
-        image: sail-8.2/app
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
+                - UID=${UID:-1000}
+                - GID=${GID:-1000}
         ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            - "80:80"
         volumes:
-            - '.:/var/www/html'
-        networks:
-            - sail
+            - ./:/var/www/html:delegated
         depends_on:
-            - mysql
+            - php
             - redis
-            - selenium
+            - queue
+        networks:
+            - laravel
+        expose:
+            - 80
+
+    php:
+        build:
+            context: ./dockerfiles
+            dockerfile: php.dockerfile
+            args:
+                - UID=${UID:-1000}
+                - GID=${GID:-1000}
+        ports:
+            - "9000:9000"
+        volumes:
+            - ./:/var/www/html:delegated
+        networks:
+            - laravel
+        environment:
+            APP_ENV: local
+            CONTAINER_ROLE: app
+
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -37,10 +58,10 @@ services:
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
-            - 'sail-mysql:/var/lib/mysql'
+            - 'laravel-mysql:/var/lib/mysql'
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
-            - sail
+            - laravel
         healthcheck:
             test:
                 - CMD
@@ -49,14 +70,14 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+
     redis:
-        image: 'redis:alpine'
+        image: redis:alpine
+        restart: unless-stopped
         ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
-        volumes:
-            - 'sail-redis:/data'
+            - "6379:6379"
         networks:
-            - sail
+            - laravel
         healthcheck:
             test:
                 - CMD
@@ -64,19 +85,68 @@ services:
                 - ping
             retries: 3
             timeout: 5s
-    selenium:
-        image: selenium/standalone-chrome
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
+
+    composer:
+        build:
+            context: ./dockerfiles
+            dockerfile: php.dockerfile
+            args:
+                - UID=${UID:-1000}
+                - GID=${GID:-1000}
         volumes:
-            - '/dev/shm:/dev/shm'
+            - ./:/var/www/html
+        depends_on:
+            - php
+        entrypoint: [ 'composer', 'install', '--ignore-platform-reqs' ]
         networks:
-            - sail
-networks:
-    sail:
-        driver: bridge
-volumes:
-    sail-mysql:
-        driver: local
-    sail-redis:
-        driver: local
+            - laravel
+        environment:
+            APP_ENV: local
+            CONTAINER_ROLE: composer
+
+    npm:
+        image: node:current-alpine
+        volumes:
+            - ./:/var/www/html
+        ports:
+            - "3000:3000"
+            - "3001:3001"
+            - "5173:5173"
+        working_dir: /var/www/html
+        command: [ '/bin/sh', '-c', 'npm install && npm run build' ]
+        networks:
+            - laravel
+
+    artisan:
+        build:
+            context: ./dockerfiles
+            dockerfile: php.dockerfile
+            args:
+                - UID=${UID:-1000}
+                - GID=${GID:-1000}
+        volumes:
+            - ./:/var/www/html:delegated
+        entrypoint: [ 'php', '/var/www/html/artisan' ]
+        networks:
+            - laravel
+        environment:
+            APP_ENV: local
+            CONTAINER_ROLE: artisan
+
+    queue:
+        build:
+            context: ./dockerfiles
+            dockerfile: php.dockerfile
+            args:
+                - UID=${UID:-1000}
+                - GID=${GID:-1000}
+        volumes:
+            - ./:/var/www/html:delegated
+        command: [ 'php', '/var/www/html/artisan', "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
+        depends_on:
+            - php
+        networks:
+            - laravel
+        environment:
+            APP_ENV: local
+            CONTAINER_ROLE: scheduler
