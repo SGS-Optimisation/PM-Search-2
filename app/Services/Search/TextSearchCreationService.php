@@ -9,6 +9,8 @@ use App\Jobs\SearchWebserviceJob;
 use App\Models\Search;
 use App\Models\User;
 use App\Services\PDF\PdfToImage;
+use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 class TextSearchCreationService
@@ -21,21 +23,23 @@ class TextSearchCreationService
 
     protected string $source_filetype;
 
+    protected array $advanced_fields;
+
+    protected array $search_strings;
+
     /**
      * TextSearchCreationService constructor.
-     * @param  string[]|string  $search_string
-     * @param  string  $operator
-     * @param  bool  $isPhrase
-     * @param  User|null  $user
+     * @param string[]|string $input_string
+     * @param string $operator
+     * @param bool $isPhrase
+     * @param User|null $user
      */
     public function __construct(
-        public array|string $search_string,
-        public string $operator = 'and',
-        public bool $isPhrase = true,
-        public bool $isOCR = false,
-        public string $type = self::TEXT_SEARCH_TYPE_THUMBNAIL,
-        public ?User $user = null,
-    ) {
+        public array|string $input_string,
+        public string       $operator = 'and',
+        public ?User        $user = null,
+    )
+    {
     }
 
     public function handle()
@@ -55,13 +59,17 @@ class TextSearchCreationService
             return;
         }
 
+        $this->extractAdvancedFields();
+
         $search_data = [
-            'search_string' => is_array($this->search_string) ? $this->search_string : explode(',', $this->search_string),
-            'operator' => $this->operator,
-            'isPhrase' => $this->isPhrase,
-            'isOCR' => $this->isOCR,
-            'type' => $this->type,
+            'textsearchstrings' => $this->search_strings,
+            'textsearchoperator' => $this->operator,
+            'searchparameters' => ['textsearch' => 'Y', 'advanced_search' => count($this->advanced_fields) > 0 ? 'Y' : 'N'],
         ];
+
+        if(count($this->advanced_fields) > 0) {
+            $search_data['fields'] = $this->advanced_fields;
+        }
 
         $working_data = [
             Search::FLAG_PROCESSED => false,
@@ -78,6 +86,42 @@ class TextSearchCreationService
         $this->search = $search;
     }
 
+    protected function extractAdvancedFields()
+    {
+        $query = $this->input_string;
+
+        if (!is_array($query)) {
+            $query = explode(',', $query);
+        }
+
+        foreach ($query as $segment) {
+            $segment = trim($segment);
+            if (preg_match('/^(\w+):(.*)$/', $segment, $matches)) {
+
+                logger('matches: '. json_encode($matches));
+
+                $field_config = Arr::where(config('pm-search.advanced_search'), function ($config, $key) use ($matches) {
+                    return $config['key'] === $matches[1];
+                });
+                $field = array_key_first($field_config);
+
+                $value = $matches[2];
+
+                if (config('pm-search.advanced_search')[$field]['type'] === 'date') {
+                    $dates = explode('>', $value);
+                    $value = json_encode([
+                        Carbon::parse($dates[0])->toISOString(),
+                        Carbon::parse($dates[1])->toISOString(),
+                    ]);
+                }
+
+                $this->advanced_fields[$field] = $value;
+
+            } else {
+                $this->search_strings[] = $segment;
+            }
+        }
+    }
 
 
 }

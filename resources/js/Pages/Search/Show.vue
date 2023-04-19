@@ -8,7 +8,8 @@ import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
 import Dropdown from "primevue/dropdown";
 import SelectButton from 'primevue/selectbutton';
 import Sidebar from "primevue/sidebar";
-import ReportItem from "@/Components/Results/ReportItem.vue";
+import PreviewCard from "@/Components/Results/PreviewCard.vue";
+import PreviewRow from "@/Components/Results/PreviewRow.vue";
 import FullModal from "@/Components/Utility/FullModal.vue";
 import ViewSearchEntry from "@/Components/Results/ViewSearchEntry.vue";
 import {userPreferencesStore} from "@/stores/userPreferencesStore";
@@ -49,6 +50,12 @@ const filteredSearchData = ref<Object[]>([]);
 const filterText = ref<String>('');
 const visibleQuickDetails = ref(false);
 
+const backgroundModes = ref([
+    {value: 'cover', 'label': 'Cover'},
+    {value: 'contain', 'label': 'Fit'},
+    {value: 'zoom', 'label': 'Zoom'},
+]);
+
 provide('filters', {filters, filteredSearchData, filterText});
 provide('fields', {fields: props.fields, fields_config: props.fields_config});
 provide('report', props.report);
@@ -82,13 +89,12 @@ function completePerPage(e) {
 }
 
 function openEntryModal(item) {
-    console.log('click event', item);
+    visibleQuickDetails.value=false;
     isOpen.value = true;
     currentEntry.value = item;
 }
 
 function openQuickView(item) {
-    console.log('click event', item);
     visibleQuickDetails.value = true;
     quickViewEntry.value = item;
 }
@@ -127,11 +133,7 @@ function getSearchData() {
     for (const field in filters.value) {
         let terms = filters.value[field];
         if (terms.length > 0) {
-            console.log('filtering', field, terms);
             data = data.filter((entry: Object) => {
-                if (terms.includes(entry[field])) {
-                    console.log('FOUND');
-                }
 
                 return entry.hasOwnProperty(field)
                     && terms.includes(entry[field])
@@ -178,7 +180,7 @@ function getSearchData() {
                             </div>
                             <div class="mx-2 flex">
                                 <SelectButton v-model="userPreferences.backgroundMode" id="imageMode"
-                                              :options="[{value: 'cover', 'label': 'Cover'}, {value: 'contain', 'label': 'Fit'}]"
+                                              :options="backgroundModes"
                                               optionLabel="label" option-value="value" aria-labelledby="basic"/>
 
                             </div>
@@ -232,8 +234,20 @@ function getSearchData() {
                 </template>
 
                 <template #grid="slotProps">
-                    <ReportItem
+                    <PreviewCard
                         :item="slotProps.data"
+                        :grid-size="userPreferences.gridSize"
+                        :extra-class="visibleQuickDetails && quickViewEntry.formatted_job_number !== slotProps.data.formatted_job_number ? 'blur-sm': ''"
+                        :image-size="userPreferences.imageSize"
+                        :background-mode="userPreferences.backgroundMode"
+                        @on-click-view="openEntryModal"
+                        @on-click-quick-view="openQuickView"
+                    />
+                </template>
+                <template #list="slotProps">
+                    <PreviewRow
+                        :item="slotProps.data"
+                        :config="fields_config"
                         :grid-size="userPreferences.gridSize"
                         :extra-class="visibleQuickDetails && quickViewEntry.formatted_job_number !== slotProps.data.formatted_job_number ? 'blur-sm': ''"
                         :image-size="userPreferences.imageSize"
@@ -248,8 +262,8 @@ function getSearchData() {
 
     </div>
 
-    <Sidebar v-model:visible="visibleQuickDetails" position="right" class="w-full md:w-20rem lg:w-30rem">
-        <QuickViewSearchEntry :entry="quickViewEntry" :config="fields_config"/>
+    <Sidebar v-model:visible="visibleQuickDetails" position="left" class="w-full md:w-20rem lg:w-30rem">
+        <QuickViewSearchEntry :entry="quickViewEntry" :config="fields_config" @request-full-view="openEntryModal"/>
 
     </Sidebar>
     <FullModal v-model:visible="isOpen" position="full" id="report-modal">
@@ -301,7 +315,7 @@ function getSearchData() {
 }
 
 .p-dataview .p-dataview-content {
-    @apply bg-neutral-200;
+    @apply bg-neutral-200 p-2;
 }
 
 #taxonomySelector {

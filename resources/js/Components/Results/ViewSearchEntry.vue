@@ -25,7 +25,7 @@ const sortedConfig = computed(() => {
     });
 
     var sortedObj = {};
-    for(const key in sortedKeys) {
+    for (const key in sortedKeys) {
         sortedObj[sortedKeys[key]] = props.config[sortedKeys[key]];
     }
 
@@ -56,6 +56,14 @@ const highres = computed(() => {
 })
 
 const titleCase = (str) => window.titleCase(str);
+
+function isEcode(str) {
+    return str.match(/^[0-9]{6}[eE]$/);
+}
+
+const ecode = computed(() => {
+    return parseInt(props.entry.pcm_type_profile_name.toString().toLowerCase().replace('e', ''));
+})
 
 function exit() {
     emit('exit');
@@ -109,16 +117,26 @@ function next() {
                         <template v-if="params.display && !bridge_fields.includes(field)">
                             <div class="p-2 border even:bg-blue-100 even:border-white">
                                 <p class="font-bold">{{ titleCase(field) }}</p>
-                                <template v-if="field==='formatted_job_number'">
-                                    <a class="text-blue-500 hover:text-blue-700"
-                                       :href="'https://pm.mysgs.sgsco.com/Job/' + entry[field]"
-                                    >
+                                <div class="break-all">
+                                    <template v-if="field==='formatted_job_number'">
+                                        <a class="text-blue-500 hover:text-blue-700" target="_blank"
+                                           :href="'https://pm.mysgs.sgsco.com/Job/' + entry[field]"
+                                        >
+                                            {{ entry[field] }}
+                                        </a>
+                                    </template>
+                                    <template v-else-if="field==='pcm_type_profile_name' && isEcode(entry[field])">
+                                        <a class="text-blue-500 hover:text-blue-700" target="_blank"
+                                           :href="'https://cmf.sgsco.com/color-profile/' + ecode"
+                                           v-tooltip="'Open color profile in CMF'"
+                                        >
+                                            {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
+                                        </a>
+                                    </template>
+                                    <template v-else>
                                         {{ entry[field] }}
-                                    </a>
-                                </template>
-                                <template v-else>
-                                    {{ entry[field] }}
-                                </template>
+                                    </template>
+                                </div>
                             </div>
                         </template>
                     </template>
@@ -128,14 +146,14 @@ function next() {
             <div class="grid grid-flow-col mt-5">
 
                 <Fieldset class="col-2" v-for="bconf in bridge_fields" :legend="titleCase(bconf)" :key="bconf">
-                        <ul v-if="fields_config[bconf].response_type === 'list'">
-                            <template v-for="(row) in entry[bconf]">
-                                <li>{{ row }}</li>
-                            </template>
-                        </ul>
-                        <p v-else>
-                            {{ entry[bconf] }}
-                        </p>
+                    <ul v-if="fields_config[bconf].response_type === 'list'">
+                        <template v-for="(row) in entry[bconf]">
+                            <li>{{ row }}</li>
+                        </template>
+                    </ul>
+                    <p v-else>
+                        {{ entry[bconf] }}
+                    </p>
                 </Fieldset>
 
             </div>
