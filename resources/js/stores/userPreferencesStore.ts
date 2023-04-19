@@ -8,6 +8,7 @@ export const userPreferencesStore = defineStore(
         const imageSize = ref('sml')
         const backgroundMode = ref('cover')
         const perPage = ref(40)
+        const layout = ref('grid');
 
         const sortOrder = ref(-1)
         const sortField = ref('Score')
@@ -15,7 +16,8 @@ export const userPreferencesStore = defineStore(
         const selectedTaxonomy = ref([]);
 
         return {
-            gridSize, imageSize, backgroundMode, perPage,
+            gridSize, layout,
+            imageSize, backgroundMode, perPage,
             sortOrder, sortField,
             selectedTaxonomy
         }

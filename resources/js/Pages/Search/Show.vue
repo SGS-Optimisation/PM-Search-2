@@ -89,7 +89,7 @@ function completePerPage(e) {
 }
 
 function openEntryModal(item) {
-    visibleQuickDetails.value=false;
+    visibleQuickDetails.value = false;
     isOpen.value = true;
     currentEntry.value = item;
 }
@@ -156,7 +156,7 @@ function getSearchData() {
         <ResultsSidebar/>
 
         <div class="results-content md:col-span-3 lg:col-span-4 mt-2">
-            <DataView :value="filteredSearchData" :layout="layout" paginator paginatorPosition="bottom"
+            <DataView :value="filteredSearchData" :layout="userPreferences.layout" paginator paginatorPosition="bottom"
                       :rows="userPreferences.perPage"
                       :sortOrder="userPreferences.sortOrder" :sortField="userPreferences.sortField">
                 <template #header>
@@ -174,22 +174,25 @@ function getSearchData() {
                                 <label for="ac">Per Page</label>
                             </span>
                             </div>
-                            <div class="mx-2">
-                                <label>Grid Size</label>
-                                <Slider class="w-14rem" v-model="userPreferences.gridSize" :step="1" :min="1" :max="5"/>
-                            </div>
-                            <div class="mx-2 flex">
-                                <SelectButton v-model="userPreferences.backgroundMode" id="imageMode"
-                                              :options="backgroundModes"
-                                              optionLabel="label" option-value="value" aria-labelledby="basic"/>
+                            <template v-if="userPreferences.layout === 'grid'">
+                                <div class="mx-2">
+                                    <label>Grid Size</label>
+                                    <Slider class="w-14rem" v-model="userPreferences.gridSize" :step="1" :min="1"
+                                            :max="5"/>
+                                </div>
+                                <div class="mx-2 flex">
+                                    <SelectButton v-model="userPreferences.backgroundMode" id="imageMode"
+                                                  :options="backgroundModes"
+                                                  optionLabel="label" option-value="value" aria-labelledby="basic"/>
 
-                            </div>
-                            <div class="mx-2 flex flex-col">
-                                <SelectButton v-model="userPreferences.imageSize"
-                                              :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
-                                              optionLabel="label" option-value="value" aria-labelledby="basic"/>
-                                <!--                            <InputSwitch v-model="imageSize"  true-value="sml" false-value="lrg"/>-->
-                            </div>
+                                </div>
+                                <div class="mx-2 flex flex-col">
+                                    <SelectButton v-model="userPreferences.imageSize"
+                                                  :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
+                                                  optionLabel="label" option-value="value" aria-labelledby="basic"/>
+                                    <!--                            <InputSwitch v-model="imageSize"  true-value="sml" false-value="lrg"/>-->
+                                </div>
+                            </template>
                         </div>
 
                         <div class="flex  pt-2">
@@ -225,7 +228,7 @@ function getSearchData() {
                                 </div>
                             </div>
                             <div class="justify-items-end">
-                                <DataViewLayoutOptions v-model="layout"/>
+                                <DataViewLayoutOptions v-model="userPreferences.layout"/>
                             </div>
                         </div>
                     </div>
