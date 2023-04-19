@@ -65,14 +65,14 @@ const advancedSearchFieldSuggestions = ref({})
 
 function autocompleteSearch(event, field) {
     console.log('autocompleteSearch', event, field);
-    return;
+    //return;
 
     //TODO: fix this
     axios.post(configStore.getAutocompleteSuggester(), {
         suggester: field + '_suggester',
         query: event.query
     }).then((response) => {
-        advancedSearchFieldSuggestions.value[field] = response.data;
+        advancedSearchFieldSuggestions.value[field] = response.data.suggestions;
     })
 }
 
@@ -165,7 +165,7 @@ const titleCase = (str) => window.titleCase(str);
 
                     </div>
 
-                    <div class="w-max text-right">
+                    <div class="text-right">
                         <SelectButton v-model="form.operator" :options="operatorOptions"
                                       :unselectable=false
                                       optionLabel="name" optionValue="value"/>
@@ -207,3 +207,9 @@ const titleCase = (str) => window.titleCase(str);
         </OverlayPanel>
     </div>
 </template>
+
+<style>
+.p-selectbutton {
+    @apply w-max;
+}
+</style>
