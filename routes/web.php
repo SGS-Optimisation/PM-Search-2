@@ -56,7 +56,6 @@ Route::middleware([
                 Route::get('/', [SearchController::class, 'show'])->name('show');
                 Route::get('/status', [SearchController::class, 'status'])->name('status');
                 Route::get('/pending', [SearchController::class, 'pending'])->name('pending');
-                Route::get('/show', [SearchController::class, 'show'])->name('show');
 
                 Route::get('/refine', [SearchController::class, 'refine'])->name('refine');
                 Route::post('refine', [UploadController::class, 'store'])->name('refine.store');

@@ -4,7 +4,7 @@ import axios from "axios";
 import route from "ziggy-js";
 import {Head, useForm, usePage} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { onMounted } from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 
 defineOptions({layout: AppLayout})
 
@@ -13,22 +13,39 @@ const props = defineProps({
     search: {type: Object, required: true},
 });
 
-onMounted(() => {
+var error = ref<boolean>(false)
+
+onBeforeMount(() => {
+    waitMode();
+});
+
+function waitMode() {
+    setTimeout(() => {
+        queryProcessed();
+    }, 5000);
+}
+
+function queryProcessed() {
+//onMounted(() => {
     axios.get(route('search.status', props.search.id))
         .then(({data}) => {
             console.log(data);
             if (data.processed) {
                 //this.$inertia.visit(
-                axios.get(
-                    route('search.show', props.search.id),
-                    {method: 'GET'}
+                axios.get(route('search.show', props.search.id)
+                    //{method: 'GET'}
                     //{replace: true}
-                );
-            } else if(data.error){
-                props.search.error = data.error;
+                ).then(response => {
+                    console.log(response);
+                });
+            } else if (data.error) {
+                error = data.error;
+            } else {
+                waitMode();
             }
-        })
-});
+        });
+}
+
 
 </script>
 
