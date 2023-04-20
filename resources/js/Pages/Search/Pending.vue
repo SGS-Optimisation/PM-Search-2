@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import ProgressSpinner from 'primevue/progressspinner';
+import Tag from "primevue/tag";
 import axios from "axios";
 import route from "ziggy-js";
 import {Head, router, useForm, usePage} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import {onBeforeMount, onMounted, ref} from "vue";
+import {configStore} from "@/stores/config-store";
 
 defineOptions({layout: AppLayout})
 
@@ -44,6 +46,17 @@ function queryProcessed() {
         });
 }
 
+function formatAdvancedSearchField(field, value) {
+    const config = configStore.getAdvancedSearchFields()[field];
+
+    if(configStore.getAdvancedSearchFields()[field].type === 'date') {
+        value = JSON.parse(value);
+        value = (new Date(value[0])).toLocaleDateString() + ' - ' + (new Date(value[1])).toLocaleDateString();
+    }
+
+    return config.key + ':' + value;
+}
+
 </script>
 
 <template>
@@ -56,7 +69,20 @@ function queryProcessed() {
                     </template>
                     <template v-else>
                         <p>Searching for
-                            <em>{{ search.search_data.search_string.join(' ' + search.search_data.operator.toUpperCase() + ' ') }}</em>
+
+                            <template v-if="search.search_data.hasOwnProperty('search_string')">
+                                <em>{{ search.search_data.search_string.join(' ' + search.search_data.operator.toUpperCase() + ' ') }}</em>
+                            </template>
+                            <template v-else>
+                                {{search.search_data.textsearchstrings.join(' ' + search.search_data.textsearchoperator.toUpperCase() + ' ') }}
+
+                                <template v-if="search.search_data.hasOwnProperty('fields')">
+                                    <Tag v-for="(value, field) in search.search_data.fields" :key="field" class="ml-1 mb-1"
+                                         severity=""
+                                         :value="formatAdvancedSearchField(field, value)" rounded></Tag>
+                                </template>
+                            </template>
+
                         </p>
                     </template>
                 </h2>

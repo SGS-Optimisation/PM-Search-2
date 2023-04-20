@@ -40,6 +40,8 @@ class TextSearchCreationService
         public ?User        $user = null,
     )
     {
+        $this->advanced_fields = [];
+        $this->search_strings = [];
     }
 
     public function handle()
