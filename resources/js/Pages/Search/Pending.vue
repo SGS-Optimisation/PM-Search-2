@@ -2,7 +2,7 @@
 import ProgressSpinner from 'primevue/progressspinner';
 import axios from "axios";
 import route from "ziggy-js";
-import {Head, useForm, usePage} from "@inertiajs/vue3";
+import {Head, router, useForm, usePage} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import {onBeforeMount, onMounted, ref} from "vue";
 
@@ -26,18 +26,15 @@ function waitMode() {
 }
 
 function queryProcessed() {
-//onMounted(() => {
     axios.get(route('search.status', props.search.id))
         .then(({data}) => {
             console.log(data);
             if (data.processed) {
-                //this.$inertia.visit(
-                axios.get(route('search.show', props.search.id)
-                    //{method: 'GET'}
-                    //{replace: true}
-                ).then(response => {
-                    console.log(response);
-                });
+                router.visit(route('search.show', {
+                    id: props.search.id,
+                    method: 'get',
+                    replace: true
+                }));
             } else if (data.error) {
                 error = data.error;
             } else {
@@ -45,7 +42,6 @@ function queryProcessed() {
             }
         });
 }
-
 
 </script>
 
