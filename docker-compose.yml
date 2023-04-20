@@ -16,6 +16,7 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-app
         ports:
             - "80:80"
         volumes:
@@ -36,6 +37,7 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-php
         ports:
             - "9000:9000"
         depends_on:
@@ -96,6 +98,7 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-composer
         volumes:
             - ./:/var/www/html
         entrypoint: [ 'composer', 'install', '--ignore-platform-reqs' ]
@@ -112,6 +115,7 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-migrations
         volumes:
             - ./:/var/www/html
         depends_on:
@@ -143,6 +147,7 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-artisan
         volumes:
             - ./:/var/www/html:delegated
         entrypoint: [ 'php', '/var/www/html/artisan' ]
@@ -159,6 +164,7 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue
         volumes:
             - ./:/var/www/html:delegated
         command: [ 'php', '/var/www/html/artisan', "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
