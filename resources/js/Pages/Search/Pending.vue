@@ -30,11 +30,12 @@ function queryProcessed() {
         .then(({data}) => {
             console.log(data);
             if (data.processed) {
-                router.visit(route('search.show', {
-                    id: props.search.id,
-                    method: 'get',
-                    replace: true
-                }));
+                router.visit(
+                    route('search.show', {id: props.search.id}),
+                    {
+                        method: 'get',
+                        replace: true
+                    });
             } else if (data.error) {
                 error = data.error;
             } else {
@@ -55,7 +56,7 @@ function queryProcessed() {
                     </template>
                     <template v-else>
                         <p>Searching for
-                            <em>{{search.search_data.search_string.join(' ' + search.search_data.operator.toUpperCase() + ' ')}}</em>
+                            <em>{{ search.search_data.search_string.join(' ' + search.search_data.operator.toUpperCase() + ' ') }}</em>
                         </p>
                     </template>
                 </h2>
@@ -67,7 +68,7 @@ function queryProcessed() {
                     An error has occured. Please try again later.
                 </template>
                 <template v-else>
-                    <ProgressSpinner style="width: 50px; height: 50px;" />
+                    <ProgressSpinner style="width: 50px; height: 50px;"/>
                 </template>
             </div>
         </div>
