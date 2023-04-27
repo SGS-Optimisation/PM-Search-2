@@ -14,6 +14,14 @@ import InputText from "primevue/inputtext";
 import {configStore} from "@/stores/config-store";
 import axios from "axios";
 
+const props = defineProps({
+    initialValues: {
+        type: Object,
+        required: false,
+        default: null
+    }
+})
+
 const form = useForm({
     search_string: Array,
     operator: <String>'and',
@@ -118,6 +126,19 @@ function checkValidRange(field) {
 }
 
 onMounted(() => {
+    if (props.initialValues !== null && props.initialValues.value !== null) {
+        for (var key in Object.keys(props.initialValues)) {
+            if (Object.keys(props.initialValues)[key] === "textsearchstrings" && props.initialValues.textsearchstrings != null) {
+                for (var tag in props.initialValues.textsearchstrings) {
+                    tags.value[tag] = props.initialValues.textsearchstrings[tag];
+                }
+            } else if (Object.keys(props.initialValues)[key] === "fields" && props.initialValues.fields != null) {
+                for (var key in Object.entries(props.initialValues.fields)) {
+                    tags.value.push(Object.entries(props.initialValues.fields)[key].join(":"));
+                }
+            }
+        }
+    }
     for (const key in configStore.getAdvancedSearchFields()) {
         advancedSearchField.value[key] = null;
         advancedSearchFieldSuggestions.value[key] = [];
