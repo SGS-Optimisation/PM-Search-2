@@ -5,22 +5,28 @@ networks:
         driver: bridge
 
 volumes:
+    pmsearch-uploads:
+        driver: azure_file
+        driver_opts:
+            share_name: pmsearchuiuploads
+            storage_account_name: pmsearchuistorage
     pmsearch-mysql:
-        driver: local
+        driver: azure_file
+        driver_opts:
+            share_name: pmsearchuitestvolume
+            storage_account_name: pmsearchuistorage
 
 services:
     app:
         build:
-            context: ./dockerfiles
-            dockerfile: nginx.dockerfile
+            context: .
+            dockerfile: dockerfiles/nginx.dockerfile
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-app
         ports:
             - "80:80"
-        volumes:
-            - ./:/var/www/html:delegated
         depends_on:
             - php
             - redis
@@ -32,24 +38,44 @@ services:
 
     php:
         build:
-            context: ./dockerfiles
-            dockerfile: php.dockerfile
+            context: .
+            dockerfile: dockerfiles/php.dockerfile
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
+        env_file: ./.env
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-php
         ports:
             - "9000:9000"
         depends_on:
-            - composer
-            - migrations
-        volumes:
-            - ./:/var/www/html:delegated
+            - mysql
         networks:
             - laravel
+        volumes:
+            - pmsearch-uploads:/var/www/html/storage/app
         environment:
             APP_ENV: local
             CONTAINER_ROLE: app
+
+    queue:
+        build:
+            context: .
+            dockerfile: dockerfiles/php.dockerfile
+            args:
+                - UID=${UID:-1000}
+                - GID=${GID:-1000}
+        env_file: ./.env
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue
+        command: [ 'php', '/var/www/html/artisan', "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
+        depends_on:
+            - mysql
+        networks:
+            - laravel
+        volumes:
+            - pmsearch-uploads:/var/www/html/storage/app
+        environment:
+            APP_ENV: local
+            CONTAINER_ROLE: worker
 
     mysql:
         image: 'mysql/mysql-server:8.0'
@@ -91,87 +117,4 @@ services:
             retries: 3
             timeout: 5s
 
-    composer:
-        build:
-            context: ./dockerfiles
-            dockerfile: php.dockerfile
-            args:
-                - UID=${UID:-1000}
-                - GID=${GID:-1000}
-        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-composer
-        volumes:
-            - ./:/var/www/html
-        entrypoint: [ 'composer', 'install', '--ignore-platform-reqs' ]
-        networks:
-            - laravel
-        environment:
-            APP_ENV: local
-            CONTAINER_ROLE: composer
 
-    migrations:
-        build:
-            context: ./dockerfiles
-            dockerfile: php.dockerfile
-            args:
-                - UID=${UID:-1000}
-                - GID=${GID:-1000}
-        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-migrations
-        volumes:
-            - ./:/var/www/html
-        depends_on:
-            - mysql
-        command: [ 'php', '/var/www/html/artisan', "migrate" ]
-        networks:
-            - laravel
-        environment:
-            APP_ENV: local
-            CONTAINER_ROLE: composer
-
-    npm:
-        image: node:current-alpine
-        volumes:
-            - ./:/var/www/html
-        ports:
-            - "3000:3000"
-            - "3001:3001"
-            - "5173:5173"
-        working_dir: /var/www/html
-        command: [ '/bin/sh', '-c', 'npm install && npm run build' ]
-        networks:
-            - laravel
-
-    artisan:
-        build:
-            context: ./dockerfiles
-            dockerfile: php.dockerfile
-            args:
-                - UID=${UID:-1000}
-                - GID=${GID:-1000}
-        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-artisan
-        volumes:
-            - ./:/var/www/html:delegated
-        entrypoint: [ 'php', '/var/www/html/artisan' ]
-        networks:
-            - laravel
-        environment:
-            APP_ENV: local
-            CONTAINER_ROLE: artisan
-
-    queue:
-        build:
-            context: ./dockerfiles
-            dockerfile: php.dockerfile
-            args:
-                - UID=${UID:-1000}
-                - GID=${GID:-1000}
-        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue
-        volumes:
-            - ./:/var/www/html:delegated
-        command: [ 'php', '/var/www/html/artisan', "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
-        depends_on:
-            - php
-        networks:
-            - laravel
-        environment:
-            APP_ENV: local
-            CONTAINER_ROLE: scheduler

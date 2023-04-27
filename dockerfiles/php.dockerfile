@@ -5,22 +5,32 @@ ARG GID
 
 ENV UID=${UID}
 ENV GID=${GID}
+#ENV COMPOSER_ALLOW_SUPERUSER=1
+#ENV NOVA_USERNAME=${NOVA_USERNAME}
+#ENV NOVA_LICENSE_KEY=${NOVA_LICENSE_KEY}
 
-RUN mkdir -p /var/www/html
-
-WORKDIR /var/www/html
+ENV NODE_VERSION=${NODE_VERSION:-20.0.0}
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-
-# MacOS staff group's gid is 20, so is the dialout group in alpine linux. We're not using it, let's just remove it.
 RUN delgroup dialout
 
 RUN addgroup -g ${GID} --system laravel
 RUN adduser -G laravel --system -D -s /bin/sh -u ${UID} laravel
 
-RUN mkdir -p /home/user/laravel/.composer
-ADD ./composer/auth.json /home/user/laravel/.composer/auth.json
+RUN mkdir -p /var/www/html
+WORKDIR /var/www/html
+COPY --chown=laravel:laravel . .
+
+#RUN composer config http-basic.nova.laravel.com ${NOVA_USERNAME} ${NOVA_LICENSE_KEY}
+
+# MacOS staff group's gid is 20, so is the dialout group in alpine linux. We're not using it, let's just remove it.
+
+
+RUN apk add nodejs npm git openssh-client
+
+RUN mkdir -p /home/laravel/.composer
+ADD ./dockerfiles/composer/auth.json /home/laravel/.composer/auth.json
 #ADD scripts/scheduler.sh /usr/local/bin/scheduler
 
 #RUN chmod +x /usr/local/bin/scheduler
@@ -38,11 +48,15 @@ RUN sed -i "s/memory_limit = 128M/memory_limit = 1G/g" /usr/local/etc/php/php.in
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions pdo pdo_mysql pdo_dblib bcmath gd zip redis #sqlsrv pdo_sqlsrv mongodb
+    install-php-extensions pdo pdo_mysql pdo_dblib bcmath gd zip redis imagick #sqlsrv pdo_sqlsrv mongodb
 
 #RUN docker-php-ext-install pdo pdo_mysql pdo_dblib bcmath gd
 
 
 USER laravel
+
+RUN composer install
+RUN npm install && npm run build
+#RUN php artisan migrate
 
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
