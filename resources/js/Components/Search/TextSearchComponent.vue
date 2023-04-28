@@ -127,21 +127,23 @@ function checkValidRange(field) {
 
 onMounted(() => {
     if (props.initialValues !== null && props.initialValues.value !== null) {
-        for (var key in Object.keys(props.initialValues)) {
-            if (Object.keys(props.initialValues)[key] === "textsearchstrings" && props.initialValues.textsearchstrings != null) {
+            if (props.initialValues.textsearchstrings != null && props.initialValues.fields != null) {
                 for (var tag in props.initialValues.textsearchstrings) {
-                    tags.value[tag] = props.initialValues.textsearchstrings[tag];
+                    tags.value.push(props.initialValues.textsearchstrings[tag]);
                 }
-            } else if (Object.keys(props.initialValues)[key] === "fields" && props.initialValues.fields != null) {
                 for (var key in Object.entries(props.initialValues.fields)) {
                     tags.value.push(Object.entries(props.initialValues.fields)[key].join(":"));
                 }
+            } else if (props.initialValues.fields != null) {
+                for (var key in Object.entries(props.initialValues.fields)) {
+                    tags.value.push(Object.entries(props.initialValues.fields)[key].join(":"));
+                }
+            } else {
+                for (var tag in props.initialValues.textsearchstrings) {
+                    tags.value.push(props.initialValues.textsearchstrings[tag]);
+                }
             }
-        }
-    }
-    for (const key in configStore.getAdvancedSearchFields()) {
-        advancedSearchField.value[key] = null;
-        advancedSearchFieldSuggestions.value[key] = [];
+        handleChangeTag(tags.value);
     }
 });
 
@@ -161,8 +163,8 @@ const titleCase = (str) => window.titleCase(str);
                 Text Search
             </template>
             <template #description>
-                Search for text from the artwork pdf consisting of 400K plus files collected since July 2018 along with
-                other parameters such as brand, variety, promotion, substrate, dieline.
+                Search for text from the artwork pdf consisting of 700K plus files collected since July 2018 along with
+                other parameters such as brand, variety, promotion, substrate, dieline and other data points from over 3 million Mysgs jobs.
             </template>
             <template #form>
                 <div class="col-span-6 flex flex-row w-full items-center">
