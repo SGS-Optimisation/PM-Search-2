@@ -27,7 +27,7 @@ COPY --chown=laravel:laravel . .
 # MacOS staff group's gid is 20, so is the dialout group in alpine linux. We're not using it, let's just remove it.
 
 
-RUN apk add nodejs npm git openssh-client
+RUN apk add git openssh-client
 
 RUN mkdir -p /home/laravel/.composer
 ADD ./dockerfiles/composer/auth.json /home/laravel/.composer/auth.json
@@ -56,7 +56,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
 USER laravel
 
 RUN composer install
-RUN npm install && npm run build
+#RUN npm install && npm run build
 #RUN php artisan migrate
 
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]

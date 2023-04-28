@@ -17,14 +17,14 @@ volumes:
             storage_account_name: pmsearchuistorage
 
 services:
-    app:
+    web:
         build:
             context: .
             dockerfile: dockerfiles/nginx.dockerfile
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
-        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-app
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-web
         ports:
             - "80:80"
         depends_on:
