@@ -14,6 +14,8 @@ volumes:
 
 services:
     web:
+        domainname: sgscopmsearchv2
+        env_file: ./.env.azure
         deploy:
             resources:
                 reservations:
@@ -24,6 +26,7 @@ services:
                     memory: 2G
 
     php:
+        env_file: ./.env.azure
         deploy:
             resources:
                 reservations:
@@ -34,6 +37,7 @@ services:
                     memory: 3G
 
     queue:
+        env_file: ./.env.azure
         deploy:
             resources:
                 reservations:

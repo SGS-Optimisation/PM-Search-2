@@ -12,14 +12,15 @@ services:
     web:
         build:
             context: .
-            dockerfile: dockerfiles/nginx.dockerfile
+            dockerfile: dockerfiles/caddy.dockerfile
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
-        env_file: ./.env.azure
+        env_file: ./.env.docker
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-web
         ports:
             - "80:80"
+            - "443:443"
         depends_on:
             - php
             - redis
@@ -30,6 +31,7 @@ services:
             - pmsearch-uploads:/var/www/html/storage/app
         expose:
             - 80
+            - 443
 
     php:
         build:
@@ -38,7 +40,7 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
-        env_file: ./.env.azure
+        env_file: ./.env.docker
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-php
         ports:
             - "9000:9000"
@@ -58,7 +60,7 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
-        env_file: ./.env.azure
+        env_file: ./.env.docker
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue
         command: [ 'php', '/var/www/html/artisan', "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
         networks:
