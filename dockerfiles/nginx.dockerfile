@@ -1,3 +1,11 @@
+FROM node:lts AS frontend
+WORKDIR /frontend
+COPY package*.json .
+RUN npm install
+COPY . .
+RUN npm run build
+
+
 FROM nginx:stable-alpine
 
 ARG UID
@@ -19,7 +27,7 @@ ADD ./dockerfiles/nginx/default.conf /etc/nginx/conf.d/
 
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
-COPY --chown=nginx:nginx . .
+COPY --chown=nginx:nginx --from=frontend /frontend/ /var/www/html
 
 RUN apk add nodejs npm 
 

@@ -1,4 +1,12 @@
-FROM php:8.2-fpm-alpine
+FROM node:lts AS frontend
+WORKDIR /frontend
+COPY package*.json .
+RUN npm install
+COPY . .
+RUN npm run build
+
+
+FROM superbase
 
 ARG UID
 ARG GID
@@ -11,8 +19,6 @@ ENV GID=${GID}
 
 ENV NODE_VERSION=${NODE_VERSION:-20.0.0}
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-
 RUN delgroup dialout
 
 RUN addgroup -g ${GID} --system laravel
@@ -21,13 +27,13 @@ RUN adduser -G laravel --system -D -s /bin/sh -u ${UID} laravel
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 COPY --chown=laravel:laravel . .
+COPY --chown=laravel:laravel --from=frontend /frontend/public/build /var/www/html/public/build
 
 #RUN composer config http-basic.nova.laravel.com ${NOVA_USERNAME} ${NOVA_LICENSE_KEY}
 
 # MacOS staff group's gid is 20, so is the dialout group in alpine linux. We're not using it, let's just remove it.
 
 
-RUN apk add git openssh-client
 
 RUN mkdir -p /home/laravel/.composer
 ADD ./dockerfiles/composer/auth.json /home/laravel/.composer/auth.json
@@ -44,11 +50,6 @@ RUN echo "php_admin_flag[log_errors] = on" >> /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i "s/memory_limit = 128M/memory_limit = 1G/g" /usr/local/etc/php/php.ini
 
 #RUN apk add freetds-dev freetds openssl1.1-compat zlib
-
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions pdo pdo_mysql pdo_dblib bcmath gd zip redis imagick #sqlsrv pdo_sqlsrv mongodb
 
 #RUN docker-php-ext-install pdo pdo_mysql pdo_dblib bcmath gd
 

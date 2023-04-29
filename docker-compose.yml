@@ -6,15 +6,7 @@ networks:
 
 volumes:
     pmsearch-uploads:
-        driver: azure_file
-        driver_opts:
-            share_name: pmsearchuiuploads
-            storage_account_name: pmsearchuistorage
-    pmsearch-mysql:
-        driver: azure_file
-        driver_opts:
-            share_name: pmsearchuitestvolume
-            storage_account_name: pmsearchuistorage
+    pmsearch-db:
 
 services:
     web:
@@ -24,6 +16,7 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
+        env_file: ./.env.azure
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-web
         ports:
             - "80:80"
@@ -33,6 +26,8 @@ services:
             - queue
         networks:
             - laravel
+        volumes:
+            - pmsearch-uploads:/var/www/html/storage/app
         expose:
             - 80
 
@@ -43,16 +38,15 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
-        env_file: ./.env
+        env_file: ./.env.azure
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-php
         ports:
             - "9000:9000"
-        depends_on:
-            - mysql
         networks:
             - laravel
         volumes:
             - pmsearch-uploads:/var/www/html/storage/app
+            - pmsearch-db:/var/www/html/database/mounted
         environment:
             APP_ENV: local
             CONTAINER_ROLE: app
@@ -64,43 +58,18 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
-        env_file: ./.env
+        env_file: ./.env.azure
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue
         command: [ 'php', '/var/www/html/artisan', "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
-        depends_on:
-            - mysql
         networks:
             - laravel
         volumes:
             - pmsearch-uploads:/var/www/html/storage/app
+            - pmsearch-db:/var/www/html/database/mounted
         environment:
             APP_ENV: local
             CONTAINER_ROLE: worker
 
-    mysql:
-        image: 'mysql/mysql-server:8.0'
-        ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
-        environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ROOT_HOST: '%'
-            MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
-            MYSQL_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ALLOW_EMPTY_PASSWORD: 1
-        volumes:
-            - 'pmsearch-mysql:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
-        networks:
-            - laravel
-        healthcheck:
-            test:
-                - CMD
-                - mysqladmin
-                - ping
-                - '-p${DB_PASSWORD}'
-            retries: 3
-            timeout: 5s
 
     redis:
         image: redis:alpine

@@ -1,4 +1,5 @@
 bootstrap/cache/services.php
+public/build
 
 storage/app/*
 storage/framework/cache/*
@@ -7,6 +8,7 @@ storage/framework/views/*
 storage/logs/*
 
 database/*.sqlite
+database/mounted/*.sqlite
 
 vendor
 

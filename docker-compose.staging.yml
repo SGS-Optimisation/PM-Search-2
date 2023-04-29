@@ -1,0 +1,57 @@
+version: '3'
+
+volumes:
+    pmsearch-uploads:
+        driver: azure_file
+        driver_opts:
+            share_name: pmsearchuiuploads
+            storage_account_name: pmsearchuistorage
+    pmsearch-db:
+        driver: azure_file
+        driver_opts:
+            share_name: pmsearchuitestvolume
+            storage_account_name: pmsearchuistorage
+
+services:
+    web:
+        deploy:
+            resources:
+                reservations:
+                    cpus: '0.5'
+                    memory: 1G
+                limits:
+                    cpus: '2'
+                    memory: 2G
+
+    php:
+        deploy:
+            resources:
+                reservations:
+                    cpus: '1'
+                    memory: 2G
+                limits:
+                    cpus: '3'
+                    memory: 3G
+
+    queue:
+        deploy:
+            resources:
+                reservations:
+                    cpus: '0.5'
+                    memory: 2G
+                limits:
+                    cpus: '3'
+                    memory: 3G
+
+
+    redis:
+        deploy:
+            resources:
+                reservations:
+                    cpus: '0.5'
+                    memory: 1G
+                limits:
+                    cpus: '2'
+                    memory: 3G
+
+
