@@ -30,7 +30,7 @@ services:
                     cpus: '1'
                     memory: 2G
                 limits:
-                    cpus: '3'
+                    cpus: '2'
                     memory: 3G
 
     queue:
@@ -40,7 +40,7 @@ services:
                     cpus: '0.5'
                     memory: 2G
                 limits:
-                    cpus: '3'
+                    cpus: '2'
                     memory: 3G
 
 
