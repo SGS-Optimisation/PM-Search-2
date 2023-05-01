@@ -136,7 +136,7 @@ onMounted(() => {
             for (var field in Object.entries(props.initialValues.fields)) {
                 if (configStore.getAdvancedSearchFields().hasOwnProperty(Object.keys(props.initialValues.fields)[field])) {
                     if (configStore.getAdvancedSearchFields()[Object.keys(props.initialValues.fields)[field]].type === 'date') {
-                        var dateValue = Object.entries(props.initialValues.fields)[field];
+                        var dateValue = Object.values(props.initialValues.fields)[field];
                         var value = dateValue.slice(2, -2).split(",");
                         var d1 = value[0].split('T')[0];
                         var d2 = value[1].slice(1).split('T')[0];
