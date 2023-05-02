@@ -128,22 +128,21 @@ function checkValidRange(field) {
 onMounted(() => {
     if (props.initialValues !== null && props.initialValues.value !== null) {
         if (props.initialValues.textsearchstrings != null) {
-            for (var tag in props.initialValues.textsearchstrings) {
+            for (const tag in props.initialValues.textsearchstrings) {
                 tags.value.push(props.initialValues.textsearchstrings[tag]);
             }
         }
         if (props.initialValues.fields != null) {
-            for (var field in Object.entries(props.initialValues.fields)) {
-                if (configStore.getAdvancedSearchFields().hasOwnProperty(Object.keys(props.initialValues.fields)[field])) {
-                    if (configStore.getAdvancedSearchFields()[Object.keys(props.initialValues.fields)[field]].type === 'date') {
-                        var dateValue = Object.values(props.initialValues.fields)[field];
-                        var value = dateValue.slice(2, -2).split(",");
-                        var d1 = value[0].split('T')[0];
-                        var d2 = value[1].slice(1).split('T')[0];
-                        value = d1 + ' > ' + d2;
-                        tags.value.push(configStore.getAdvancedSearchFields()[Object.keys(props.initialValues.fields)[field]].key + ': ' + value);
+            for (const field in props.initialValues.fields) {
+                if (configStore.getAdvancedSearchFields().hasOwnProperty(field)) {
+                    if (configStore.getAdvancedSearchFields()[field].type === 'date') {
+                        const dates_array = JSON.parse(props.initialValues.fields[field])
+                        var d1 = new Date(dates_array[0]).toLocaleDateString().split('T')[0];
+                        var d2 = new Date(dates_array[1]).toLocaleDateString().split('T')[0];
+                        var value = d1 + ' - ' + d2;
+                        tags.value.push(configStore.getAdvancedSearchFields()[field].key + ': ' + value);
                     } else {
-                        tags.value.push(configStore.getAdvancedSearchFields()[Object.keys(props.initialValues.fields)[field]].key + ': ' + Object.values(props.initialValues.fields)[field]);
+                        tags.value.push(configStore.getAdvancedSearchFields()[field].key + ': ' + props.initialValues.fields[field]);
                     }
                 }
             }
