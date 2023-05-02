@@ -23,7 +23,9 @@ export default {
                                 class="p-sidebar-close p-sidebar-icon p-link"
                                 :aria-label="closeAriaLabel"
                                 @click="hide" @keydown.esc="hide">
-                            <span :class="['p-sidebar-close-icon', closeIcon]" />
+                            <slot name="closeicon">
+                                <component :is="closeIcon ? 'span' : 'TimesIcon'" :class="['p-sidebar-close-icon ', closeIcon]"></component>
+                            </slot>
                         </button>
                     </div>
                     <div :ref="contentRef" class="p-sidebar-content">
