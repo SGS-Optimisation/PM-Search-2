@@ -45,16 +45,18 @@ function handleChangeTag(event) {
     for(const tag of tags.value) {
         if(tag.indexOf(':') > 0) {
             const parts = tag.split(':');
-            var field = false;
+            var field:string = '';
+            var type = null;
 
             for(const key in configStore.getAdvancedSearchFields()) {
                 if(configStore.getAdvancedSearchFields()[key].key === parts[0]) {
                     field = key;
+                    type = configStore.getAdvancedSearchFields()[key].type
                     break;
                 }
             }
 
-            if(field)
+            if(field && type !== 'date')
                 advancedSearchField.value[field] = parts[1];
             else
                 parseAdvancedFields();
@@ -145,11 +147,12 @@ onMounted(() => {
                         var d1 = new Date(dates_array[0]);
                         var d2 = new Date(dates_array[1]);
                         advancedSearchField.value[field] = [d1, d2];
-                        /*var d1 = new Date(dates_array[0]).toLocaleDateString().split('T')[0];
-                        var d2 = new Date(dates_array[1]).toLocaleDateString().split('T')[0];
-                        var value = d1 + ' - ' + d2;
-                        tags.value.push(configStore.getAdvancedSearchFields()[field].key + ': ' + value);*/
-                        //parseAdvancedFields();
+
+                        let tagKey = configStore.getAdvancedSearchFields()[field].key;
+                        var d1_str = d1.toISOString().split('T')[0];
+                        var d2_str = d2.toISOString().split('T')[0];
+                        tags.value.push(tagKey + ':' + d1_str + '>' + d2_str);
+
                     } else {
                         tags.value.push(configStore.getAdvancedSearchFields()[field].key + ': ' + props.initialValues.fields[field]);
                     }
