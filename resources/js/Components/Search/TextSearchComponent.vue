@@ -19,6 +19,11 @@ const props = defineProps({
         type: Object,
         required: false,
         default: null
+    },
+    compactMode: {
+        type: Boolean,
+        required: false,
+        default: false,
     }
 })
 
@@ -164,11 +169,11 @@ const titleCase = (str) => window.titleCase(str);
 
 <template>
     <div>
-        <jet-form-section @submitted="doSearch" class="mb-4">
+        <jet-form-section @submitted="doSearch" class="mb-4" :compact-mode="compactMode">
             <template #title>
                 Text Search
             </template>
-            <template #description>
+            <template #description v-if="!compactMode">
                 Search for text from the artwork pdf consisting of 700K plus files collected since July 2018 along with
                 other parameters such as brand, variety, promotion, substrate, dieline and other data points from over 3 million Mysgs jobs.
             </template>

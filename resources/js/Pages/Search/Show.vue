@@ -153,7 +153,7 @@ function getSearchData() {
 
     <div class="bg-white shadow">
         <div class="max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md">
-            <TextSearchComponent :initial-values="search_data"/>
+            <TextSearchComponent :initial-values="search_data" :compact-mode="true"/>
         </div>
     </div>
 
