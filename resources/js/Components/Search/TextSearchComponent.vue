@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {defineComponent, watch, ref, reactive, onMounted} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted, onUpdated} from "vue";
 import JetFormSection from '@/Components/Jetstream/FormSection.vue';
 import route from "ziggy-js";
 import AutoComplete from 'primevue/autocomplete';
@@ -56,8 +56,9 @@ function handleChangeTag(event) {
                 }
             }
 
-            if(field && type !== 'date')
-                advancedSearchField.value[field] = parts[1];
+            if(field) {
+                if (type !== 'date') advancedSearchField.value[field] = parts[1];
+            }
             else
                 parseAdvancedFields();
         }
@@ -133,6 +134,15 @@ function checkValidRange(field) {
 }
 
 onMounted(() => {
+    parseInitialValues();
+});
+
+onUpdated(() => {
+    parseInitialValues();
+})
+
+
+function parseInitialValues() {
     if (props.initialValues !== null && props.initialValues.value !== null) {
         if (props.initialValues.textsearchstrings != null) {
             for (const tag in props.initialValues.textsearchstrings) {
@@ -161,8 +171,7 @@ onMounted(() => {
         }
         handleChangeTag(tags.value);
     }
-
-});
+}
 
 const toggleAdvanced = (event) => {
     advancedSearchOverlay.value.toggle(event);
