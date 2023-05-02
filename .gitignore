@@ -21,3 +21,5 @@ yarn-error.log
 _ide_helper.php
 .DS_Store
 .env.valet
+.env.azure
+.env.docker

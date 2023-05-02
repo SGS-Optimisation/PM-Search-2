@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+    laravel:
+        driver: bridge
+
+volumes:
+    pmsearch-uploads:
+    pmsearch-db:
+
+services:
+    redis:
+      image: redis:alpine
+      restart: unless-stopped
+      ports:
+        - "6379:6379"
+      networks:
+        - laravel
+      healthcheck:
+        test:
+          - CMD
+          - redis-cli
+          - ping
+        retries: 3
+        timeout: 5s
+
+

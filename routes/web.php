@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AzureAuthController;
+use App\Http\Controllers\CaddyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UploadController;
@@ -37,13 +38,13 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::get('/', function (){
+    Route::get('/', function () {
         return redirect(route('dashboard'));
     })->name('home');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::post('/upload',  [UploadController::class, 'store'])->name('image-search');
+    Route::post('/upload', [UploadController::class, 'store'])->name('image-search');
 
     Route::name('search.')->prefix('/search')
         ->group(function () {
@@ -52,7 +53,7 @@ Route::middleware([
             Route::get('/image', [SearchController::class, 'image'])->name('image');
             Route::get('/text', [SearchController::class, 'text'])->name('text');
 
-            Route::prefix('/{search}')->group(function($group){
+            Route::prefix('/{search}')->group(function ($group) {
                 Route::get('/', [SearchController::class, 'show'])->name('show');
                 Route::get('/status', [SearchController::class, 'status'])->name('status');
                 Route::get('/pending', [SearchController::class, 'pending'])->name('pending');
@@ -66,10 +67,5 @@ Route::middleware([
                 }*/
 
             });
-
-
-
-
         });
-
 });

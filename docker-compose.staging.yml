@@ -41,19 +41,8 @@ services:
         deploy:
             resources:
                 reservations:
-                    cpus: '0.5'
+                    cpus: '1'
                     memory: 2G
-                limits:
-                    cpus: '2'
-                    memory: 3G
-
-
-    redis:
-        deploy:
-            resources:
-                reservations:
-                    cpus: '0.5'
-                    memory: 1G
                 limits:
                     cpus: '2'
                     memory: 3G
