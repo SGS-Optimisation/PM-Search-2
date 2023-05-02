@@ -142,10 +142,14 @@ onMounted(() => {
                 if (configStore.getAdvancedSearchFields().hasOwnProperty(field)) {
                     if (configStore.getAdvancedSearchFields()[field].type === 'date') {
                         const dates_array = JSON.parse(props.initialValues.fields[field])
-                        var d1 = new Date(dates_array[0]).toLocaleDateString().split('T')[0];
+                        var d1 = new Date(dates_array[0]);
+                        var d2 = new Date(dates_array[1]);
+                        advancedSearchField.value[field] = [d1, d2];
+                        /*var d1 = new Date(dates_array[0]).toLocaleDateString().split('T')[0];
                         var d2 = new Date(dates_array[1]).toLocaleDateString().split('T')[0];
                         var value = d1 + ' - ' + d2;
-                        tags.value.push(configStore.getAdvancedSearchFields()[field].key + ': ' + value);
+                        tags.value.push(configStore.getAdvancedSearchFields()[field].key + ': ' + value);*/
+                        //parseAdvancedFields();
                     } else {
                         tags.value.push(configStore.getAdvancedSearchFields()[field].key + ': ' + props.initialValues.fields[field]);
                     }
