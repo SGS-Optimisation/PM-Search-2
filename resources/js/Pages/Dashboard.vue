@@ -24,7 +24,9 @@ defineProps({
         <div class="w-full sm:px-6 lg:px-4">
             <div class="grid">
                 <div class="col-9">
-                    <TextSearchComponent/>
+                    <div class="p6">
+                        <TextSearchComponent/>
+                    </div>
 
                     <div class="mt-8">
                         <ImageSearchComponent/>

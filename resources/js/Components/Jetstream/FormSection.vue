@@ -3,13 +3,20 @@ import { computed, useSlots } from 'vue';
 import SectionTitle from './SectionTitle.vue';
 
 defineEmits(['submitted']);
+defineProps({
+    compactMode: {
+        type: Boolean,
+        required: false,
+        default: false,
+    }
+})
 
 const hasActions = computed(() => !! useSlots().actions);
 </script>
 
 <template>
     <div class="md:grid md:grid-cols-4 md:gap-3">
-        <SectionTitle>
+        <SectionTitle v-if="!compactMode">
             <template #title>
                 <slot name="title" />
             </template>
@@ -18,11 +25,19 @@ const hasActions = computed(() => !! useSlots().actions);
             </template>
         </SectionTitle>
 
-        <div class="mt-5 md:mt-0 md:col-span-3">
+        <div class="mt-5 md:mt-0" :class="{
+            'md:col-span-3': !compactMode,
+            'md:col-span-4': compactMode
+        }">
             <form @submit.prevent="$emit('submitted')">
                 <div
-                    class="px-4 py-5 bg-white sm:p-6 shadow"
-                    :class="hasActions ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md'"
+                    class="bg-white shadow"
+                    :class="{
+                        'sm:rounded-tl-md sm:rounded-tr-md': hasActions,
+                        'sm:rounded-md': !hasActions,
+                        'px-4 py-5 sm:p-6' : !compactMode,
+                        'px-2 py-1': compactMode,
+                    }"
                 >
                     <div class="grid grid-cols-6 gap-6">
                         <slot name="form" />

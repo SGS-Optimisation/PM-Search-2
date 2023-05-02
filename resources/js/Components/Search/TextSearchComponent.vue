@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {defineComponent, watch, ref, reactive, onMounted} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted, onUpdated} from "vue";
 import JetFormSection from '@/Components/Jetstream/FormSection.vue';
 import route from "ziggy-js";
 import AutoComplete from 'primevue/autocomplete';
@@ -13,6 +13,19 @@ import {useDialog} from 'primevue/usedialog';
 import InputText from "primevue/inputtext";
 import {configStore} from "@/stores/config-store";
 import axios from "axios";
+
+const props = defineProps({
+    initialValues: {
+        type: Object,
+        required: false,
+        default: null
+    },
+    compactMode: {
+        type: Boolean,
+        required: false,
+        default: false,
+    }
+})
 
 const form = useForm({
     search_string: Array,
@@ -32,17 +45,20 @@ function handleChangeTag(event) {
     for(const tag of tags.value) {
         if(tag.indexOf(':') > 0) {
             const parts = tag.split(':');
-            var field = false;
+            var field:string = '';
+            var type = null;
 
             for(const key in configStore.getAdvancedSearchFields()) {
                 if(configStore.getAdvancedSearchFields()[key].key === parts[0]) {
                     field = key;
+                    type = configStore.getAdvancedSearchFields()[key].type
                     break;
                 }
             }
 
-            if(field)
-                advancedSearchField.value[field] = parts[1];
+            if(field) {
+                if (type !== 'date') advancedSearchField.value[field] = parts[1];
+            }
             else
                 parseAdvancedFields();
         }
@@ -118,11 +134,44 @@ function checkValidRange(field) {
 }
 
 onMounted(() => {
-    for (const key in configStore.getAdvancedSearchFields()) {
-        advancedSearchField.value[key] = null;
-        advancedSearchFieldSuggestions.value[key] = [];
-    }
+    parseInitialValues();
 });
+
+onUpdated(() => {
+    parseInitialValues();
+})
+
+
+function parseInitialValues() {
+    if (props.initialValues !== null && props.initialValues.value !== null) {
+        if (props.initialValues.textsearchstrings != null) {
+            for (const tag in props.initialValues.textsearchstrings) {
+                tags.value.push(props.initialValues.textsearchstrings[tag]);
+            }
+        }
+        if (props.initialValues.fields != null) {
+            for (const field in props.initialValues.fields) {
+                if (configStore.getAdvancedSearchFields().hasOwnProperty(field)) {
+                    if (configStore.getAdvancedSearchFields()[field].type === 'date') {
+                        const dates_array = JSON.parse(props.initialValues.fields[field])
+                        var d1 = new Date(dates_array[0]);
+                        var d2 = new Date(dates_array[1]);
+                        advancedSearchField.value[field] = [d1, d2];
+
+                        let tagKey = configStore.getAdvancedSearchFields()[field].key;
+                        var d1_str = d1.toISOString().split('T')[0];
+                        var d2_str = d2.toISOString().split('T')[0];
+                        tags.value.push(tagKey + ':' + d1_str + '>' + d2_str);
+
+                    } else {
+                        tags.value.push(configStore.getAdvancedSearchFields()[field].key + ': ' + props.initialValues.fields[field]);
+                    }
+                }
+            }
+        }
+        handleChangeTag(tags.value);
+    }
+}
 
 const toggleAdvanced = (event) => {
     advancedSearchOverlay.value.toggle(event);
@@ -135,13 +184,13 @@ const titleCase = (str) => window.titleCase(str);
 
 <template>
     <div>
-        <jet-form-section @submitted="doSearch" class="mb-4">
+        <jet-form-section @submitted="doSearch" class="mb-4" :compact-mode="compactMode">
             <template #title>
                 Text Search
             </template>
-            <template #description>
-                Search for text from the artwork pdf consisting of 400K plus files collected since July 2018 along with
-                other parameters such as brand, variety, promotion, substrate, dieline.
+            <template #description v-if="!compactMode">
+                Search for text from the artwork pdf consisting of 700K plus files collected since July 2018 along with
+                other parameters such as brand, variety, promotion, substrate, dieline and other data points from over 3 million Mysgs jobs.
             </template>
             <template #form>
                 <div class="col-span-6 flex flex-row w-full items-center">
