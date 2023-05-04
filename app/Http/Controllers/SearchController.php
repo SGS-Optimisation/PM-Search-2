@@ -9,6 +9,7 @@ use App\Services\Search\ImageSearchCreationService;
 use App\Services\Search\TextSearchCreationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Jetstream;
 use Maatwebsite\Excel\Facades\Excel;
@@ -108,11 +109,11 @@ class SearchController extends Controller
         return Jetstream::inertia()->render($request, 'Search/Show', [
             'mode' => $search->search_mode,
             'search_data' => $search->search_data,
-            'thumb' => url('/storage/'.($search->working_data['thumb'] ?? 'none.jpg')),
+            'thumb' => Storage::url($search->working_data['thumb'] ?? 'none.jpg'),
             'filename' => $search->working_data['original_filename'] ?? "[Sir/Ma'am, this is a Text Search]",
             'report' => $report_preparor->report_output,
             'fields' => $report_preparor->fields,
-            'image_path' => url('/storage/'.$search->image_path),
+            'image_path' => Storage::url($search->image_path),
             'working_data' => $search->working_data,
             'fields_config' => config('pm-search.fields'),
             'search_id' => $search->id,
