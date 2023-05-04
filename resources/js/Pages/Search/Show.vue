@@ -145,7 +145,6 @@ function getSearchData() {
 
     return data;
 }
-console.log(props.thumb, "--here");
 
 </script>
 
