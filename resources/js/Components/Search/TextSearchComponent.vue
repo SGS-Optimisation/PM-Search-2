@@ -74,9 +74,10 @@ function doSearch(this: any) {
         preserveScroll: true
     })
 }
+//const simplified_group_name = ref('')
 
-const advancedSearchOverlay = ref();
 const advancedSearchField = ref({})
+const advancedSearchOverlay = ref();
 const advancedSearchFieldSuggestions = ref({})
 
 function autocompleteSearch(event, field) {
@@ -171,7 +172,8 @@ function parseInitialValues() {
         }
         handleChangeTag(tags.value);
     }
-}
+    //advancedSearchFieldSuggestions.value['simplified_group_name'] = [];
+};
 
 const toggleAdvanced = (event) => {
     advancedSearchOverlay.value.toggle(event);
@@ -189,10 +191,22 @@ const titleCase = (str) => window.titleCase(str);
                 Text Search
             </template>
             <template #description v-if="!compactMode">
-                Search for text from the artwork pdf consisting of 700K plus files collected since July 2018 along with
+                <p class="text-[13px]">Search for text from the artwork pdf consisting of 700K plus files collected since July 2018 along with
                 other parameters such as brand, variety, promotion, substrate, dieline and other data points from over 3 million Mysgs jobs.
+                <br>
+                Unavailable thumbnails are a result of the job not launching/employing the standard workflow which support the capture of thumbnail files.
+                </p>
             </template>
             <template #form>
+
+                <div class="col-span-6 flex flex-row w-full items-center">
+                    <!--<span class="p-float-label">
+                        <AutoComplete id="simplified_group_name" v-model="simplified_group_name"
+                                      :suggestions="advancedSearchFieldSuggestions['simplified_group_name']"
+                                      @complete="autocompleteSearch($event, 'simplified_group_name')"/>
+                        <label for="simplified_group_name">Customer</label>
+                    </span>-->
+                </div>
                 <div class="col-span-6 flex flex-row w-full items-center">
                     <div class="grow pr-2">
                         <div class="flex flex-row items-between relative">
@@ -232,8 +246,8 @@ const titleCase = (str) => window.titleCase(str);
         <OverlayPanel ref="advancedSearchOverlay" appendTo="body" @hide="parseAdvancedFields" show-close-icon>
             <div class="md:grid md:grid-cols-4 gap-x-6 gap-y-3 justify-content-center align-items-center p-2">
                 <template v-for="(config, field) in configStore.getAdvancedSearchFields()" :key="field">
-                    <label class="block text-xs font-medium text-gray-700 capitalize text-right">
-                        {{ titleCase(field) }}
+                    <label class="block text-xs font-medium text-gray-700 capitalize text-right" :title="field">
+                        {{ titleCase( config.hasOwnProperty('title') ? config.title : field) }}
                     </label>
 
                     <template v-if="config.type === 'text'">

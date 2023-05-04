@@ -39,7 +39,7 @@ const hasActions = computed(() => !! useSlots().actions);
                         'px-2 py-1': compactMode,
                     }"
                 >
-                    <div class="grid grid-cols-6 gap-6">
+                    <div class="grid grid-cols-6 gap-x-6 gap-y-2">
                         <slot name="form" />
                     </div>
                 </div>

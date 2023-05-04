@@ -2,6 +2,7 @@
 import moment from 'moment';
 import {computed} from "@vue/reactivity";
 import InnerImageZoom from 'vue-inner-image-zoom';
+import {ref} from "vue";
 
 const emit = defineEmits(['on-click-view', 'on-click-quick-view']);
 
@@ -12,6 +13,8 @@ const props = defineProps({
     gridSize: {type: Number, default: 3},
     extraClass: {type: String, default: ''},
 });
+
+const imageAvailable = ref(true);
 
 const backgroundImage = computed(() => {
     return props.item['image_' + props.imageSize];
@@ -89,6 +92,8 @@ const ecode = computed(() => {
                v-tooltip.top="'Open fullscreen image'"
                class="flex justify-center block overflow-hidden"
                :class="'h-'+height" href="#">
+
+                <template v-if="imageAvailable">
                 <inner-image-zoom
                     v-if="backgroundMode==='zoom'"
                     :src="zoomSrc"
@@ -97,8 +102,16 @@ const ecode = computed(() => {
                     className="my-auto"
                 />
                 <img v-else :src="backgroundImage" loading="lazy" class="responsive"
-                     :style="imageStyle"
+                     :style="imageStyle" @error="imageAvailable = false"
                 />
+                </template>
+                <template v-else>
+                    <p class="text-center align-middle my-auto text-gray-200">
+                        🚫<br>
+                        Unavailable thumbnails are a result of the job not launching or employing the standard workflow
+                        which support the capture of thumbnail files.
+                    </p>
+                </template>
             </a>
 
 

@@ -89,8 +89,8 @@ return [
         'variety' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 12],
         'promotion' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 13],
         'packaging_reference' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
-        'pcm_type_profile_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
-        'pcm_type_desc' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
+        'pcm_type_profile_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100, 'title' => 'E-Profile'],
+        'pcm_type_desc' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100, 'title' => 'Proof Type'],
         //'project_id' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
         'project_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
         'file_location' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 100],
@@ -107,7 +107,7 @@ return [
         'contact_type' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position'=> 100],
         'customer_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position'=> 2],
         'customer_type' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position'=> 100],
-        'number_of_colors' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'int', 'position'=> 100],
+        'number_of_colors' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'int', 'position'=> 100, 'title' => 'Number Of Colours'],
         //'number_of_new_colors' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'int', 'position'=> 100],
         'booked_date' => ['search' => true, 'display' => true, 'type' => 'date', 'response_type' => 'date', 'position'=> 10],
         //'file_date' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'date', 'position'=> 100],
@@ -121,16 +121,23 @@ return [
     ],
 
     'advanced_search' => [
+
         'brand' => ['key' => 'brand', 'type' => 'autocomplete'],
-        'portfolio_group_name' => ['key' => 'portfolio', 'type' => 'autocomplete'],
         'simplified_group_name' => ['key' => 'simplified', 'type' => 'autocomplete'],
-        'promotion' => ['key' => 'promo', 'type' => 'autocomplete'],
-        'range_name' => ['key' => 'range', 'type' => 'autocomplete'],
-        'substrate' => ['key' => 'substrate', 'type' => 'autocomplete'],
+
         'variety' => ['key' => 'variety', 'type' => 'autocomplete'],
-        'customer_name' => ['key' => 'customer', 'type' => 'autocomplete'],
         'printer_name' => ['key' => 'printer', 'type' => 'autocomplete'],
+
+        'weight' => ['key' => 'weight', 'type' => 'text'],
+        'print_process' => ['key' => 'process', 'type' => 'text'],
+
+        'customer_design_ref' => ['key' => 'ref', 'type' => 'text', 'title' => 'Design / End User Reference'],
+        'pcm_type_profile_name' => ['key' => 'profile', 'type' => 'text', 'title' => 'E-Number/Profile'],
+
+        'package_type' => ['key' => 'pack', 'type' => 'text'],
         'booked_date' => ['key' => 'date', 'type' => 'date'],
+
+
     ],
 
     'color_name_mappings' => [

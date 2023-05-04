@@ -9,6 +9,9 @@ const props = defineProps({
 })
 
 function formatAdvancedSearchField(field, value) {
+    if( !configStore.getAdvancedSearchFields().hasOwnProperty(field)) {
+        return field + ':' + value;
+    }
     const config = configStore.getAdvancedSearchFields()[field];
 
     if(configStore.getAdvancedSearchFields()[field].type === 'date') {
@@ -24,7 +27,7 @@ function formatAdvancedSearchField(field, value) {
 <template>
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg pt-2 pb-12 px-2">
 
-        <DataView :value="latestSearches">
+        <DataView :value="latestSearches" paginator :rows="5">
             <template #header>
                 <h4 class="h4 font-bold text-lg">My latest searches</h4>
             </template>
