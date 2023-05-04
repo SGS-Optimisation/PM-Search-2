@@ -160,10 +160,12 @@ function getSearchData() {
     </template>
     <template v-else>
         <div class="bg-white shadow">
-          <a class="cursor-pointer max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md flex justify-center">
+          <div class="max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md flex justify-center">
                 <ImageSearchComponent :compact-mode="true" />
+              <a class="cursor-pointer">
                 <img :src="thumb" alt="" class="img-size">
-            </a>
+              </a>
+            </div>
         </div>
     </template>
 
