@@ -72,6 +72,7 @@ watch(
 const titleCase = (str) => window.titleCase(str);
 
 onMounted(() => {
+    console.log("here");
     items.value = props.report;
 
     items.value.map((item) => {
