@@ -19,6 +19,7 @@ import ResultsSidebar from "@/Components/Results/ResultsSidebar.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import QuickViewSearchEntry from "@/Components/Results/QuickViewSearchEntry.vue";
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
+import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
 
 const props = defineProps({
     search_id: {type: Number, required: true},
@@ -144,18 +145,28 @@ function getSearchData() {
 
     return data;
 }
-
+console.log(props.thumb, "--here");
 
 </script>
 
 <template>
     <Head title="Search results"/>
 
+    <template v-if="mode === 'text'">
     <div class="bg-white shadow">
         <div class="max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md">
             <TextSearchComponent :initial-values="search_data" :compact-mode="true"/>
         </div>
     </div>
+    </template>
+    <template v-else>
+        <div class="bg-white shadow">
+          <a class="cursor-pointer max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md flex justify-center">
+                <ImageSearchComponent :compact-mode="true" />
+                <img :src="thumb" alt="" class="img-size">
+            </a>
+        </div>
+    </template>
 
     <div class="md:grid md:grid-cols-4 lg:grid-cols-5">
 
@@ -327,6 +338,10 @@ function getSearchData() {
     @apply bg-neutral-200 p-2;
 }
 
+.img-size {
+    height: fit-content;
+    max-width: 100px;
+}
 #taxonomySelector {
 }
 </style>
