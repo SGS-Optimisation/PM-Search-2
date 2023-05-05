@@ -20,7 +20,7 @@ services:
             resources:
                 reservations:
                     cpus: '0.5'
-                    memory: 1G
+                    memory: 500M
                 limits:
                     cpus: '2'
                     memory: 2G
@@ -30,21 +30,21 @@ services:
         deploy:
             resources:
                 reservations:
-                    cpus: '1'
-                    memory: 2G
+                    cpus: '0.5'
+                    memory: 1G
                 limits:
                     cpus: '2'
-                    memory: 3G
+                    memory: 2G
 
     queue:
         env_file: ./.env.azure
         deploy:
             resources:
                 reservations:
-                    cpus: '1'
-                    memory: 2G
+                    cpus: '0.5'
+                    memory: 1G
                 limits:
                     cpus: '2'
-                    memory: 3G
+                    memory: 2G
 
 

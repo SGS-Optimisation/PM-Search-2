@@ -9,6 +9,15 @@ volumes:
     pmsearch-db:
 
 services:
+    web:
+      env_file: ./.env.docker
+
+    php:
+      env_file: ./.env.docker
+
+    queue:
+      env_file: ./.env.docker
+
     redis:
       image: redis:alpine
       restart: unless-stopped
