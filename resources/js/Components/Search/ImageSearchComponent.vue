@@ -168,7 +168,6 @@ const currentSearchImage = computed(() => {
 <template>
 
     <div>
-        <div class="flex justify-center">
         <jet-form-section @submitted="submitSearch" :compact-mode="compactMode" class="mb-4">
             <template #title>
                 Image Search
@@ -214,15 +213,17 @@ const currentSearchImage = computed(() => {
                 </div>
 
 
+                <template v-if="props.initialValues && props.initialValues.image_path">
+                    <div style="text-align: center">
+                        <Image :src="currentSearchImage" alt="" preview
+                               @show="isCurrentSearchOpen = true"
+                               @hide="isCurrentSearchOpen = false"
+                        />
+                    </div>
+                </template>
+
             </template>
         </jet-form-section>
-        <template v-if="props.initialValues && props.initialValues.image_path">
-                <Image :src="currentSearchImage" alt="" preview
-                       @show="isCurrentSearchOpen = true"
-                       @hide="isCurrentSearchOpen = false"
-                />
-        </template>
-        </div>
 
         <Dialog modal v-model:visible="isShowModal"
                 :style="{ width: '80vw' }">
@@ -264,9 +265,10 @@ const currentSearchImage = computed(() => {
 </template>
 
 <style>
-span img {
-    height: 5rem;
-    width: 5rem;
-    padding: 0.5rem;
+.p-image {
+    height: 6rem;
+    width: 6rem;
+    overflow: hidden;
+    display: inline-block;
 }
 </style>
