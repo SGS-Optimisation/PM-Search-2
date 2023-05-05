@@ -162,7 +162,7 @@ function getSearchData() {
     <template v-else>
         <div class="bg-white shadow">
           <div class="max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md flex justify-center">
-              <ImageSearchComponent :compact-mode="true" />
+              <ImageSearchComponent  :initial-values="{filename, thumb, image_path }" :compact-mode="true" />
               <Image :src="thumb" alt="" class="img-size" preview />
             </div>
         </div>
