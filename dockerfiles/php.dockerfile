@@ -6,7 +6,7 @@ COPY . .
 RUN npm run build
 
 
-FROM superbase
+FROM superbase:latest
 
 ARG UID
 ARG GID
