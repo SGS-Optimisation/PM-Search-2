@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {Head, useForm, usePage} from "@inertiajs/vue3";
-import {defineComponent, watch, ref, reactive} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted} from "vue";
 import {computed} from "@vue/reactivity";
 import VuePictureCropper, {cropper} from 'vue-picture-cropper'
 import JetFormSection from '@/Components/Jetstream/FormSection.vue';
@@ -10,6 +10,20 @@ import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
 import {router} from '@inertiajs/vue3'
 import route from "ziggy-js";
+import Image from 'primevue/image';
+
+const props = defineProps({
+    initialValues: {
+        type: Object,
+        required: false,
+        default: null
+    },
+    compactMode: {
+        type: Boolean,
+        required: false,
+        default: false,
+    }
+})
 
 const isShowModal = ref<boolean>(false)
 const uploadInput = ref<HTMLInputElement | null>(null)
@@ -33,6 +47,12 @@ const hasDocument = computed(() => {
     return form.document.name !== undefined && form.document.name !== 'Object'
 });
 
+onMounted(() => {
+    if(props.initialValues) {
+        initRefine();
+    }
+})
+
 
 function selectFile(e: Event) {
     // Reset last selection and results
@@ -46,6 +66,10 @@ function selectFile(e: Event) {
 
     // Convert to dataURL and pass to the cropper component
     const file = files[0]
+    loadImage(file);
+}
+
+function loadImage(file, showModal = true) {
     result.sourceFile = file
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -55,13 +79,21 @@ function selectFile(e: Event) {
         result.sourceURL = String(reader.result)
 
         // Show the modal
-        isShowModal.value = true
+        isShowModal.value = showModal;
 
         // Clear selected files of input element
         if (!uploadInput.value) return
         uploadInput.value.value = ''
     }
 }
+
+function initRefine(showModal = false) {
+    fetch(props.initialValues.image_path).then(res => res.blob()).then(blob => {
+        const file = new File([blob], props.initialValues.image_path.split('/').pop(), {type: 'image/jpeg'});
+        loadImage(file, showModal);
+    })
+}
+
 
 async function getResult() {
     if (!cropper) return
@@ -118,12 +150,17 @@ function submitSearch() {
     form.post(route('image-search'));
 }
 
+const hasSearchedImage = computed(() => {
+    return props.initialValues !== null && props.initialValues.hasOwnProperty('image_path');
+})
+
 </script>
 
 <template>
 
     <div>
-        <jet-form-section @submitted="submitSearch" class="mb-4">
+        <div class="flex justify-center">
+        <jet-form-section @submitted="submitSearch" :compact-mode="compactMode" class="mb-4">
             <template #title>
                 Image Search
             </template>
@@ -132,7 +169,7 @@ function submitSearch() {
             </template>
             <template #form>
 
-                <div class="col-span-6">
+                <div class="py-2 col-span-6">
 
                     <div class="flex justify-start">
                         <FileUpload mode="basic" name="imageSearch" ref="uploadInput"
@@ -140,6 +177,8 @@ function submitSearch() {
                                     chooseLabel="Select Image"
                                     accept="image/*" :maxFileSize="1000000"
                                     @select="selectFile"/>
+
+
 
                         <div class="px-2 flex flex-col">
                             <div v-for="tech of searchTechs" :key="tech.name" class="px-2">
@@ -156,6 +195,9 @@ function submitSearch() {
                                     :disabled="!hasDocument"
                                     label="Search" severity="success"/>
                         </div>
+                        <Button v-if="hasSearchedImage" @click="initRefine(true)">
+                            Refine
+                        </Button>
                     </div>
                     <div class="flex justify-center px-12 pt-2">
                         <img :src="result.blobURL"/>
@@ -165,6 +207,12 @@ function submitSearch() {
 
             </template>
         </jet-form-section>
+        <template v-if="props.initialValues">
+            <div v-if="props.initialValues.image_path">
+                <Image :src="props.initialValues.thumb" alt="" preview />
+            </div>
+        </template>
+        </div>
 
         <Dialog modal v-model:visible="isShowModal"
                 :style="{ width: '80vw' }">
@@ -204,3 +252,11 @@ function submitSearch() {
         </Dialog>
     </div>
 </template>
+
+<style>
+span img {
+    height: 5rem;
+    width: 5rem;
+    padding: 0.5rem;
+}
+</style>
