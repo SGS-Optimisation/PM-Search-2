@@ -154,6 +154,15 @@ const hasSearchedImage = computed(() => {
     return props.initialValues !== null && props.initialValues.hasOwnProperty('image_path');
 })
 
+const isCurrentSearchOpen = ref(false);
+
+const currentSearchImage = computed(() => {
+    if(isCurrentSearchOpen.value) {
+        return props.initialValues.image_path;
+    }
+    return props.initialValues.thumb;
+})
+
 </script>
 
 <template>
@@ -207,10 +216,11 @@ const hasSearchedImage = computed(() => {
 
             </template>
         </jet-form-section>
-        <template v-if="props.initialValues">
-            <div v-if="props.initialValues.image_path">
-                <Image :src="props.initialValues.thumb" alt="" preview />
-            </div>
+        <template v-if="props.initialValues && props.initialValues.image_path">
+                <Image :src="currentSearchImage" alt="" preview
+                       @show="isCurrentSearchOpen = true"
+                       @hide="isCurrentSearchOpen = false"
+                />
         </template>
         </div>
 
