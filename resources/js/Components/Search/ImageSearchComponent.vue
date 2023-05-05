@@ -10,6 +10,7 @@ import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
 import {router} from '@inertiajs/vue3'
 import route from "ziggy-js";
+import Image from 'primevue/image';
 
 const props = defineProps({
     initialValues: {
@@ -158,6 +159,7 @@ const hasSearchedImage = computed(() => {
 <template>
 
     <div>
+        <div class="flex justify-center">
         <jet-form-section @submitted="submitSearch" :compact-mode="compactMode" class="mb-4">
             <template #title>
                 Image Search
@@ -167,7 +169,7 @@ const hasSearchedImage = computed(() => {
             </template>
             <template #form>
 
-                <div class="col-span-6">
+                <div class="py-2 col-span-6">
 
                     <div class="flex justify-start">
                         <FileUpload mode="basic" name="imageSearch" ref="uploadInput"
@@ -205,6 +207,12 @@ const hasSearchedImage = computed(() => {
 
             </template>
         </jet-form-section>
+        <template v-if="props.initialValues">
+            <div v-if="props.initialValues.image_path">
+                <Image :src="props.initialValues.thumb" alt="" preview />
+            </div>
+        </template>
+        </div>
 
         <Dialog modal v-model:visible="isShowModal"
                 :style="{ width: '80vw' }">
@@ -244,3 +252,11 @@ const hasSearchedImage = computed(() => {
         </Dialog>
     </div>
 </template>
+
+<style>
+span img {
+    height: 5rem;
+    width: 5rem;
+    padding: 0.5rem;
+}
+</style>

@@ -20,7 +20,6 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import QuickViewSearchEntry from "@/Components/Results/QuickViewSearchEntry.vue";
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
-import Image from 'primevue/image';
 
 const props = defineProps({
     search_id: {type: Number, required: true},
@@ -163,8 +162,7 @@ function getSearchData() {
         <div class="bg-white shadow">
           <div class="max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md flex justify-center">
               <ImageSearchComponent  :initial-values="{filename, thumb, image_path }" :compact-mode="true" />
-              <Image :src="thumb" alt="" class="img-size" preview />
-            </div>
+          </div>
         </div>
     </template>
 
@@ -338,10 +336,6 @@ function getSearchData() {
     @apply bg-neutral-200 p-2;
 }
 
-.img-size {
-    height: fit-content;
-    max-width: 100px;
-}
 #taxonomySelector {
 }
 </style>
