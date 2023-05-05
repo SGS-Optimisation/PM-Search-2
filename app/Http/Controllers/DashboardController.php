@@ -16,7 +16,10 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        $latest_searches = $request->user()->searches()->latest()->take(10)->get();
+        $latest_searches = $request->user()->searches()
+            ->latest()->take(10)
+            ->select(['id', 'search_mode', 'search_data', 'working_data'])
+            ->get();
 
         return Jetstream::inertia()->render($request, 'Dashboard', [
             'latestSearches' => $latest_searches,
