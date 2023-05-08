@@ -13,7 +13,7 @@ export default {
     <Portal>
         <div v-if="containerVisible" :ref="maskRef" :class="maskClass" @mousedown="onMaskClick">
             <transition name="p-sidebar" @enter="onEnter" @after-enter="onAfterEnter" @before-leave="onBeforeLeave" @leave="onLeave" @after-leave="onAfterLeave" appear>
-                <div v-if="visible" :ref="containerRef" v-focustrap :class="containerClass" role="complementary" :aria-modal="modal" @keydown="onKeydown" v-bind="$attrs">
+                <div class="flex flex-col max-h-screen" v-if="visible" :ref="containerRef" v-focustrap :class="containerClass" role="complementary" :aria-modal="modal" @keydown="onKeydown" v-bind="$attrs">
                     <div :ref="headerContainerRef" class="p-sidebar-header">
                         <div v-if="$slots.header" class="p-sidebar-header-content">
                             <slot name="header"></slot>

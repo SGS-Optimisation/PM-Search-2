@@ -192,7 +192,7 @@ const titleCase = (str) => window.titleCase(str);
             </template>
             <template #description v-if="!compactMode">
                 <p class="text-[13px]">Search for text from the artwork pdf consisting of 700K plus files collected since July 2018 along with
-                other parameters such as brand, variety, promotion, substrate, dieline and other data points from over 3 million Mysgs jobs.
+                other parameters such as brand, variety, print process, printer, dieline and other data points from over 3 million MySGS jobs.
                 <br>
                 Unavailable thumbnails are a result of the job not launching/employing the standard workflow which support the capture of thumbnail files.
                 </p>

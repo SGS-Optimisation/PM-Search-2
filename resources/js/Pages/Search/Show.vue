@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {Head, useForm, usePage} from "@inertiajs/vue3";
-import {defineComponent, watch, ref, reactive, onMounted, onBeforeMount, provide} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted, onBeforeMount, provide, computed} from "vue";
 import AutoComplete from "primevue/autocomplete";
 import Slider from 'primevue/slider';
 import DataView from "primevue/dataview";
@@ -20,6 +20,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import QuickViewSearchEntry from "@/Components/Results/QuickViewSearchEntry.vue";
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
+import {snakeCase} from "lodash";
 
 const props = defineProps({
     search_id: {type: Number, required: true},
@@ -145,6 +146,29 @@ function getSearchData() {
 
     return data;
 }
+
+const groupedSortedConfig = computed(() => {
+    var sortedKeys = Object.keys(props.fields_config).sort((a, b) => {
+        return props.fields_config[a].position - props.fields_config[b].position;
+    });
+
+    var sortedObj = {};
+    for (const key in sortedKeys) {
+        sortedObj[sortedKeys[key]] = props.fields_config[sortedKeys[key]];
+    }
+
+    var groupedObj = {};
+    for (const key in sortedObj) {
+        if (sortedObj[key].section) {
+            if (!groupedObj[sortedObj[key].section]) {
+                groupedObj[sortedObj[key].section] = {};
+            }
+            groupedObj[sortedObj[key].section][key] = sortedObj[key];
+        }
+    }
+
+    return groupedObj;
+});
 
 </script>
 
@@ -300,11 +324,16 @@ function getSearchData() {
                     </span>
 
                     <a class="p-button p-button-info p-button-outlined p-button-sm mx-2" href="#job-image">Image</a>
-                    <a class="p-button p-button-info p-button-outlined p-button-sm mx-2" href="#job-meta">Metada</a>
+                    <template v-for="(field, section) in groupedSortedConfig">
+                        <a class="p-button p-button-info p-button-outlined p-button-sm mx-2"
+                           :href="'#' + snakeCase(section)">
+                            {{section}}
+                        </a>
+                    </template>
                 </div>
             </template>
         </template>
-        <ViewSearchEntry :entry="currentEntry" :config="fields_config"
+        <ViewSearchEntry :entry="currentEntry" :grouped-sorted-config="groupedSortedConfig"
                          @exit="closeEntryModal"
                          @next="nextEntry"
                          @prev="prevEntry"

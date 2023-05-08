@@ -5,6 +5,7 @@ namespace App\Operations;
 
 
 use App\Models\Search;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class PrepareSearchReportOperation extends BaseOperation
@@ -28,7 +29,9 @@ class PrepareSearchReportOperation extends BaseOperation
          * Build fields, used in filtering
          */
         $this->fields = [];
-        foreach ($this->report_output as $entry) {
+        foreach ($this->report_output as &$entry) {
+            $this->extractCustomersAndPrinters($entry);
+
             foreach ($entry as $field => $value) {
                 $sc_field = Str::snake($field);
 
@@ -44,7 +47,7 @@ class PrepareSearchReportOperation extends BaseOperation
                     switch ($value_type) {
                         case 'list':
                             //foreach($value as $v) {
-                                $this->fields[$sc_field][] = $value;
+                            $this->fields[$sc_field][] = $value;
                             //}
                             break;
                         case 'str':
@@ -66,6 +69,36 @@ class PrepareSearchReportOperation extends BaseOperation
 
         return $this;
     }
+
+    protected function extractCustomersAndPrinters(&$entry)
+    {
+        // customer_name should be split into customer_name_only and printer_name, using customer_type to determine which is which
+        $customer_names = $entry['customer_name'];
+        $customer_types = $entry['customer_type'];
+
+        if(count ($customer_names) != count($customer_types)){
+            logger('error in entry ' . print_r($entry, true));
+            return;
+        }
+
+        try{
+            $combined = array_combine($customer_names, $customer_types);
+        }catch(\Exception $e){
+            dd($entry);
+        }
+
+
+        $printers = array_keys(Arr::where($combined, function ($value, $key) {
+            return $value == "Printer";
+        }));
+        $customers = array_keys(Arr::where($combined, function ($value, $key) {
+            return $value == "End User";
+        }));
+
+        $entry['customer_name_only'] = $customers;
+        $entry['printer_name'] = $printers;
+    }
+
 
     protected static function merge_outputs($output)
     {

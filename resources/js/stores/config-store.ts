@@ -5,6 +5,7 @@ import _ from 'lodash';
 interface Config extends Object {
     fields: Array<any>,
     bridgeFields: Array<any>,
+    tableFields: Array<any>,
 
     autocompleteSuggester: string,
 
@@ -16,6 +17,7 @@ class ConfigStore extends PersistentLocalStore<Config> {
         return {
             fields: [],
             bridgeFields: [],
+            tableFields: [],
             autocompleteSuggester: '',
             advancedSearchFields: [],
         };
@@ -35,6 +37,14 @@ class ConfigStore extends PersistentLocalStore<Config> {
 
     getBridgeFields() {
         return this.state.bridgeFields;
+    }
+
+    setTableFields(fields) {
+        this.state.tableFields = fields;
+    }
+
+    getTableFields() {
+        return this.state.tableFields;
     }
 
     setAutocompleteSuggester(suggester) {

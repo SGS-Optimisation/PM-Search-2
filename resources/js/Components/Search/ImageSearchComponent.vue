@@ -264,7 +264,7 @@ const currentSearchImage = computed(() => {
     </div>
 </template>
 
-<style>
+<style scoped>
 .p-image {
     height: 6rem;
     width: 6rem;

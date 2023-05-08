@@ -3,8 +3,10 @@ import Fieldset from 'primevue/fieldset';
 import Image from 'primevue/image';
 import ProgressSpinner from 'primevue/progressspinner';
 import VueLoadImage from 'vue-load-image'
+import InnerImageZoom from 'vue-inner-image-zoom';
 import {configStore} from "@/stores/config-store";
 import {ref, onMounted, computed} from "vue";
+import {snakeCase} from "lodash";
 
 const emit = defineEmits(['next', 'prev', 'exit']);
 
@@ -13,27 +15,14 @@ const props = defineProps({
         type: Object,
         required: true
     },
-    config: {
+    groupedSortedConfig: {
         type: Object,
         required: true
-    }
+    },
 })
 
-const sortedConfig = computed(() => {
-    var sortedKeys = Object.keys(props.config).sort((a, b) => {
-        return props.config[a].position - props.config[b].position;
-    });
 
-    var sortedObj = {};
-    for (const key in sortedKeys) {
-        sortedObj[sortedKeys[key]] = props.config[sortedKeys[key]];
-    }
-
-    return sortedObj;
-
-});
-
-const modal = ref(null);
+const modal = ref();
 
 onMounted(() => {
     modal.value.focus()
@@ -45,6 +34,10 @@ const fields_config = computed(() => {
 
 const bridge_fields = computed(() => {
     return configStore.getBridgeFields();
+})
+
+const table_fields = computed(() => {
+    return configStore.getTableFields();
 })
 
 const thumb = computed(() => {
@@ -87,65 +80,107 @@ function next() {
     >
 
         <div class="">
-            <div class="mx-auto max-w-[90%]" id="job-image">
-                <vue-load-image>
+            <div class="mx-auto max-w-[90%] h-full max-h-full" id="job-image">
+               <vue-load-image>
                     <template v-slot:image>
-                        <img :src="highres"/>
+                        <div :data-src="highres" class="text-center">
+<!--                        <img :src="highres"/>-->
+                            <Image :src="highres" alt="" imageClass="max-h-screen" preview/>
+                        </div>
                     </template>
                     <template v-slot:preloader>
-                        <div class="flex h-screen w-screen justify-items-center items-center">
+                        <div class="flex h-full justify-items-center items-center">
                             <ProgressSpinner/>
                         </div>
                     </template>
                     <template v-slot:error>Failed to load image</template>
                 </vue-load-image>
-                <!--<Image class="" :src="entry.image_lrg" alt=""/>-->
-                <!--<vue-image-zoomer
-                    :regular="thumb"
-                    :zoom="highres"
-                    :zoom-amount="5"
-                    :click-zoom="true"
-                    close-pos="top-right"
-                    img-class="img-fluid"
+<!--                <Image :src="highres" alt="" preview/>-->
+<!--                <inner-image-zoom
+                    :src="highres"
+                    className="max-h-screen"
+                    zoomType="click"
                 />-->
+
             </div>
 
-            <Fieldset legend="Details" id="job-meta">
-                <div class="text-sm md:grid md:grid-flow-row-dense md:grid-cols-6 md:grid-rows-4">
+            <template v-for="(sortedConfig, section) in groupedSortedConfig">
+                <Fieldset :legend="section" :id="snakeCase(section)" class="mt-3">
+                    <template #legend>
+                        <div class="flex align-items-center text-gray-50">
+                            <span class="pi pi-user mr-2"></span>
+                            <span class="font-bold">{{section}}</span>
+                        </div>
+                    </template>
 
-                    <template v-for="(params, field) in sortedConfig">
-                        <template v-if="params.display && !bridge_fields.includes(field)">
-                            <div class="p-2 border even:bg-blue-100 even:border-white">
-                                <p class="font-bold">{{ titleCase(field) }}</p>
-                                <div class="break-all">
-                                    <template v-if="field==='formatted_job_number'">
-                                        <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                           :href="'https://pm.mysgs.sgsco.com/Job/' + entry[field]"
-                                        >
+                    <div class="text-sm md:grid md:grid-flow-row-dense md:grid-cols-6">
+                        <template v-for="(params, field) in sortedConfig">
+                            <template v-if="params.display && !bridge_fields.includes(field)">
+                                <div class="p-2 border border-bluegray-50 even:bg-neutral-50 even:border-white">
+                                    <p class="font-bold">{{ params.hasOwnProperty('title') ? params.title : titleCase(field) }}</p>
+                                    <div class="break-all">
+                                        <template v-if="field==='formatted_job_number'">
+                                            <a class="text-blue-500 hover:text-blue-700" target="_blank"
+                                               :href="'https://pm.mysgs.sgsco.com/Job/' + entry[field]"
+                                            >
+                                                {{ entry[field] }}
+                                            </a>
+                                        </template>
+                                        <template v-else-if="field==='pcm_type_profile_name' && isEcode(entry[field])">
+                                            <a class="text-blue-500 hover:text-blue-700" target="_blank"
+                                               :href="'https://cmf.sgsco.com/color-profile/' + ecode"
+                                               v-tooltip="'Open color profile in CMF'"
+                                            >
+                                                {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
+                                            </a>
+                                        </template>
+                                        <template v-else>
                                             {{ entry[field] }}
-                                        </a>
-                                    </template>
-                                    <template v-else-if="field==='pcm_type_profile_name' && isEcode(entry[field])">
-                                        <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                           :href="'https://cmf.sgsco.com/color-profile/' + ecode"
-                                           v-tooltip="'Open color profile in CMF'"
-                                        >
-                                            {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
-                                        </a>
-                                    </template>
-                                    <template v-else>
-                                        {{ entry[field] }}
-                                    </template>
+                                        </template>
+                                    </div>
                                 </div>
+
+                            </template>
+                        </template>
+                    </div>
+
+                    <template v-for="table in table_fields">
+                        <template v-if="table.section === section">
+                            <div class="mt-3">
+                                {{table.name}}
+                                <table class="table-auto">
+                                    <thead>
+                                    <tr>
+                                        <template v-for="field in table.fields">
+                                            <th>{{titleCase(field)}}</th>
+                                        </template>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <template v-for="row in entry[table.name]">
+                                        <tr>
+                                            <template v-for="col in table.columns">
+                                                <td>{{row[col]}}</td>
+                                            </template>
+                                        </tr>
+                                    </template>
+                                    </tbody>
+                                </table>
                             </div>
                         </template>
                     </template>
-                </div>
-            </Fieldset>
+                </Fieldset>
+            </template>
 
             <div class="grid grid-flow-col mt-5">
 
-                <Fieldset class="col-2" v-for="bconf in bridge_fields" :legend="titleCase(bconf)" :key="bconf">
+                <Fieldset class="col-2" v-for="bconf in bridge_fields" :key="bconf">
+                    <template #legend>
+                        <div class="flex align-items-center text-gray-50">
+                            <span class="pi pi-user mr-2"></span>
+                            <span class="font-bold">{{titleCase(bconf)}}</span>
+                        </div>
+                    </template>
                     <ul v-if="fields_config[bconf].response_type === 'list'">
                         <template v-for="(row) in entry[bconf]">
                             <li>{{ row }}</li>
@@ -162,3 +197,22 @@ function next() {
     </div>
 </template>
 
+<style>
+
+fieldset.p-fieldset legend.p-fieldset-legend {
+    @apply bg-blue-500;
+}
+
+.p-image-toolbar {
+    z-index: 9999;
+}
+
+.p-image-preview-container {
+    @apply overflow-hidden;
+}
+
+.p-image-preview-container:hover > .p-image-preview-indicator {
+    background: none;
+}
+
+</style>

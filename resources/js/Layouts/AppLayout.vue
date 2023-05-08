@@ -38,6 +38,7 @@ onMounted(() => {
     axios.get(route('api.configs')).then(({data}) => {
         configStore.setFields(data.fields_config);
         configStore.setBridgeFields(data.bridge_fields);
+        configStore.setTableFields(data.table_fields);
         configStore.setAutocompleteSuggester(data.autocomplete_suggester_url);
         configStore.setAdvancedSearchFields(data.advanced_search_fields);
     });
