@@ -81,10 +81,10 @@ function next() {
 
         <div class="">
             <div class="mx-auto max-w-[90%] h-full max-h-full" id="job-image">
-               <vue-load-image>
+                <vue-load-image>
                     <template v-slot:image>
                         <div :data-src="highres" class="text-center">
-<!--                        <img :src="highres"/>-->
+                            <!--                        <img :src="highres"/>-->
                             <Image :src="highres" alt="" imageClass="max-h-screen" preview/>
                         </div>
                     </template>
@@ -95,12 +95,12 @@ function next() {
                     </template>
                     <template v-slot:error>Failed to load image</template>
                 </vue-load-image>
-<!--                <Image :src="highres" alt="" preview/>-->
-<!--                <inner-image-zoom
-                    :src="highres"
-                    className="max-h-screen"
-                    zoomType="click"
-                />-->
+                <!--                <Image :src="highres" alt="" preview/>-->
+                <!--                <inner-image-zoom
+                                    :src="highres"
+                                    className="max-h-screen"
+                                    zoomType="click"
+                                />-->
 
             </div>
 
@@ -109,7 +109,7 @@ function next() {
                     <template #legend>
                         <div class="flex align-items-center text-gray-50">
                             <span class="pi pi-user mr-2"></span>
-                            <span class="font-bold">{{section}}</span>
+                            <span class="font-bold">{{ section }}</span>
                         </div>
                     </template>
 
@@ -117,7 +117,8 @@ function next() {
                         <template v-for="(params, field) in sortedConfig">
                             <template v-if="params.display && !bridge_fields.includes(field)">
                                 <div class="p-2 border border-bluegray-50 even:bg-neutral-50 even:border-white">
-                                    <p class="font-bold">{{ params.hasOwnProperty('title') ? params.title : titleCase(field) }}</p>
+                                    <p class="font-bold">
+                                        {{ params.hasOwnProperty('title') ? params.title : titleCase(field) }}</p>
                                     <div class="break-all">
                                         <template v-if="field==='formatted_job_number'">
                                             <a class="text-blue-500 hover:text-blue-700" target="_blank"
@@ -146,21 +147,34 @@ function next() {
 
                     <template v-for="table in table_fields">
                         <template v-if="table.section === section">
-                            <div class="mt-3">
-                                {{table.name}}
-                                <table class="table-auto">
+                            <div class="flex mt-3 justify-content-center">
+                                <table class="border-collapse table-auto w-50 text-sm" :id="snakeCase(table.name)">
                                     <thead>
                                     <tr>
                                         <template v-for="field in table.fields">
-                                            <th>{{titleCase(field)}}</th>
+                                            <th class="border-b dark:border-slate-600 font-medium p-4 pl-3 pt-0 pb-3 text-slate-400 text-left">
+                                                {{ titleCase(field) }}
+                                            </th>
                                         </template>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <template v-for="row in entry[table.name]">
+                                    <template v-for="(row, index) in entry[table.fields[0]]">
                                         <tr>
-                                            <template v-for="col in table.columns">
-                                                <td>{{row[col]}}</td>
+                                            <template v-for="field in table.fields">
+                                                <td class="border-b border-slate-100 dark:border-slate-700 p-1 pl-3 text-slate-500">
+                                                    <div class="flex flex-row align-middle">
+                                                        <template v-if="field === 'hex_colors'">
+                                                            <div class="h-5 w-5 min-w-9 mr-1"
+                                                                 :style="'background-color:' + entry[field][index]">
+
+                                                            </div>
+                                                        </template>
+                                                        {{
+                                                            entry[field][index] !== undefined ? entry[field][index] : ''
+                                                        }}
+                                                    </div>
+                                                </td>
                                             </template>
                                         </tr>
                                     </template>
@@ -178,7 +192,7 @@ function next() {
                     <template #legend>
                         <div class="flex align-items-center text-gray-50">
                             <span class="pi pi-user mr-2"></span>
-                            <span class="font-bold">{{titleCase(bconf)}}</span>
+                            <span class="font-bold">{{ titleCase(bconf) }}</span>
                         </div>
                     </template>
                     <ul v-if="fields_config[bconf].response_type === 'list'">
