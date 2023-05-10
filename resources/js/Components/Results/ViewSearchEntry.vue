@@ -36,6 +36,10 @@ const bridge_fields = computed(() => {
     return configStore.getBridgeFields();
 })
 
+const grouped_fields = computed(() => {
+    return configStore.getGroupedFields();
+})
+
 const table_fields = computed(() => {
     return configStore.getTableFields();
 })
@@ -79,7 +83,7 @@ function next() {
          @keyup.right="next"
     >
 
-        <div class="">
+        <div class="modal-body">
             <div class="mx-auto max-w-[90%] h-full max-h-full" id="job-image">
                 <vue-load-image>
                     <template v-slot:image>
@@ -89,7 +93,8 @@ function next() {
                         </div>
                     </template>
                     <template v-slot:preloader>
-                        <div class="flex h-full justify-items-center items-center">
+                        <div class="flex flex-col h-full justify-items-center items-center">
+
                             <ProgressSpinner/>
                         </div>
                     </template>
@@ -152,7 +157,7 @@ function next() {
                                     <thead>
                                     <tr>
                                         <template v-for="field in table.fields">
-                                            <th class="border-b dark:border-slate-600 font-medium p-4 pl-3 pt-0 pb-3 text-slate-400 text-left">
+                                            <th class="border-b dark:border-slate-600 font-medium px-4 pl-3 pt-0 pb-1 text-slate-400 text-left">
                                                 {{ titleCase(field) }}
                                             </th>
                                         </template>
@@ -162,7 +167,7 @@ function next() {
                                     <template v-for="(row, index) in entry[table.fields[0]]">
                                         <tr>
                                             <template v-for="field in table.fields">
-                                                <td class="border-b border-slate-100 dark:border-slate-700 p-1 pl-3 text-slate-500">
+                                                <td class="border-b border-slate-300 p-1 pl-3 text-slate-500">
                                                     <div class="flex flex-row align-middle">
                                                         <template v-if="field === 'hex_colors'">
                                                             <div class="h-5 w-5 min-w-9 mr-1"
@@ -186,26 +191,39 @@ function next() {
                 </Fieldset>
             </template>
 
-            <div class="grid grid-flow-col mt-5">
 
-                <Fieldset class="col-2" v-for="bconf in bridge_fields" :key="bconf">
-                    <template #legend>
-                        <div class="flex align-items-center text-gray-50">
-                            <span class="pi pi-user mr-2"></span>
-                            <span class="font-bold">{{ titleCase(bconf) }}</span>
+            <Fieldset v-for="group in grouped_fields">
+                <template #legend>
+                    <div class="flex align-items-center text-gray-50">
+                        <span class="pi pi-user mr-2"></span>
+                        <span class="font-bold">{{ group.name }}</span>
+                    </div>
+                </template>
+
+                <div class="md:grid md:grid-cols-6">
+                    <div v-for="field in group.fields">
+                        <div class="px-4">
+                            <p class="font-bold">
+                                {{
+                                    fields_config[field].hasOwnProperty('title') ?
+                                        fields_config[field].hasOwnProperty('title')
+                                        : titleCase(field)
+                                }}
+                            </p>
+                            <ul v-if="fields_config[field].response_type === 'list'">
+                                <template v-for="(row) in entry[field]">
+                                    <li>{{ row }}</li>
+                                </template>
+                            </ul>
+                            <p v-else>
+                                {{ entry[bconf] }}
+                            </p>
                         </div>
-                    </template>
-                    <ul v-if="fields_config[bconf].response_type === 'list'">
-                        <template v-for="(row) in entry[bconf]">
-                            <li>{{ row }}</li>
-                        </template>
-                    </ul>
-                    <p v-else>
-                        {{ entry[bconf] }}
-                    </p>
-                </Fieldset>
+                    </div>
+                </div>
 
-            </div>
+            </Fieldset>
+
         </div>
 
     </div>

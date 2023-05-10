@@ -215,8 +215,8 @@ const groupedSortedConfig = computed(() => {
                             </div>
                             <template v-if="userPreferences.layout === 'grid'">
                                 <div class="mx-2">
-                                    <label>Grid Size</label>
-                                    <Slider class="w-14rem" v-model="userPreferences.gridSize" :step="1" :min="1"
+                                    <label class="mb-2">Grid Size</label>
+                                    <Slider class="w-12rem" v-model="userPreferences.gridSize" :step="1" :min="1"
                                             :max="5"/>
                                 </div>
                                 <div class="mx-2 flex">

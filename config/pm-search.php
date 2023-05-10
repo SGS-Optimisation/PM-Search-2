@@ -161,6 +161,13 @@ return [
         //'description',
     ],
 
+    'grouped_fields' => [
+        [
+            'name' => 'File Attributes',
+            'fields' => ['font_name', 'layer_name',]
+        ]
+    ],
+
     'tables' => [
         [
             'name' => 'Color Table',

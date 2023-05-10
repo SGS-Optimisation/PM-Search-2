@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {defineComponent, watch, ref, reactive, onMounted, onUpdated} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted, onUpdated, computed} from "vue";
 import JetFormSection from '@/Components/Jetstream/FormSection.vue';
 import route from "ziggy-js";
 import AutoComplete from 'primevue/autocomplete';
@@ -64,6 +64,10 @@ function handleChangeTag(event) {
         }
     }
 }
+
+const canSearch = computed(() => {
+    return tags.value.length > 0;
+})
 
 function doSearch(this: any) {
 
@@ -234,7 +238,7 @@ const titleCase = (str) => window.titleCase(str);
                                       optionLabel="name" optionValue="value"/>
                     </div>
                     <div class="ml-2">
-                        <Button type="submit" @click="doSearch"
+                        <Button type="submit" @click="doSearch" :disabled="!canSearch"
                                 label="Search" severity="success"/>
                     </div>
 

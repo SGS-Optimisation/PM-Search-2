@@ -58,13 +58,13 @@ const titleCase = (str) => window.titleCase(str);
             <template v-for="(params, field) in sortedConfig">
                 <template v-if="params.display && !bridge_fields.includes(field)">
                     <tr class="border even:bg-blue-100">
-                        <td class="font-bold text-xs whitespace-nowrap">{{ titleCase(field) }}</td>
+                        <td class="font-bold text-xs whitespace-nowrap">{{ params.hasOwnProperty('title') ? params.title : titleCase(field) }}</td>
                         <td class="md:grow">
                             <template v-if="field==='formatted_job_number'">
                                 <a class="text-blue-500 hover:text-blue-700" target="_blank"
                                    :href="'https://pm.mysgs.sgsco.com/Job/' + entry[field]"
                                 >
-                                    {{ entry[field] }}
+                                    {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
                                 </a>
                             </template>
                             <template v-else-if="field==='pcm_type_profile_name' && isEcode(entry[field])">
@@ -76,7 +76,7 @@ const titleCase = (str) => window.titleCase(str);
                                 </a>
                             </template>
                             <template v-else>
-                                {{ entry[field].toString() }}
+                                {{ entry[field] && typeof entry[field].toString === 'function' ? entry[field].toString() : entry[field] }}
                             </template>
                         </td>
                     </tr>

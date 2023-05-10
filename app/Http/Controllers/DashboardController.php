@@ -17,7 +17,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $latest_searches = $request->user()->searches()
-            ->latest()->take(10)
+            ->latest()->take(40)
             ->select(['id', 'search_mode', 'search_data', 'working_data'])
             ->get();
 
