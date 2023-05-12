@@ -149,7 +149,7 @@ function next() {
                                                 {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
                                             </a>
                                         </template>
-                                        <template v-else-if="field==='printer_spec_url'">
+                                        <template v-else-if="entry[field] && field==='printer_spec_url'">
                                             <a class="text-blue-500 hover:text-blue-700" target="_blank"
                                                :href="'https://automation.sgsco.com/prepress/details?id=' + entry[field]"
                                                v-tooltip="'Open color profile in Printer Specs'"

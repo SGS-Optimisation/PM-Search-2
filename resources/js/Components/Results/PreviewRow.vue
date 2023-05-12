@@ -4,6 +4,7 @@ import {computed} from "@vue/reactivity";
 import InnerImageZoom from 'vue-inner-image-zoom';
 import {configStore} from "@/stores/config-store";
 import _ from 'lodash';
+import {ref} from "vue";
 
 const emit = defineEmits(['on-click-view', 'on-click-quick-view']);
 
@@ -26,6 +27,8 @@ const thumb = computed(() => {
 const highres = computed(() => {
     return props.item['image_lrg'];
 })
+
+const imageAvailable = ref(true);
 
 const zoomSrc = computed(() => {
     return props.gridSize === 1 ? highres.value : thumb.value;
@@ -55,7 +58,7 @@ const sortedConfig = computed(() => {
 });
 
 const splittedConfig = computed(() => {
-    var chunks =  _.chunk(Object.keys(sortedConfig.value), Math.ceil(Object.keys(sortedConfig.value).length/2));
+    var chunks = _.chunk(Object.keys(sortedConfig.value), Math.ceil(Object.keys(sortedConfig.value).length / 2));
 
     var result = [];
     for (const chunk in chunks) {
@@ -94,22 +97,32 @@ const titleCase = (str) => window.titleCase(str);
 
     <div class="col-12">
         <div class="bg-white flex flex-column xl:flex-row xl:align-items-start p-4 gap-4 mb-2">
-            <img  @click.prevent="$emit('on-click-view', item)"
-                  class="responsive w-4"
-                  v-tooltip.top="'Open fullscreen image'" :src="thumb" loading="lazy"
-            />
+            <template v-if="imageAvailable">
+                <img @click.prevent="$emit('on-click-view', item)"
+                     class="responsive w-4"
+                     @error="imageAvailable = false"
+                     v-tooltip.top="'Open fullscreen image'" :src="thumb" loading="lazy"
+                />
+            </template>
+            <template v-else>
+                <p class="w-4 text-center align-middle my-auto text-gray-200">
+                    🚫<br>
+                    Unavailable thumbnails are a result of the job not launching or employing the standard workflow
+                    which support the capture of thumbnail files.
+                </p>
+            </template>
             <div v-for="(configCol, index) in splittedConfig"
-                class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-                <div class="flex flex-column align-items-center sm:align-items-start gap-3" >
+                 class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                <div class="flex flex-column align-items-center sm:align-items-start gap-3">
                     <div class="flex flex-col text-xs">
                         <div v-for="(params, field) in configCol">
                             <template v-if="params.display && !bridge_fields.includes(field)">
-                               <span class="font-bold">{{ titleCase(field) }}</span>:
+                                <span class="font-bold">{{ titleCase(field) }}</span>:
                                 <template v-if="field==='formatted_job_number'">
                                     <a class="text-blue-500 hover:text-blue-700" target="_blank"
                                        :href="'https://pm.mysgs.sgsco.com/Job/' + item[field]"
                                     >
-                                        {{ item[field] }}
+                                        {{ item[field] }} <i class="text-xs pi pi-external-link"></i>
                                     </a>
                                 </template>
                                 <template v-else-if="field==='pcm_type_profile_name' && isEcode(item[field])">
@@ -120,8 +133,16 @@ const titleCase = (str) => window.titleCase(str);
                                         {{ item[field] }} <i class="text-xs pi pi-external-link"></i>
                                     </a>
                                 </template>
+                                <template v-else-if="item[field] && field==='printer_spec_url'">
+                                    <a class="text-blue-500 hover:text-blue-700" target="_blank"
+                                       :href="'https://automation.sgsco.com/prepress/details?id=' + item[field]"
+                                       v-tooltip="'Open color profile in Printer Specs'"
+                                    >
+                                        {{ item[field] }} <i class="text-xs pi pi-external-link"></i>
+                                    </a>
+                                </template>
                                 <template v-else>
-                                    {{ item[field].toString() }}
+                                    {{ item[field] }}
                                 </template>
                             </template>
 
