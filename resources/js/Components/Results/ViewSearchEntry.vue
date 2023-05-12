@@ -52,6 +52,15 @@ const highres = computed(() => {
     return props.entry['image_lrg'];
 })
 
+const backgroundStyle = computed(() => {
+    return {
+        'background-size': 'contain',
+        'background-repeat': 'no-repeat',
+        'background-position': 'center center',
+        'background-image': `url(${props.entry['image_sml']})`,
+    }
+})
+
 const titleCase = (str) => window.titleCase(str);
 
 function isEcode(str) {
@@ -93,7 +102,7 @@ function next() {
                         </div>
                     </template>
                     <template v-slot:preloader>
-                        <div class="flex flex-col h-full justify-items-center items-center">
+                        <div class="flex flex-col h-full justify-items-center items-center"  :style="backgroundStyle">
 
                             <ProgressSpinner/>
                         </div>
@@ -136,6 +145,14 @@ function next() {
                                             <a class="text-blue-500 hover:text-blue-700" target="_blank"
                                                :href="'https://cmf.sgsco.com/color-profile/' + ecode"
                                                v-tooltip="'Open color profile in CMF'"
+                                            >
+                                                {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
+                                            </a>
+                                        </template>
+                                        <template v-else-if="field==='printer_spec_url'">
+                                            <a class="text-blue-500 hover:text-blue-700" target="_blank"
+                                               :href="'https://automation.sgsco.com/prepress/details?id=' + entry[field]"
+                                               v-tooltip="'Open color profile in Printer Specs'"
                                             >
                                                 {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
                                             </a>

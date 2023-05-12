@@ -102,10 +102,13 @@ return [
         'packaging_reference' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 3, 'section' => 'Printer Specifications'],
         'printer_spec_url' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 4, 'title' => 'Printer Spec ID', 'section' => 'Printer Specifications'],
         'dieline' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 5, 'section' => 'Printer Specifications'],
+        // TODO: this is not present in the API
         'print_orientation' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 6, 'section' => 'Printer Specifications'],
 
         // ROW 2
-        'substrate' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 10, 'section' => 'Printer Specifications'],
+        'plate_type' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 10, 'section' => 'Printer Specifications'],
+        'plate_thickness' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 11, 'section' => 'Printer Specifications'],
+        'substrate' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 12, 'section' => 'Printer Specifications'],
 
         // Colour Details
         'pcm_type_desc' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position'=> 1, 'title' => 'Proof Type', 'section' => 'Colour Details'],
