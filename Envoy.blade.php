@@ -8,6 +8,6 @@
     php8.2 artisan config:clear
     php8.2 artisan migrate --force
     sudo supervisorctl restart pm-search-queue-worker:
-    npm install
-    npm run build
+    /home/mytransferdev/.nvm/versions/node/v16.16.0/bin/npm install
+    /home/mytransferdev/.nvm/versions/node/v16.16.0/bin/npm run build
 @endtask
