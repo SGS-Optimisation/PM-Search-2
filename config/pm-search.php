@@ -183,21 +183,21 @@ return [
 
     'advanced_search' => [
 
-        'brand' => ['key' => 'brand', 'type' => 'autocomplete'],
-        'simplified_group_name' => ['key' => 'simplified', 'type' => 'autocomplete'],
+        'simplified_group_name' => ['key' => 'simplified', 'type' => 'autocomplete', 'standalone' => true, 'title' => 'Customer'],
 
-        'variety' => ['key' => 'variety', 'type' => 'autocomplete'],
+        'brand' => ['key' => 'brand', 'type' => 'autocomplete'],
         'printer_name' => ['key' => 'printer', 'type' => 'autocomplete'],
 
-        'weight' => ['key' => 'weight', 'type' => 'text'],
+        'variety' => ['key' => 'variety', 'type' => 'autocomplete'],
         'print_process' => ['key' => 'process', 'type' => 'text'],
 
-        'customer_design_ref' => ['key' => 'ref', 'type' => 'text', 'title' => 'Design / End User Reference'],
+        'weight' => ['key' => 'weight', 'type' => 'text'],
         'pcm_type_profile_name' => ['key' => 'profile', 'type' => 'text', 'title' => 'E-Number/Profile'],
 
-        'package_type' => ['key' => 'pack', 'type' => 'text'],
+        'customer_design_ref' => ['key' => 'ref', 'type' => 'text', 'title' => 'Design / End User Reference'],
         'booked_date' => ['key' => 'date', 'type' => 'date'],
 
+        'package_type' => ['key' => 'pack', 'type' => 'text'],
 
     ],
 
