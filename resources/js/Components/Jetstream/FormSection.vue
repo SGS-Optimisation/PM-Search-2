@@ -31,11 +31,11 @@ const hasActions = computed(() => !! useSlots().actions);
         }">
             <form @submit.prevent="$emit('submitted')">
                 <div
-                    class="bg-white shadow"
+                    class="bg-white"
                     :class="{
                         'sm:rounded-tl-md sm:rounded-tr-md': hasActions,
                         'sm:rounded-md': !hasActions,
-                        'px-4 py-5 sm:p-6' : !compactMode,
+                        'px-4 py-5 sm:p-6 shadow' : !compactMode,
                         'px-2 py-1': compactMode,
                     }"
                 >

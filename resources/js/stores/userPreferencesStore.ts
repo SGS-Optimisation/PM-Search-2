@@ -6,7 +6,7 @@ export const userPreferencesStore = defineStore(
     () => {
         const gridSize = ref(40)
         const imageSize = ref('sml')
-        const backgroundMode = ref('cover')
+        const backgroundMode = ref('fit')
         const perPage = ref(25)
         const layout = ref('grid');
 

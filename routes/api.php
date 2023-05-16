@@ -31,6 +31,7 @@ Route::name('api.')
                 'fields_config' => config('pm-search.fields'),
                 'bridge_fields' => config('pm-search.bridge_view_fields'),
                 'grouped_fields' => config('pm-search.grouped_fields'),
+                'results_row_fields' => config('pm-search.results_row_fields'),
                 'table_fields' => config('pm-search.tables'),
                 'autocomplete_suggester_url' => config('pm-search.autocomplete_suggester_url'),
                 'advanced_search_fields' => config('pm-search.advanced_search'),

@@ -39,6 +39,7 @@ onMounted(() => {
         configStore.setFields(data.fields_config);
         configStore.setBridgeFields(data.bridge_fields);
         configStore.setGroupedFields(data.grouped_fields);
+        configStore.setResultsRowFields(data.results_row_fields);
         configStore.setTableFields(data.table_fields);
         configStore.setAutocompleteSuggester(data.autocomplete_suggester_url);
         configStore.setAdvancedSearchFields(data.advanced_search_fields);

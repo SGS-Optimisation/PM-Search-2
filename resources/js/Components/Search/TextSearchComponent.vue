@@ -217,7 +217,7 @@ const titleCase = (str) => window.titleCase(str);
 
 <template>
     <div>
-        <jet-form-section @submitted="doSearch" class="mb-4" :compact-mode="compactMode">
+        <jet-form-section @submitted="doSearch" :compact-mode="compactMode">
             <template #title>
                 Text Search
             </template>

@@ -73,7 +73,7 @@ const ecode = computed(() => {
     <!-- Article -->
     <div class="p-2" :class="colClass">
 
-        <article class="hover:drop-shadow-2xl p-4 border-1 surface-border surface-card border-round relative shadow-sm">
+        <article class="hover:drop-shadow-2xl p-2 surface-border surface-card border-round relative shadow-sm">
 
             <div class="ribbon z-0" v-if="item.tag !== '' && item.tag !== 'textsearch'">
                 <span :title="item.tag"
@@ -94,22 +94,21 @@ const ecode = computed(() => {
                :class="'h-'+height" href="#">
 
                 <template v-if="imageAvailable">
-                <inner-image-zoom
-                    v-if="backgroundMode==='zoom'"
-                    :src="zoomSrc"
-                    :zoomSrc="highres"
-                    zoomType="hover"
-                    className="my-auto"
-                />
-                <img v-else :src="backgroundImage" loading="lazy" class="responsive"
-                     :style="imageStyle" @error="imageAvailable = false"
-                />
+                    <inner-image-zoom
+                        v-if="backgroundMode==='zoom'"
+                        :src="zoomSrc"
+                        :zoomSrc="highres"
+                        zoomType="hover"
+                        className="my-auto"
+                    />
+                    <img v-else :src="backgroundImage" loading="lazy" class="responsive"
+                         :style="imageStyle" @error="imageAvailable = false"
+                    />
                 </template>
                 <template v-else>
                     <p class="text-center align-middle my-auto text-gray-200">
                         🚫<br>
-                        Unavailable thumbnails are a result of the job not launching or employing the standard workflow
-                        which support the capture of thumbnail files.
+                        The Thumbnail for this job was not captured as part of the standard workflow
                     </p>
                 </template>
             </a>
@@ -125,14 +124,26 @@ const ecode = computed(() => {
                     {{ item.formatted_job_number }} <i class="text-xs pi pi-external-link"></i>
                 </a>
 
-                <template v-if="isEcode(item.pcm_type_profile_name)">
-                    <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                       :href="'https://cmf.sgsco.com/color-profile/' + ecode"
-                       v-tooltip="'Open color profile in CMF'"
-                    >
-                        {{ item.pcm_type_profile_name }} <i class="text-xs pi pi-external-link"></i>
-                    </a>
-                </template>
+                <div class="flex flex-col text-right">
+
+                    <template v-if="isEcode(item.pcm_type_profile_name)">
+                        <a class="text-blue-500 hover:text-blue-700 whitespace-nowrap" target="_blank"
+                           :href="'https://cmf.sgsco.com/color-profile/' + ecode"
+                           v-tooltip="'Open color profile in CMF'"
+                        >
+                            {{ item.pcm_type_profile_name }} <i class="text-xs pi pi-external-link"></i>
+                        </a>
+                    </template>
+
+                    <template v-if="item.printer_spec_url">
+                        <a class="text-blue-500 hover:text-blue-700" target="_blank"
+                           :href="'https://automation.sgsco.com/prepress/details?id=' + item.printer_spec_url"
+                           v-tooltip="'Open color profile in Printer Specs'"
+                        >
+                            🖨 {{ item.printer_spec_url }} <i class="text-xs pi pi-external-link"></i>
+                        </a>
+                    </template>
+                </div>
             </div>
 
             <!-- main content -->

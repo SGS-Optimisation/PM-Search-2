@@ -6,6 +6,8 @@ interface Config extends Object {
     fields: Array<any>,
     bridgeFields: Array<any>,
     groupedFields: Array<any>,
+
+    resultsRowFields: Array<any>,
     tableFields: Array<any>,
 
     autocompleteSuggester: string,
@@ -19,6 +21,7 @@ class ConfigStore extends PersistentLocalStore<Config> {
             fields: [],
             bridgeFields: [],
             groupedFields: [],
+            resultsRowFields: [],
             tableFields: [],
             autocompleteSuggester: '',
             advancedSearchFields: [],
@@ -47,6 +50,14 @@ class ConfigStore extends PersistentLocalStore<Config> {
 
     getGroupedFields() {
         return this.state.groupedFields;
+    }
+
+    setResultsRowFields(fields) {
+        this.state.resultsRowFields = fields;
+    }
+
+    getResultsRowFields() {
+        return this.state.resultsRowFields;
     }
 
     setTableFields(fields) {

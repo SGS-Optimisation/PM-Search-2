@@ -58,13 +58,13 @@ const sortedConfig = computed(() => {
 });
 
 const splittedConfig = computed(() => {
-    var chunks = _.chunk(Object.keys(sortedConfig.value), Math.ceil(Object.keys(sortedConfig.value).length / 2));
+    var chunks = _.chunk(configStore.getResultsRowFields(), Math.ceil(configStore.getResultsRowFields().length / 2));
 
     var result = [];
     for (const chunk in chunks) {
         var obj = {};
         for (const key in chunks[chunk]) {
-            obj[chunks[chunk][key]] = sortedConfig.value[chunks[chunk][key]];
+            obj[chunks[chunk][key]] = props.config[chunks[chunk][key]];
         }
         result.push(obj);
     }
@@ -98,17 +98,18 @@ const titleCase = (str) => window.titleCase(str);
     <div class="col-12">
         <div class="bg-white flex flex-column xl:flex-row xl:align-items-start p-4 gap-4 mb-2">
             <template v-if="imageAvailable">
+                <div class="w-3">
                 <img @click.prevent="$emit('on-click-view', item)"
-                     class="responsive w-4"
+                     class="responsive  max-h-32"
                      @error="imageAvailable = false"
                      v-tooltip.top="'Open fullscreen image'" :src="thumb" loading="lazy"
                 />
+                </div>
             </template>
             <template v-else>
-                <p class="w-4 text-center align-middle my-auto text-gray-200">
+                <p class="w-3 text-center align-middle my-auto text-gray-200">
                     🚫<br>
-                    Unavailable thumbnails are a result of the job not launching or employing the standard workflow
-                    which support the capture of thumbnail files.
+                    The Thumbnail for this job was not captured as part of the standard workflow
                 </p>
             </template>
             <div v-for="(configCol, index) in splittedConfig"
@@ -117,7 +118,7 @@ const titleCase = (str) => window.titleCase(str);
                     <div class="flex flex-col text-xs">
                         <div v-for="(params, field) in configCol">
                             <template v-if="params.display && !bridge_fields.includes(field)">
-                                <span class="font-bold">{{ titleCase(field) }}</span>:
+                                <span class="font-bold">{{ params.hasOwnProperty('title') ? params.title : titleCase(field) }}</span>:
                                 <template v-if="field==='formatted_job_number'">
                                     <a class="text-blue-500 hover:text-blue-700" target="_blank"
                                        :href="'https://pm.mysgs.sgsco.com/Job/' + item[field]"
@@ -148,9 +149,6 @@ const titleCase = (str) => window.titleCase(str);
 
                         </div>
                     </div>
-                </div>
-                <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-
                 </div>
             </div>
         </div>

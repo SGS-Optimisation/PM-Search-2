@@ -26,6 +26,7 @@ module.exports = {
         'h-64',
         'h-48',
         'h-36',
+        'h-32',
         'bg-indigo-400',
         'bg-yellow-400',
         'bg-red-400',

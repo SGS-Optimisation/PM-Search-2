@@ -165,3 +165,10 @@ function getFilterOptions() {
         </div>
     </div>
 </template>
+
+
+<style scoped>
+.results-sidebar{
+    @apply bg-indigo-50 z-40;
+}
+</style>

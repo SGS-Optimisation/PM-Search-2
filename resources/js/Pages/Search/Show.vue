@@ -2,14 +2,18 @@
 import {Head, useForm, usePage} from "@inertiajs/vue3";
 import {defineComponent, watch, ref, reactive, onMounted, onBeforeMount, provide, computed} from "vue";
 import AutoComplete from "primevue/autocomplete";
+import Button from "primevue/button";
 import Slider from 'primevue/slider';
 import DataView from "primevue/dataview";
 import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
+import Divider from 'primevue/divider';
 import Dropdown from "primevue/dropdown";
-import SelectButton from 'primevue/selectbutton';
-import Sidebar from "primevue/sidebar";
+import Inplace from "primevue/inplace";
+import OverlayPanel from 'primevue/overlaypanel';
 import PreviewCard from "@/Components/Results/PreviewCard.vue";
 import PreviewRow from "@/Components/Results/PreviewRow.vue";
+import SelectButton from 'primevue/selectbutton';
+import Sidebar from "primevue/sidebar";
 import FullModal from "@/Components/Utility/FullModal.vue";
 import ViewSearchEntry from "@/Components/Results/ViewSearchEntry.vue";
 import {userPreferencesStore} from "@/stores/userPreferencesStore";
@@ -21,6 +25,7 @@ import QuickViewSearchEntry from "@/Components/Results/QuickViewSearchEntry.vue"
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
 import {snakeCase} from "lodash";
+import useHotkey from "vue3-hotkey";
 
 const props = defineProps({
     search_id: {type: Number, required: true},
@@ -54,9 +59,9 @@ const filterText = ref<String>('');
 const visibleQuickDetails = ref(false);
 
 const backgroundModes = ref([
-    {value: 'cover', 'label': 'Cover'},
-    {value: 'contain', 'label': 'Fit'},
-    {value: 'zoom', 'label': 'Zoom'},
+    {value: 'cover', 'label': '<u>C</u>over'},
+    {value: 'contain', 'label': '<u>F</u>it'},
+    {value: 'zoom', 'label': '<u>Z</u>oom'},
 ]);
 
 provide('filters', {filters, filteredSearchData, filterText});
@@ -88,7 +93,7 @@ onMounted(() => {
 });
 
 function completePerPage(e) {
-    perPage.value = parseInt(e.query);
+    userPreferences.perPage = parseInt(e.query);
 }
 
 function openEntryModal(item) {
@@ -170,23 +175,53 @@ const groupedSortedConfig = computed(() => {
     return groupedObj;
 });
 
+const gridConfigOverlay = ref();
+const toggleGridConfig = (event) => {
+    gridConfigOverlay.value.toggle(event);
+}
+
+const hotkeys = ref([
+    {
+        keys: ['f'],
+        preventDefault: true,
+        handler(keys) {
+            userPreferences.backgroundMode = 'contain';
+        }
+    },
+    {
+        keys: ['c'],
+        preventDefault: true,
+        handler(keys) {
+            userPreferences.backgroundMode = 'cover';
+        }
+    },
+    {
+        keys: ['z'],
+        preventDefault: true,
+        handler(keys) {
+            userPreferences.backgroundMode = 'zoom';
+        }
+    }
+])
+const stop = useHotkey(hotkeys.value)
+
 </script>
 
 <template>
     <Head title="Search results"/>
 
     <template v-if="mode === 'text'">
-    <div class="bg-white shadow">
-        <div class="max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md">
-            <TextSearchComponent :initial-values="search_data" :compact-mode="true"/>
+        <div class="bg-white shadow">
+            <div class="max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md">
+                <TextSearchComponent :initial-values="search_data" :compact-mode="true"/>
+            </div>
         </div>
-    </div>
     </template>
     <template v-else>
         <div class="bg-white shadow">
-          <div class="max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md flex justify-center">
-              <ImageSearchComponent  :initial-values="{filename, thumb, image_path }" :compact-mode="true" />
-          </div>
+            <div class="max-w-7xl mx-auto pt-3 pb-1 px-4 overflow-hidden sm:rounded-md flex justify-center">
+                <ImageSearchComponent :initial-values="{filename, thumb, image_path }" :compact-mode="true"/>
+            </div>
         </div>
     </template>
 
@@ -215,27 +250,58 @@ const groupedSortedConfig = computed(() => {
                             </div>
                             <template v-if="userPreferences.layout === 'grid'">
                                 <div class="mx-2">
-                                    <label class="mb-2">Grid Size</label>
-                                    <Slider class="w-12rem" v-model="userPreferences.gridSize" :step="1" :min="1"
-                                            :max="5"/>
+                                    <Inplace v-if="false" :closable="true">
+                                        <template #display>
+                                            <span class="p-button hover:p-button-secondary">
+                                                Grid Size
+                                            </span>
+                                        </template>
+                                        <template #content>
+                                            <label class="block text-xs mb-2">Grid Size</label>
+                                            <Slider class="w-10rem" v-model="userPreferences.gridSize" :step="1"
+                                                    :min="1"
+                                                    :max="5"/>
+                                        </template>
+                                    </Inplace>
+                                    <template v-else>
+                                        <label class="block text-xs mb-2">Grid Size</label>
+                                        <Slider class="w-10rem" v-model="userPreferences.gridSize" :step="1"
+                                                :min="1"
+                                                :max="5"/>
+                                    </template>
+
+
                                 </div>
                                 <div class="mx-2 flex">
                                     <SelectButton v-model="userPreferences.backgroundMode" id="imageMode"
                                                   :options="backgroundModes"
-                                                  optionLabel="label" option-value="value" aria-labelledby="basic"/>
+                                                  optionLabel="label" option-value="value" aria-labelledby="basic">
+                                        <template #option="slotProps">
+                                            <span class="p-button-label" v-html="slotProps.option.label"></span>
+                                        </template>
+                                    </SelectButton>
+
 
                                 </div>
-                                <div class="mx-2 flex flex-col">
-                                    <SelectButton v-model="userPreferences.imageSize"
-                                                  :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
-                                                  optionLabel="label" option-value="value" aria-labelledby="basic"/>
-                                    <!--                            <InputSwitch v-model="imageSize"  true-value="sml" false-value="lrg"/>-->
-                                </div>
+
+                                <Button type="button" icon="pi pi-cog" @click="toggleGridConfig"/>
+
+                                <OverlayPanel ref="gridConfigOverlay">
+                                    <div class="mx-2 flex flex-col">
+                                        <div class="flex">
+                                            <label class="align-self-center mr-2">Thumbnail resolution</label>
+                                            <SelectButton v-model="userPreferences.imageSize"
+                                                          :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
+                                                          optionLabel="label" option-value="value"
+                                                          aria-labelledby="basic"/>
+                                        </div>
+                                    </div>
+                                </OverlayPanel>
                             </template>
                         </div>
 
-                        <div class="flex  pt-2">
-                            <div class="flex mx-4">
+                        <div class="flex pt-2">
+                            <div class="flex mx-1">
                                 <div class="flex flex-row">
 
                                 <span class="p-float-label">
@@ -254,18 +320,19 @@ const groupedSortedConfig = computed(() => {
                                                     'text-gray-200': userPreferences.sortOrder === -1,
                                                     }"
                                         >
-                                            <i class="pi pi-chevron-up"></i>
+                                            <i class="pi pi-chevron-up" style="font-size: 0.8rem"></i>
 
                                         </a>
                                         <a class="cursor-pointer" @click="userPreferences.sortOrder = -1"
                                            :class="{'text-blue-800': userPreferences.sortOrder === -1,
                                            'text-gray-200': userPreferences.sortOrder === 1
                                         }">
-                                            <i class="pi pi-chevron-down"></i>
+                                            <i class="pi pi-chevron-down" style="font-size: 0.8rem"></i>
                                         </a>
                                     </div>
                                 </div>
                             </div>
+                            <Divider layout="vertical"/>
                             <div class="justify-items-end">
                                 <DataViewLayoutOptions v-model="userPreferences.layout"/>
                             </div>
@@ -327,7 +394,7 @@ const groupedSortedConfig = computed(() => {
                     <template v-for="(field, section) in groupedSortedConfig">
                         <a class="p-button p-button-info p-button-outlined p-button-sm mx-2"
                            :href="'#' + snakeCase(section)">
-                            {{section}}
+                            {{ section }}
                         </a>
                     </template>
                 </div>
@@ -343,28 +410,51 @@ const groupedSortedConfig = computed(() => {
 
 </template>
 
-<style>
+<style lang="scss" scoped>
 
-.grid-options {
-    @apply text-xs;
+:deep(*) {
+    .p-dataview-header {
+        @apply sticky top-0 z-30;
+        padding: 0.5rem 1rem;
+    }
+
+    .p-dataview-content, article {
+        @apply z-20;
+    }
+
+    .p-inplace .p-inplace-display {
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .p-button.p-autocomplete-dropdown {
+        padding: 0;
+    }
+
+    .p-autocomplete-input.p-inputtext {
+        padding: 5px;
+    }
+
+    .grid-options,
+    .grid-options .p-button,
+    .grid-options .p-button-label,
+    .grid-options .p-float-label label,
+    .grid-options .p-dropdown-label {
+        font-size: 11px;
+
+    }
+
+    .p-float-label .p-inputwrapper-filled ~ label {
+        top: -0.3rem;
+    }
+
+    .p-dataview .p-dataview-header, .p-paginator {
+        @apply bg-indigo-50;
+    }
+
+    .p-dataview .p-dataview-content {
+        @apply bg-neutral-200 p-2;
+    }
 }
 
-.p-float-label .p-inputwrapper-filled ~ label {
-    top: -0.3rem;
-}
-
-.p-dataview .p-dataview-header {
-    padding: 0.5rem 1rem;
-}
-
-.results-sidebar, .p-dataview .p-dataview-header, .p-paginator {
-    @apply bg-indigo-50;
-}
-
-.p-dataview .p-dataview-content {
-    @apply bg-neutral-200 p-2;
-}
-
-#taxonomySelector {
-}
 </style>
