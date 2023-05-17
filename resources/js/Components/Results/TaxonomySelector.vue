@@ -92,6 +92,7 @@ function setSelected(value) {
                          optionGroupLabel="label" optionGroupChildren="items"
                          option-value="value" option-label="label"
                          placeholder="Select"
+                         filter-placeholder="Browse"
                          class="w-full"/>
             <label class="block text-xs font-medium text-gray-700 capitalize">
                 {{ titleCase(taxonomyName).replace(/Id$/, '') }}
@@ -99,4 +100,3 @@ function setSelected(value) {
         </span>
     </div>
 </template>
-

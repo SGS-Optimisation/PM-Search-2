@@ -15,10 +15,18 @@ const userPreferences = userPreferencesStore();
 const allSearchOptions = ref<Object>({});
 const filteredSearchOptions = ref<Object>({});
 
+const titleCase = (str) => window.titleCase(str);
+
+const arr = [];
+
+Object.keys(fields).map((key) => {
+    if (fields_config.hasOwnProperty(key))
+        arr.push({"value": key, "label": titleCase(fields_config[key].hasOwnProperty('title') ? fields_config[key].title : key)})
+    //value: key, label: titleCase(fields_config[key].hasOwnProperty('title') ? fields_config[key].title : key)}
+})
+
 const availableFields = computed(() => {
-    return Object.keys(fields).map((key) => {
-        return {value: key, label: titleCase(key)}
-    });
+    return arr.sort((a,b) => a.label.localeCompare(b.label))
 })
 
 onMounted(() => {
@@ -39,8 +47,6 @@ watch(
     },
     {deep: true}
 )
-
-const titleCase = (str) => window.titleCase(str);
 
 const totalResults = computed(() => {
     return report.length;
@@ -127,7 +133,7 @@ function getFilterOptions() {
             </div>
 
             <div class="flex flex-col border-t-2 border-b-2 border-gray-200 px-2 pt-3 pb-4 shadow-lg">
-                <p class="pb-4">Advanced filtering</p>
+                <p class="pb-4">Advanced Filtering</p>
                 <div class="pb-4">
                         <span class="p-float-label grow">
                             <MultiSelect v-model="userPreferences.selectedTaxonomy" id="taxonomySelector"
@@ -137,8 +143,10 @@ function getFilterOptions() {
                                          option-value="value" option-label="label"
                                          display="chip"
                                          placeholder="Searchable Fields"
+                                         filter-placeholder="Browse"
+                                         scroll-height="21rem"
                                          class="w-full"/>
-                            <label for="taxonomySelector">Select Search Fields</label>
+                            <label for="taxonomySelector">Select Additional Search Filters</label>
                         </span>
                     <template v-if="userPreferences.selectedTaxonomy.length">
                         <Button class="px-3" size="small" label="Remove Filter Fields" icon="pi pi-times"

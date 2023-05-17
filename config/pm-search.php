@@ -59,7 +59,7 @@ return [
 
         // ROW 1
         'formatted_job_number' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 1, 'title' => 'Job Number', 'section' => 'Job Details'],
-        'simplified_group_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 2, 'title' => 'Customer Name', 'section' => 'Job Details'],
+        'simplified_group_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 2, 'title' => 'Customer Name (Simplified)', 'section' => 'Job Details'],
 
         // this fields contains a list of actual customers (end users) as well as printers
         'customer_name' => ['search' => true, 'display' => false, 'type' => 'list', 'response_type' => 'list'],
@@ -72,14 +72,14 @@ return [
 
         // ROW, 'section' => 'Job Details' 2
         'booked_date' => ['search' => true, 'display' => true, 'type' => 'date', 'response_type' => 'date', 'position' => 10, 'section' => 'Job Details'],
-        'customer_design_ref' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 11, 'title' => 'Design End User Reference', 'section' => 'Job Details'],
+        'customer_design_ref' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 11, 'title' => 'Design / End User Reference', 'section' => 'Job Details'],
         'order_type' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 12, 'section' => 'Job Details'],
         'package_type' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 13, 'section' => 'Job Details'],
         'account_manager_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 14, 'title' => 'Primary Project Manager', 'section' => 'Job Details'],
         'site_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 15, 'title' => 'Primary SGS Location', 'section' => 'Job Details'],
 
         // ROW, 'section' => 'Job Details' 3
-        'job_relationship' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 20, 'section' => 'Job Details'],
+        //'job_relationship' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 20, 'section' => 'Job Details'],
         'languages' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 21, 'section' => 'Job Details'],
         'language_count' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 22, 'section' => 'Job Details'],
         'project_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 23, 'section' => 'Job Details'],
@@ -96,9 +96,9 @@ return [
         // ROW 1
 
         // printer_name is a generated row
-        'printer_name' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 1, 'section' => 'Printer Specifications'],
+        'printer_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 1, 'title' => 'Printer', 'section' => 'Printer Specifications'],
         'print_process' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 2, 'section' => 'Printer Specifications'],
-        'packaging_reference' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 3, 'section' => 'Printer Specifications'],
+        'packaging_reference' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 3, 'title' => 'Package / Printer Reference', 'section' => 'Printer Specifications'],
         'printer_spec_url' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 4, 'title' => 'Printer Spec ID', 'section' => 'Printer Specifications'],
         'dieline' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 5, 'section' => 'Printer Specifications'],
         // TODO: this is not present in the API
@@ -111,21 +111,21 @@ return [
 
         // Colour Details
         'pcm_type_desc' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 1, 'title' => 'Proof Type', 'section' => 'Colour Details'],
-        'pcm_type_profile_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 2, 'title' => 'E-Profile', 'section' => 'Colour Details'],
+        'pcm_type_profile_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 2, 'title' => 'Profile', 'section' => 'Colour Details'],
         'number_of_colors' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'int', 'position' => 3, 'title' => 'Number Of Colours', 'section' => 'Colour Details'],
 
         // BRIDGE FIELDS
-        'color_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        'book' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        'color_type' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        'hex_colors' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        'color_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'title' => 'Colour Name', 'position' => 100],
+        //'book' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        //'color_type' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        //'hex_colors' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
         'font_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        'layer_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        //'layer_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
 
         // HIDDEN ROWS
-        'contact_type' => ['search' => true, 'display' => false, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        //'contact_type' => ['search' => true, 'display' => false, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
         'customer_type' => ['search' => true, 'display' => false, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        'portfolio_group_name' => ['search' => true, 'display' => false, 'type' => 'list', 'response_type' => 'str', 'position' => 100],
+        //'portfolio_group_name' => ['search' => true, 'display' => false, 'type' => 'list', 'response_type' => 'str', 'position' => 100],
         'job_version_id' => ['search' => false, 'display' => false, 'type' => 'list', 'response_type' => 'str', 'position' => 100],
 
         'description' => ['search' => false, 'display' => false, 'type' => 'list', 'response_type' => 'str', 'position' => 100],
