@@ -79,7 +79,7 @@ return [
         'site_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 15, 'title' => 'Primary SGS Location', 'section' => 'Job Details'],
 
         // ROW, 'section' => 'Job Details' 3
-        //'job_relationship' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 20, 'section' => 'Job Details'],
+        'job_relationship' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 20, 'section' => 'Job Details'],
         'languages' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 21, 'section' => 'Job Details'],
         'language_count' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 22, 'section' => 'Job Details'],
         'project_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 23, 'section' => 'Job Details'],
@@ -116,16 +116,16 @@ return [
 
         // BRIDGE FIELDS
         'color_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'title' => 'Colour Name', 'position' => 100],
-        //'book' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        //'color_type' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        //'hex_colors' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        'book' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        'color_type' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        'hex_colors' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
         'font_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        //'layer_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        'layer_name' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
 
         // HIDDEN ROWS
-        //'contact_type' => ['search' => true, 'display' => false, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        'contact_type' => ['search' => false, 'display' => false, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
         'customer_type' => ['search' => true, 'display' => false, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        //'portfolio_group_name' => ['search' => true, 'display' => false, 'type' => 'list', 'response_type' => 'str', 'position' => 100],
+        'portfolio_group_name' => ['search' => false, 'display' => false, 'type' => 'list', 'response_type' => 'str', 'position' => 100],
         'job_version_id' => ['search' => false, 'display' => false, 'type' => 'list', 'response_type' => 'str', 'position' => 100],
 
         'description' => ['search' => false, 'display' => false, 'type' => 'list', 'response_type' => 'str', 'position' => 100],
