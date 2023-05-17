@@ -36,7 +36,7 @@ COPY --chown=laravel:laravel --from=frontend /frontend/public/build /var/www/htm
 
 
 RUN mkdir -p /home/laravel/.composer
-ADD ./dockerfiles/composer/auth.json /home/laravel/.composer/auth.json
+COPY --chown=laravel:laravel  ./dockerfiles/composer/auth.json /home/laravel/.composer/auth.json
 #ADD scripts/scheduler.sh /usr/local/bin/scheduler
 
 #RUN chmod +x /usr/local/bin/scheduler
