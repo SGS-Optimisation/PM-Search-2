@@ -6,7 +6,7 @@ COPY . .
 RUN npm run build
 
 
-FROM superbase:latest
+FROM sgscoaisearchfrontend.azurecr.io/superbase:latest
 
 ARG UID
 ARG GID
