@@ -47,7 +47,7 @@ defineOptions({layout: AppLayout})
 const items = ref();
 const userPreferences = userPreferencesStore();
 const layout = ref('grid');
-const perPage = ref(40);
+const perPage = ref(25);
 const sortOptions = ref([{label: 'Score', value: 'score'}, {label: 'Booked Date', value: 'booked_date_fmt'}]);
 const isOpen = ref(false);
 const currentEntry = ref();
@@ -241,7 +241,7 @@ const stop = useHotkey(hotkeys.value)
                             <div class="mx-2">
                             <span class="p-float-label">
                                 <AutoComplete v-model="userPreferences.perPage"
-                                              dropdown :suggestions="[20, 40, 100, 1000]"
+                                              dropdown :suggestions="[25, 50, 100]"
                                               @complete="completePerPage"
                                               :inputStyle="{width: '5em'}"
                                 />
