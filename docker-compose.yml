@@ -49,6 +49,8 @@ services:
         environment:
             APP_ENV: local
             CONTAINER_ROLE: app
+            NOVA_USERNAME: ${NOVA_USERNAME}
+            NOVA_LICENSE_KEY: ${NOVA_LICENSE_KEY}
 
     queue:
         build:
@@ -67,5 +69,7 @@ services:
         environment:
             APP_ENV: local
             CONTAINER_ROLE: worker
+            NOVA_USERNAME: ${NOVA_USERNAME}
+            NOVA_LICENSE_KEY: ${NOVA_LICENSE_KEY}
 
 

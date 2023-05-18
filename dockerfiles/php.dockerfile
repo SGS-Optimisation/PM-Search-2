@@ -10,12 +10,14 @@ FROM sgscoaisearchfrontend.azurecr.io/superbase:latest
 
 ARG UID
 ARG GID
+ARG NOVA_USERNAME
+ARG NOVA_LICENSE_KEY
 
 ENV UID=${UID}
 ENV GID=${GID}
 #ENV COMPOSER_ALLOW_SUPERUSER=1
-#ENV NOVA_USERNAME=${NOVA_USERNAME}
-#ENV NOVA_LICENSE_KEY=${NOVA_LICENSE_KEY}
+ENV NOVA_USERNAME=$NOVA_USERNAME
+ENV NOVA_LICENSE_KEY=$NOVA_LICENSE_KEY
 
 ENV NODE_VERSION=${NODE_VERSION:-20.0.0}
 
@@ -29,14 +31,9 @@ WORKDIR /var/www/html
 COPY --chown=laravel:laravel . .
 COPY --chown=laravel:laravel --from=frontend /frontend/public/build /var/www/html/public/build
 
-#RUN composer config http-basic.nova.laravel.com ${NOVA_USERNAME} ${NOVA_LICENSE_KEY}
-
 # MacOS staff group's gid is 20, so is the dialout group in alpine linux. We're not using it, let's just remove it.
 
-
-
-RUN mkdir -p /home/laravel/.composer
-COPY --chown=laravel:laravel  ./dockerfiles/composer/auth.json /home/laravel/.composer/auth.json
+#COPY --chown=laravel:laravel  ./dockerfiles/composer/auth.json /home/laravel/.composer/auth.json
 #ADD scripts/scheduler.sh /usr/local/bin/scheduler
 
 #RUN chmod +x /usr/local/bin/scheduler
@@ -55,7 +52,9 @@ RUN sed -i "s/memory_limit = 128M/memory_limit = 1G/g" /usr/local/etc/php/php.in
 
 
 USER laravel
-
+RUN mkdir -p /home/laravel/.composer
+RUN echo "nova user email: ${NOVA_USERNAME}"
+RUN composer config --global http-basic.nova.laravel.com ${NOVA_USERNAME} ${NOVA_LICENSE_KEY}
 RUN composer install
 #RUN npm install && npm run build
 #RUN php artisan migrate
