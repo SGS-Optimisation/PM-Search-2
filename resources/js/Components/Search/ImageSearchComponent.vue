@@ -8,9 +8,11 @@ import FileUpload from 'primevue/fileupload';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
+import ProgressSpinner from "primevue/progressspinner";
 import {router} from '@inertiajs/vue3'
 import route from "ziggy-js";
 import Image from 'primevue/image';
+import axios from "axios";
 
 const props = defineProps({
     initialValues: {
@@ -43,12 +45,13 @@ const searchTechs = ref([
     {name: 'visualsearch', label: 'Visual'}
 ])
 
+const isConverting = ref(false);
 const hasDocument = computed(() => {
     return form.document.name !== undefined && form.document.name !== 'Object'
 });
 
 onMounted(() => {
-    if(props.initialValues) {
+    if (props.initialValues) {
         initRefine();
     }
 })
@@ -66,7 +69,28 @@ function selectFile(e: Event) {
 
     // Convert to dataURL and pass to the cropper component
     const file = files[0]
-    loadImage(file);
+
+    console.log('uploaded file', file);
+
+    if (file.type === 'application/pdf') {
+        let formData = new FormData();
+        formData.append('document', file);
+        isConverting.value = true;
+        axios.post(route('api.pdf-to-image'), formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            responseType: "json",
+        }).then(({data}) => {
+            fetch(data.path).then(res => res.blob()).then(blob => {
+                const image = new File([blob], file.name, {type: 'image/jpeg'});
+                isConverting.value = false;
+                loadImage(image);
+            });
+        });
+    } else {
+        loadImage(file);
+    }
 }
 
 function loadImage(file, showModal = true) {
@@ -157,7 +181,7 @@ const hasSearchedImage = computed(() => {
 const isCurrentSearchOpen = ref(false);
 
 const currentSearchImage = computed(() => {
-    if(isCurrentSearchOpen.value) {
+    if (isCurrentSearchOpen.value) {
         return props.initialValues.image_path;
     }
     return props.initialValues.thumb;
@@ -182,10 +206,9 @@ const currentSearchImage = computed(() => {
                     <div class="flex justify-start">
                         <FileUpload mode="basic" name="imageSearch" ref="uploadInput"
                                     :url="route('image-search')"
-                                    chooseLabel="Select Image"
-                                    accept="image/*" :maxFileSize="1000000"
+                                    chooseLabel="Select File"
+                                    accept="image/*,.pdf" :maxFileSize="1000000"
                                     @select="selectFile"/>
-
 
 
                         <div class="px-2 flex flex-col">
@@ -207,6 +230,10 @@ const currentSearchImage = computed(() => {
                             Refine
                         </Button>
                     </div>
+                    <template v-if="isConverting">
+                        <ProgressSpinner/>
+                        Converting PDF to Image...
+                    </template>
                     <div class="flex justify-center px-12 pt-2">
                         <img :src="result.blobURL"/>
                     </div>

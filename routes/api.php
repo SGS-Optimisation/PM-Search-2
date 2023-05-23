@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,7 @@ Route::name('api.')
         //'user.permissions',
         //'cache.headers:public;max_age=3600;etag',
     ])->group(function () {
+
         Route::get('/configs', function(){
             return [
                 'fields_config' => config('pm-search.fields'),
@@ -37,6 +39,9 @@ Route::name('api.')
                 'advanced_search_fields' => config('pm-search.advanced_search'),
             ];
         })->name('configs');
+
+        Route::post('/convert', [UploadController::class, 'convert'])->name('pdf-to-image');
+
     });
 
 

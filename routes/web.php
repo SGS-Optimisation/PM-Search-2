@@ -46,6 +46,8 @@ Route::middleware([
 
     Route::post('/upload', [UploadController::class, 'store'])->name('image-search');
 
+
+
     Route::name('search.')->prefix('/search')
         ->group(function () {
             Route::post('/', [SearchController::class, 'store'])->name('store');
