@@ -40,6 +40,12 @@ const operatorOptions = ref([
 ]);
 
 function handleChangeTag(event) {
+    let tooltip = document.getElementsByClassName('p-tooltip-right')
+    if (tooltip.length > 0) {
+        for (let i = 0; i < tooltip.length; i++) {
+            tooltip[i].style.display = "none"
+        }
+    }
     tags.value = event;
 
     for (const tag of tags.value) {

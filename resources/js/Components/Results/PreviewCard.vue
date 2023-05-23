@@ -160,7 +160,7 @@ const ecode = computed(() => {
                     <div class="md:grid grid-flow-row auto-rows-max gap-y-1">
                         <span title="Brand">{{ item.brand }}</span>
                         <span title="Variety">{{ item.variety }}</span>
-                        <span v-if="item.number_of_colors" title="Number of Colors">🌈 {{ item.number_of_colors }}</span>
+                        <span v-if="item.number_of_colors" title="Number of Colors"><i class="pi pi-palette"></i> {{ item.number_of_colors }}</span>
                     </div>
 
                     <div class="md:grid grid-flow-row auto-rows-max gap-y-1 text-right">
