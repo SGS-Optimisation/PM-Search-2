@@ -3,8 +3,9 @@ import moment from 'moment';
 import {computed} from "@vue/reactivity";
 import InnerImageZoom from 'vue-inner-image-zoom';
 import {ref} from "vue";
+import Checkbox from 'primevue/checkbox';
 
-const emit = defineEmits(['on-click-view', 'on-click-quick-view']);
+const emit = defineEmits(['on-click-view', 'on-click-quick-view', 'selection-changed']);
 
 const props = defineProps({
     item: {type: Object, required: true},
@@ -67,6 +68,8 @@ const ecode = computed(() => {
     return parseInt(props.item.pcm_type_profile_name.toString().toLowerCase().replace('e', ''));
 })
 
+const checked = ref(false);
+
 </script>
 
 <template>
@@ -74,6 +77,7 @@ const ecode = computed(() => {
     <div class="p-2" :class="colClass">
 
         <article class="hover:drop-shadow-2xl p-2 surface-border surface-card border-round relative shadow-sm">
+            <Checkbox v-model="checked" :binary="true" @click="$emit('selection-changed', item)"/>
 
             <div class="ribbon z-0" v-if="item.tag !== '' && item.tag !== 'textsearch'">
                 <span :title="item.tag"

@@ -50,8 +50,10 @@ const layout = ref('grid');
 const perPage = ref(25);
 const sortOptions = ref([{label: 'Score', value: 'score'}, {label: 'Booked Date', value: 'booked_date_fmt'}]);
 const isOpen = ref(false);
+const comparing = ref(false);
 const currentEntry = ref();
 const quickViewEntry = ref();
+const compareSelection =  ref<Object[]>([]);
 const filters = ref<Object>({});
 const filteredSearchData = ref<Object[]>([]);
 
@@ -175,6 +177,22 @@ const groupedSortedConfig = computed(() => {
     return groupedObj;
 });
 
+function updateComparisonSelection(item) {
+    if (compareSelection.value.includes(item)) {
+        compareSelection.value = compareSelection.value.filter((entry) => entry !== item);
+    } else {
+        compareSelection.value.push(item);
+    }
+}
+
+function openComparisonView() {
+    comparing.value = true;
+}
+
+function closeComparisonView() {
+    comparing.value = false;
+}
+
 const gridConfigOverlay = ref();
 const toggleGridConfig = (event) => {
     gridConfigOverlay.value.toggle(event);
@@ -288,13 +306,16 @@ const stop = useHotkey(hotkeys.value)
                                 <Button type="button" icon="pi pi-cog" @click="toggleGridConfig"/>
 
                                 <OverlayPanel ref="gridConfigOverlay">
-                                    <div class="mx-2 flex flex-col">
+                                    <div class="mx-2 flex flex-col gap-2">
                                         <div class="flex">
                                             <label class="align-self-center mr-2">Thumbnail resolution</label>
                                             <SelectButton v-model="userPreferences.imageSize"
                                                           :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
                                                           optionLabel="label" option-value="value"
                                                           aria-labelledby="basic"/>
+                                        </div>
+                                        <div v-if="compareSelection.length > 1" class="flex">
+                                            <Button type="button" label="Compare selection" icon="pi pi-columns" @click="openComparisonView"/>
                                         </div>
                                     </div>
                                 </OverlayPanel>
@@ -352,6 +373,7 @@ const stop = useHotkey(hotkeys.value)
                         :background-mode="userPreferences.backgroundMode"
                         @on-click-view="openEntryModal"
                         @on-click-quick-view="openQuickView"
+                        @selection-changed="updateComparisonSelection"
                     />
                 </template>
                 <template #list="slotProps">
@@ -406,6 +428,15 @@ const stop = useHotkey(hotkeys.value)
                          @next="nextEntry"
                          @prev="prevEntry"
         />
+    </FullModal>
+
+    <FullModal  v-model:visible="comparing" position="full">
+        <template #header>
+
+        </template>
+            <QuickViewSearchEntry  :entries="compareSelection" :config="fields_config"
+                                   :compareMode="true"
+                                   @request-full-view="openEntryModal"/>
     </FullModal>
 
 
