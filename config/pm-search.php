@@ -199,6 +199,7 @@ return [
         'formatted_job_number',
         'booked_date',
         'simplified_group_name',
+        'customer_name_only',
         'brand',
         'variety',
         'weight',
