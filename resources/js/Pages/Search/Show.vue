@@ -240,10 +240,11 @@ const stop = useHotkey(hotkeys.value)
 
                             <div class="mx-2">
                             <span class="p-float-label">
-                                <AutoComplete v-model="userPreferences.perPage"
-                                              dropdown :suggestions="[25, 50, 100]"
-                                              @complete="completePerPage"
-                                              :inputStyle="{width: '5em'}"
+                                <Dropdown v-model="userPreferences.perPage"
+                                          :options="[{label: '25', value: '25'}, {label: '50', value: '50'}, {label: '100', value: '100'}]"
+                                          option-label="label"
+                                          option-value="value"
+                                          class="md:w-7rem"
                                 />
                                 <label for="ac">Per Page</label>
                             </span>
