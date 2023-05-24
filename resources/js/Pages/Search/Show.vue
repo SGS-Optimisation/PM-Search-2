@@ -53,7 +53,7 @@ const isOpen = ref(false);
 const comparing = ref(false);
 const currentEntry = ref();
 const quickViewEntry = ref();
-const compareSelection =  ref<Object[]>([]);
+const compareSelection = ref<Object[]>([]);
 const filters = ref<Object>({});
 const filteredSearchData = ref<Object[]>([]);
 
@@ -186,7 +186,22 @@ function updateComparisonSelection(item) {
 }
 
 function openComparisonView() {
-    comparing.value = true;
+    if (!(compareSelection.value.length < 2 || compareSelection.value.length > 4)) {
+        comparing.value = true;
+    }
+}
+
+const previewCards = ref<PreviewCard[]>([]);
+const previewRows = ref<PreviewRow[]>([]);
+
+function clearSelection() {
+    compareSelection.value = [];
+    for (const card of previewCards.value) {
+        card.clearSelection();
+    }
+    for (const card of previewRows.value) {
+        card.clearSelection();
+    }
 }
 
 function closeComparisonView() {
@@ -257,17 +272,17 @@ const stop = useHotkey(hotkeys.value)
                         <div class="flex pt-2">
 
                             <div class="mx-2">
-                            <span class="p-float-label">
-                                <Dropdown v-model="userPreferences.perPage"
-                                          :options="[{label: '25', value: '25'}, {label: '50', value: '50'}, {label: '100', value: '100'}]"
-                                          option-label="label"
-                                          option-value="value"
-                                          class="md:w-7rem"
-                                />
-                                <label for="ac">Per Page</label>
-                            </span>
+                                <span class="p-float-label">
+                                    <Dropdown v-model="userPreferences.perPage"
+                                              :options="[{label: '25', value: '25'}, {label: '50', value: '50'}, {label: '100', value: '100'}]"
+                                              option-label="label"
+                                              option-value="value"
+                                              class="md:w-7rem"
+                                    />
+                                    <label for="ac">Per Page</label>
+                                </span>
                             </div>
-                            <template v-if="userPreferences.layout === 'grid'">
+                            <div class="flex" v-if="userPreferences.layout === 'grid'">
                                 <div class="mx-2">
                                     <Inplace v-if="false" :closable="true">
                                         <template #display>
@@ -302,24 +317,33 @@ const stop = useHotkey(hotkeys.value)
 
 
                                 </div>
+                            </div>
+                            <Button type="button" icon="pi pi-caret-down" @click="toggleGridConfig"/>
 
-                                <Button type="button" icon="pi pi-cog" @click="toggleGridConfig"/>
-
-                                <OverlayPanel ref="gridConfigOverlay">
-                                    <div class="mx-2 flex flex-col gap-2">
-                                        <div class="flex">
-                                            <label class="align-self-center mr-2">Thumbnail resolution</label>
-                                            <SelectButton v-model="userPreferences.imageSize"
-                                                          :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
-                                                          optionLabel="label" option-value="value"
-                                                          aria-labelledby="basic"/>
-                                        </div>
-                                        <div v-if="compareSelection.length > 1" class="flex">
-                                            <Button type="button" label="Compare selection" icon="pi pi-columns" @click="openComparisonView"/>
-                                        </div>
+                            <OverlayPanel ref="gridConfigOverlay">
+                                <div class="mx-2 flex flex-col gap-3">
+                                    <div class="flex" v-if="userPreferences.layout === 'grid'">
+                                        <label class="align-self-center mr-2 text-xs">Thumbnail resolution</label>
+                                        <SelectButton v-model="userPreferences.imageSize"
+                                                      :options="[{value: 'sml', 'label': 'Optimized'}, {value: 'lrg', 'label': 'Large'}]"
+                                                      optionLabel="label" option-value="value"
+                                                      aria-labelledby="basic"/>
                                     </div>
-                                </OverlayPanel>
-                            </template>
+                                    <div class="flex">
+                                        <Button type="button" label="Compare selection" icon="pi pi-columns"
+                                                class="w-full"
+                                                v-tooltip="compareSelection.length < 2 || compareSelection.length > 4 ? 'Select 2-4 images to compare' : ''"
+                                                :severity="compareSelection.length < 2 || compareSelection.length > 4 ? 'secondary' : 'primary'"
+                                                @click="openComparisonView"/>
+                                    </div>
+                                    <div class="flex">
+                                        <Button type="button" label="Clear selection" icon="pi pi-columns"
+                                                class="w-full"
+                                                :severity="compareSelection.length === 0 ? 'secondary' : 'primary'"
+                                                @click="clearSelection"/>
+                                    </div>
+                                </div>
+                            </OverlayPanel>
                         </div>
 
                         <div class="flex pt-2">
@@ -356,7 +380,8 @@ const stop = useHotkey(hotkeys.value)
                             </div>
                             <Divider layout="vertical"/>
                             <div class="justify-items-end">
-                                <DataViewLayoutOptions v-model="userPreferences.layout"/>
+                                <DataViewLayoutOptions v-model="userPreferences.layout"
+                                                       @update:model-value="clearSelection"/>
                             </div>
                         </div>
                     </div>
@@ -365,27 +390,28 @@ const stop = useHotkey(hotkeys.value)
                 </template>
 
                 <template #grid="slotProps">
-                    <PreviewCard
-                        :item="slotProps.data"
-                        :grid-size="userPreferences.gridSize"
-                        :extra-class="visibleQuickDetails && quickViewEntry.formatted_job_number !== slotProps.data.formatted_job_number ? 'blur-sm': ''"
-                        :image-size="userPreferences.imageSize"
-                        :background-mode="userPreferences.backgroundMode"
-                        @on-click-view="openEntryModal"
-                        @on-click-quick-view="openQuickView"
-                        @selection-changed="updateComparisonSelection"
+                    <PreviewCard :ref="el => previewCards.push(el)"
+                                 :item="slotProps.data"
+                                 :grid-size="userPreferences.gridSize"
+                                 :extra-class="visibleQuickDetails && quickViewEntry.formatted_job_number !== slotProps.data.formatted_job_number ? 'blur-sm': ''"
+                                 :image-size="userPreferences.imageSize"
+                                 :background-mode="userPreferences.backgroundMode"
+                                 @on-click-view="openEntryModal"
+                                 @on-click-quick-view="openQuickView"
+                                 @selection-changed="updateComparisonSelection"
                     />
                 </template>
                 <template #list="slotProps">
-                    <PreviewRow
-                        :item="slotProps.data"
-                        :config="fields_config"
-                        :grid-size="userPreferences.gridSize"
-                        :extra-class="visibleQuickDetails && quickViewEntry.formatted_job_number !== slotProps.data.formatted_job_number ? 'blur-sm': ''"
-                        :image-size="userPreferences.imageSize"
-                        :background-mode="userPreferences.backgroundMode"
-                        @on-click-view="openEntryModal"
-                        @on-click-quick-view="openQuickView"
+                    <PreviewRow :ref="el => previewRows.push(el)"
+                                :item="slotProps.data"
+                                :config="fields_config"
+                                :grid-size="userPreferences.gridSize"
+                                :extra-class="visibleQuickDetails && quickViewEntry.formatted_job_number !== slotProps.data.formatted_job_number ? 'blur-sm': ''"
+                                :image-size="userPreferences.imageSize"
+                                :background-mode="userPreferences.backgroundMode"
+                                @on-click-view="openEntryModal"
+                                @on-click-quick-view="openQuickView"
+                                @selection-changed="updateComparisonSelection"
                     />
                 </template>
 
@@ -430,13 +456,13 @@ const stop = useHotkey(hotkeys.value)
         />
     </FullModal>
 
-    <FullModal  v-model:visible="comparing" position="full">
+    <FullModal v-model:visible="comparing" position="full">
         <template #header>
 
         </template>
-            <QuickViewSearchEntry  :entries="compareSelection" :config="fields_config"
-                                   :compareMode="true"
-                                   @request-full-view="openEntryModal"/>
+        <QuickViewSearchEntry :entries="compareSelection" :config="fields_config"
+                              :compareMode="true"
+                              @request-full-view="openEntryModal"/>
     </FullModal>
 
 

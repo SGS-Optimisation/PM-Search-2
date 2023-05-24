@@ -86,7 +86,7 @@ const titleCase = (str) => window.titleCase(str);
                         <td v-for="item in displayedEntries"
                             :class="{
                                 'md:grow' : !compareMode,
-                                'mr-3' : compareMode,
+                                'pr-3' : compareMode,
                             }">
                             <template v-if="field==='formatted_job_number'">
                                 <a class="text-blue-500 hover:text-blue-700" target="_blank"

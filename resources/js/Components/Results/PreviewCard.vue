@@ -70,6 +70,14 @@ const ecode = computed(() => {
 
 const checked = ref(false);
 
+function clearSelection() {
+    checked.value = false;
+}
+
+defineExpose({
+    clearSelection
+})
+
 </script>
 
 <template>
