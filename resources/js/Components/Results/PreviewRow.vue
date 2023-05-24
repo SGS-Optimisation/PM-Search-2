@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import moment from 'moment';
 import {computed} from "@vue/reactivity";
-import InnerImageZoom from 'vue-inner-image-zoom';
 import {configStore} from "@/stores/config-store";
 import _ from 'lodash';
 import {ref} from "vue";
+import Checkbox from 'primevue/checkbox';
 
-const emit = defineEmits(['on-click-view', 'on-click-quick-view']);
+const emit = defineEmits(['on-click-view', 'on-click-quick-view', 'selection-changed']);
 
 const props = defineProps({
     item: {type: Object, required: true},
@@ -91,12 +91,23 @@ const ecode = computed(() => {
 
 const titleCase = (str) => window.titleCase(str);
 
+const checked = ref(false);
+
+function clearSelection() {
+    checked.value = false;
+}
+
+defineExpose({
+    clearSelection
+})
+
 </script>
 
 <template>
 
     <div class="col-12">
         <div class="bg-white flex flex-column xl:flex-row xl:align-items-start p-4 gap-4 mb-2">
+            <Checkbox v-model="checked" :binary="true" @click="$emit('selection-changed', item)"/>
             <template v-if="imageAvailable">
                 <div class="w-3">
                 <img @click.prevent="$emit('on-click-view', item)"
