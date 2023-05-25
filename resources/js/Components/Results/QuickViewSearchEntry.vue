@@ -3,6 +3,7 @@ import Fieldset from "primevue/fieldset";
 import Button from "primevue/button";
 import {computed} from "vue";
 import {configStore} from "@/stores/config-store";
+import GenericField from "@/Components/Search/GenericField.vue";
 
 const props = defineProps({
     entry: {
@@ -29,8 +30,8 @@ const displayedEntries = computed(() => {
 
 const emit = defineEmits(['request-full-view']);
 
-function openFullView() {
-    emit('request-full-view', props.entry);
+function openFullView(entry = null) {
+    emit('request-full-view', entry ? entry : props.entry);
 }
 
 const sortedConfig = computed(() => {
@@ -55,7 +56,7 @@ function isEcode(str) {
     return str.match(/^[0-9]{6}[eE]$/);
 }
 
-function parseEcode(entry){
+function parseEcode(entry) {
     return parseInt(entry.pcm_type_profile_name.toString().toLowerCase().replace('e', ''));
 }
 
@@ -70,7 +71,13 @@ const titleCase = (str) => window.titleCase(str);
             <tr v-if="compareMode">
                 <td></td>
                 <td v-for="item in displayedEntries">
-                    <Button @click="openFullView" label="Full View" class="mb-4"/>
+                    <Button @click="openFullView(item)" label="Full View" class="mb-4"/>
+                </td>
+            </tr>
+            <tr v-if="compareMode">
+                <td></td>
+                <td v-for="item in displayedEntries">
+                    <img :src="item.image_sml">
                 </td>
             </tr>
             <template v-for="(params, field) in sortedConfig">
@@ -88,26 +95,7 @@ const titleCase = (str) => window.titleCase(str);
                                 'md:grow' : !compareMode,
                                 'pr-3' : compareMode,
                             }">
-                            <template v-if="field==='formatted_job_number'">
-                                <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                   :href="'https://pm.mysgs.sgsco.com/Job/' + item[field]"
-                                >
-                                    {{ item[field] }} <i class="text-xs pi pi-external-link"></i>
-                                </a>
-                            </template>
-                            <template v-else-if="field==='pcm_type_profile_name' && isEcode(item[field])">
-                                <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                   :href="'https://cmf.sgsco.com/color-profile/' + parseEcode(item)"
-                                   v-tooltip="'Open color profile in CMF'"
-                                >
-                                    {{ item[field] }} <i class="text-xs pi pi-external-link"></i>
-                                </a>
-                            </template>
-                            <template v-else>
-                                {{ item[field] && typeof item[field].toString === 'function' ? item[field].toString() : item[field] }}
-
-                                <span v-if="!item[field]">&nbsp;</span>
-                            </template>
+                            <GenericField :field="field" :value="item[field]"/>
                         </td>
                     </tr>
                 </template>

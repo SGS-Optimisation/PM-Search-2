@@ -217,22 +217,36 @@ const hotkeys = ref([
     {
         keys: ['f'],
         preventDefault: true,
-        handler(keys) {
+        handler() {
             userPreferences.backgroundMode = 'contain';
         }
     },
     {
         keys: ['c'],
         preventDefault: true,
-        handler(keys) {
+        handler() {
             userPreferences.backgroundMode = 'cover';
         }
     },
     {
         keys: ['z'],
         preventDefault: true,
-        handler(keys) {
+        handler() {
             userPreferences.backgroundMode = 'zoom';
+        }
+    },
+    {
+        keys: ['s'],
+        preventDefault: true,
+        handler() {
+            openComparisonView();
+        }
+    },
+    {
+        keys: ['l'],
+        preventDefault: true,
+        handler() {
+            clearSelection();
         }
     }
 ])
@@ -274,7 +288,7 @@ const stop = useHotkey(hotkeys.value)
                             <div class="mx-2">
                                 <span class="p-float-label">
                                     <Dropdown v-model="userPreferences.perPage"
-                                              :options="[{label: '25', value: '25'}, {label: '50', value: '50'}, {label: '100', value: '100'}]"
+                                              :options="[{label: '25', value: 25}, {label: '50', value: 50}, {label: '100', value: 100}]"
                                               option-label="label"
                                               option-value="value"
                                               class="md:w-7rem"
@@ -330,17 +344,21 @@ const stop = useHotkey(hotkeys.value)
                                                       aria-labelledby="basic"/>
                                     </div>
                                     <div class="flex">
-                                        <Button type="button" label="Compare selection" icon="pi pi-columns"
+                                        <Button type="button" icon="pi pi-columns"
                                                 class="w-full"
                                                 v-tooltip="compareSelection.length < 2 || compareSelection.length > 4 ? 'Select 2-4 images to compare' : ''"
                                                 :severity="compareSelection.length < 2 || compareSelection.length > 4 ? 'secondary' : 'primary'"
-                                                @click="openComparisonView"/>
+                                                @click="openComparisonView">
+                                            <u>S</u>election Comparison
+                                        </Button>
                                     </div>
                                     <div class="flex">
-                                        <Button type="button" label="Clear selection" icon="pi pi-columns"
+                                        <Button type="button" icon="pi pi-columns"
                                                 class="w-full"
                                                 :severity="compareSelection.length === 0 ? 'secondary' : 'primary'"
-                                                @click="clearSelection"/>
+                                                @click="clearSelection">
+                                            C<u>l</u>ear Selection
+                                        </Button>
                                     </div>
                                 </div>
                             </OverlayPanel>

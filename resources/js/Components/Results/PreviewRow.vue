@@ -5,6 +5,7 @@ import {configStore} from "@/stores/config-store";
 import _ from 'lodash';
 import {ref} from "vue";
 import Checkbox from 'primevue/checkbox';
+import GenericField from "@/Components/Search/GenericField.vue";
 
 const emit = defineEmits(['on-click-view', 'on-click-quick-view', 'selection-changed']);
 
@@ -130,32 +131,8 @@ defineExpose({
                         <div v-for="(params, field) in configCol">
                             <template v-if="params.display && !bridge_fields.includes(field)">
                                 <span class="font-bold">{{ params.hasOwnProperty('title') ? params.title : titleCase(field) }}</span>:
-                                <template v-if="field==='formatted_job_number'">
-                                    <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                       :href="'https://pm.mysgs.sgsco.com/Job/' + item[field]"
-                                    >
-                                        {{ item[field] }} <i class="text-xs pi pi-external-link"></i>
-                                    </a>
-                                </template>
-                                <template v-else-if="field==='pcm_type_profile_name' && isEcode(item[field])">
-                                    <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                       :href="'https://cmf.sgsco.com/color-profile/' + ecode"
-                                       v-tooltip="'Open color profile in CMF'"
-                                    >
-                                        {{ item[field] }} <i class="text-xs pi pi-external-link"></i>
-                                    </a>
-                                </template>
-                                <template v-else-if="item[field] && field==='printer_spec_url'">
-                                    <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                       :href="'https://automation.sgsco.com/prepress/details?id=' + item[field]"
-                                       v-tooltip="'Open color profile in Printer Specs'"
-                                    >
-                                        {{ item[field] }} <i class="text-xs pi pi-external-link"></i>
-                                    </a>
-                                </template>
-                                <template v-else>
-                                    {{ item[field] }}
-                                </template>
+
+                                <GenericField :field="field" :value="item[field]"/>
                             </template>
 
                         </div>

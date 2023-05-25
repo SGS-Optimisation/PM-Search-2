@@ -7,6 +7,7 @@ import InnerImageZoom from 'vue-inner-image-zoom';
 import {configStore} from "@/stores/config-store";
 import {ref, onMounted, computed} from "vue";
 import {snakeCase} from "lodash";
+import GenericField from "@/Components/Search/GenericField.vue";
 
 const emit = defineEmits(['next', 'prev', 'exit']);
 
@@ -134,32 +135,7 @@ function next() {
                                     <p class="font-bold">
                                         {{ params.hasOwnProperty('title') ? params.title : titleCase(field) }}</p>
                                     <div class="break-all">
-                                        <template v-if="field==='formatted_job_number'">
-                                            <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                               :href="'https://pm.mysgs.sgsco.com/Job/' + entry[field]"
-                                            >
-                                                {{ entry[field] }}
-                                            </a>
-                                        </template>
-                                        <template v-else-if="field==='pcm_type_profile_name' && isEcode(entry[field])">
-                                            <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                               :href="'https://cmf.sgsco.com/color-profile/' + ecode"
-                                               v-tooltip="'Open color profile in CMF'"
-                                            >
-                                                {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
-                                            </a>
-                                        </template>
-                                        <template v-else-if="entry[field] && field==='printer_spec_url'">
-                                            <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                                               :href="'https://automation.sgsco.com/prepress/details?id=' + entry[field]"
-                                               v-tooltip="'Open color profile in Printer Specs'"
-                                            >
-                                                {{ entry[field] }} <i class="text-xs pi pi-external-link"></i>
-                                            </a>
-                                        </template>
-                                        <template v-else>
-                                            {{ entry[field] }}
-                                        </template>
+                                        <GenericField :field="field" :value="entry[field]"/>
                                     </div>
                                 </div>
 

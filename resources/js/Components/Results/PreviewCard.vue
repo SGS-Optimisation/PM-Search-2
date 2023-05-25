@@ -4,6 +4,7 @@ import {computed} from "@vue/reactivity";
 import InnerImageZoom from 'vue-inner-image-zoom';
 import {ref} from "vue";
 import Checkbox from 'primevue/checkbox';
+import GenericField from "@/Components/Search/GenericField.vue";
 
 const emit = defineEmits(['on-click-view', 'on-click-quick-view', 'selection-changed']);
 
@@ -128,32 +129,16 @@ defineExpose({
 
             <!-- External links -->
             <div class="flex px-2 mt-2 justify-between leading-none">
-                <a class="text-blue-500 hover:text-blue-700 whitespace-nowrap"
-                   target="_blank"
-                   :href="'https://pm.mysgs.sgsco.com/Job/' + item.formatted_job_number"
-                   v-tooltip="'Open job in MySGS'"
-                >
-                    {{ item.formatted_job_number }} <i class="text-xs pi pi-external-link"></i>
-                </a>
+                <GenericField field="formatted_job_number" :value="item['formatted_job_number']"/>
 
                 <div class="flex flex-col text-right">
 
                     <template v-if="isEcode(item.pcm_type_profile_name)">
-                        <a class="text-blue-500 hover:text-blue-700 whitespace-nowrap" target="_blank"
-                           :href="'https://cmf.sgsco.com/color-profile/' + ecode"
-                           v-tooltip="'Open color profile in CMF'"
-                        >
-                            {{ item.pcm_type_profile_name }} <i class="text-xs pi pi-external-link"></i>
-                        </a>
+                        <GenericField field="pcm_type_profile_name" :value="item['pcm_type_profile_name']"/>
                     </template>
 
                     <template v-if="item.printer_spec_url">
-                        <a class="text-blue-500 hover:text-blue-700" target="_blank"
-                           :href="'https://automation.sgsco.com/prepress/details?id=' + item.printer_spec_url"
-                           v-tooltip="'Open color profile in Printer Specs'"
-                        >
-                            🖨 {{ item.printer_spec_url }} <i class="text-xs pi pi-external-link"></i>
-                        </a>
+                        <GenericField field="printer_spec_url" :value="item['printer_spec_url']" icon="🖨"/>
                     </template>
                 </div>
             </div>
