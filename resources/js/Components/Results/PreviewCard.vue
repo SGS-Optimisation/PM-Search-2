@@ -2,7 +2,7 @@
 import moment from 'moment';
 import {computed} from "@vue/reactivity";
 import InnerImageZoom from 'vue-inner-image-zoom';
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import Checkbox from 'primevue/checkbox';
 import GenericField from "@/Components/Search/GenericField.vue";
 
@@ -20,6 +20,15 @@ const imageAvailable = ref(true);
 
 const backgroundImage = computed(() => {
     return props.item['image_' + props.imageSize];
+})
+
+onMounted(() => {
+    for (const field in props.item) {
+        if (Array.isArray(props.item[field])) {
+            const result = props.item[field]
+            props.item[field] = result.toString()
+        }
+    }
 })
 
 const thumb = computed(() => {
