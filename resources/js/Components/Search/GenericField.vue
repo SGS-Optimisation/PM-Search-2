@@ -56,7 +56,7 @@ function ecode(str) {
         <template v-else-if="value && field==='printer_spec_url'">
             <a class="text-blue-500 hover:text-blue-700 whitespace-nowrap" target="_blank"
                :href="'https://automation.sgsco.com/prepress/details?id=' + value"
-               v-tooltip="'Open color profile in Printer Specs'"
+               v-tooltip="'Open in Printer Spec Database'"
             >
                 {{ value }} <i class="text-xs pi pi-external-link"></i>
             </a>

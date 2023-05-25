@@ -207,7 +207,7 @@ const currentSearchImage = computed(() => {
                         <FileUpload mode="basic" name="imageSearch" ref="uploadInput"
                                     :url="route('image-search')"
                                     chooseLabel="Select File"
-                                    accept="image/*,.pdf" :maxFileSize="1000000"
+                                    accept="image/*,.pdf" :maxFileSize="10000000"
                                     @select="selectFile"/>
 
 
