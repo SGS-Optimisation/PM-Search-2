@@ -4,6 +4,7 @@
 namespace App\Services\Search\Azure;
 
 
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 
 class GeneratePublicLinksForReportImages
@@ -36,11 +37,11 @@ class GeneratePublicLinksForReportImages
             $report = $this->search->report;
 
 
-            if ($this->search->search_mode == Search::SEARCH_MODE_TEXT) {
+            if ($this->search->search_mode == Searchable::SEARCH_MODE_TEXT) {
                 foreach ($report['output'] as &$entry) {
                     $this->processEntry($entry);
                 }
-            } elseif ($this->search->search_mode == Search::SEARCH_MODE_IMAGE) {
+            } elseif ($this->search->search_mode == Searchable::SEARCH_MODE_IMAGE) {
                 foreach ($report['output'] as &$search_tech) {
                     foreach ($search_tech as &$entry) {
                         $this->processEntry($entry);

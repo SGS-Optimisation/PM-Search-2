@@ -4,6 +4,7 @@
 namespace App\Services\Images;
 
 
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 use App\Services\PDF\PdfToImage;
 use Illuminate\Support\Facades\Storage;
@@ -37,12 +38,12 @@ class GenerateSearchImages
              */
 
             $image_path = sprintf("searches/%s/%s",
-                $this->search->id, Search::SEARCH_SOURCE_FILENAME);
+                $this->search->id, Searchable::SEARCH_SOURCE_FILENAME);
             Storage::move($this->search->source_filepath, $image_path);
 
             $this->search->image_path = $image_path;
             $working_data = $this->search->working_data;
-            $working_data[Search::FLAG_HAS_SOURCE_IMAGE] = true;
+            $working_data[Searchable::FLAG_HAS_SOURCE_IMAGE] = true;
             $this->search->working_data = $working_data;
             $this->search->save();
         } else {
@@ -64,7 +65,7 @@ class GenerateSearchImages
     protected function makeThumb()
     {
         $thumb_path = sprintf("searches/%s/%s",
-            $this->search->id, Search::SEARCH_THUMB_FILENAME);
+            $this->search->id, Searchable::SEARCH_THUMB_FILENAME);
         if (Storage::exists($thumb_path)) {
             Storage::delete($thumb_path);
         }

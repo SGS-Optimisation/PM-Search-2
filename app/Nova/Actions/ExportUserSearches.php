@@ -2,6 +2,7 @@
 
 namespace App\Nova\Actions;
 
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -48,25 +49,25 @@ class ExportUserSearches extends DownloadExcel
             $search->search_mode,
 
             match ($search->search_mode) {
-                Search::SEARCH_MODE_TEXT => implode(' '.$search->search_data->operator.' ',
+                Searchable::SEARCH_MODE_TEXT => implode(' '.$search->search_data->operator.' ',
                     $search->search_data->search_string),
-                Search::SEARCH_MODE_IMAGE => $search->working_data['original_filename'] ?? 'Error',
+                Searchable::SEARCH_MODE_IMAGE => $search->working_data['original_filename'] ?? 'Error',
             },
 
             //phase
             match ($search->search_mode) {
-                Search::SEARCH_MODE_TEXT => $search->searchDataIsPhrase ?: 'FALSE',
-                Search::SEARCH_MODE_IMAGE => 'NA'
+                Searchable::SEARCH_MODE_TEXT => $search->searchDataIsPhrase ?: 'FALSE',
+                Searchable::SEARCH_MODE_IMAGE => 'NA'
             },
             //OCR
             match ($search->search_mode) {
-                Search::SEARCH_MODE_TEXT => $search->searchDataIsOcr ?: 'FALSE',
-                Search::SEARCH_MODE_IMAGE => 'NA'
+                Searchable::SEARCH_MODE_TEXT => $search->searchDataIsOcr ?: 'FALSE',
+                Searchable::SEARCH_MODE_IMAGE => 'NA'
             },
             //type
             match ($search->search_mode) {
-                Search::SEARCH_MODE_TEXT => $search->searchDataType,
-                Search::SEARCH_MODE_IMAGE => implode(',', array_keys($search->working_data['search_techs']?? []))
+                Searchable::SEARCH_MODE_TEXT => $search->searchDataType,
+                Searchable::SEARCH_MODE_IMAGE => implode(',', array_keys($search->working_data['search_techs']?? []))
             },
 
             $search->created_at->format('Y-m-d H:i'),

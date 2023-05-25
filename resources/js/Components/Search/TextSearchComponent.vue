@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {defineComponent, watch, ref, reactive, onMounted, onUpdated, computed} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted, onUpdated, computed, defineAsyncComponent} from "vue";
 import JetFormSection from '@/Components/Jetstream/FormSection.vue';
 import route from "ziggy-js";
 import AutoComplete from 'primevue/autocomplete';
@@ -13,6 +13,9 @@ import {useDialog} from 'primevue/usedialog';
 import InputText from "primevue/inputtext";
 import {configStore} from "@/stores/config-store";
 import axios from "axios";
+import {useToast} from "primevue/usetoast";
+
+const AddCollectionForm = defineAsyncComponent(() => import('@/Components/Collections/Form.vue'));
 
 const props = defineProps({
     initialValues: {
@@ -27,11 +30,42 @@ const props = defineProps({
     }
 })
 
+const dialog = useDialog();
+const toast = useToast();
+
+const openAddCollectionDialog = () => {
+    const addDialogRef = dialog.open(AddCollectionForm, {
+        props: {
+            header: 'Create Collection',
+            style: {
+                width: '50vw',
+            },
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            modal: true
+        },
+        templates: {
+            //footer: markRaw(FooterDemo)
+        },
+        onClose: (options) => {
+            if (options.data) {
+                toast.add({
+                    severity: 'info',
+                    summary: 'Collection created',
+                    detail: 'You can <a href="' + route('collection.show') +'">view your collection here</a>',
+                    life: 3000});
+            }
+        }
+    });
+}
+
 const form = useForm({
     search_string: Array,
     operator: <String>'and',
 })
-const dialog = useDialog();
+
 const tags = ref<Array<String>>([])
 const resetOnSuccess = ref<boolean>(false)
 const operatorOptions = ref([

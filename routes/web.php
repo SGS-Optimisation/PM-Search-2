@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AzureAuthController;
 use App\Http\Controllers\CaddyController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UploadController;
@@ -69,5 +70,11 @@ Route::middleware([
                 }*/
 
             });
+        });
+
+    Route::name('collection.')->prefix('/collection')
+        ->group(function(){
+
+            Route::get('/', [CollectionController::class, 'show'])->name('show');
         });
 });

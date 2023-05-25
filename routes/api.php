@@ -42,6 +42,9 @@ Route::name('api.')
 
         Route::post('/convert', [UploadController::class, 'convert'])->name('pdf-to-image');
 
+        Route::post('collections', [App\Http\Controllers\CollectionController::class, 'create'])->name('collections.create');
+        Route::post('collections/from-search/{id}', [App\Http\Controllers\CollectionController::class, 'createFromSearch'])->name('collections.create-from-search');
+
     });
 
 
