@@ -9,15 +9,13 @@ use App\Models\Search;
 
 class GeneratePublicLinksForReportImages
 {
-    public Search $search;
 
     /**
      * ReportImageLinks constructor.
-     * @param  Search  $search
+     * @param Searchable $search
      */
-    public function __construct(Search $search)
+    public function __construct(public Searchable $search)
     {
-        $this->search = $search;
     }
 
 
@@ -30,6 +28,8 @@ class GeneratePublicLinksForReportImages
             && (!isset($this->search->working_data['image_linking'])
                 || !$this->search->working_data['image_linking'])
         ) {
+
+            logger('generating public links for report images');
 
             $working_data = $this->search->working_data;
             $working_data['image_linking'] = false;
@@ -55,6 +55,8 @@ class GeneratePublicLinksForReportImages
             $this->search->working_data = $working_data;
 
             $this->search->save();
+        } else {
+            logger('skipping generating public links for report images');
         }
     }
 

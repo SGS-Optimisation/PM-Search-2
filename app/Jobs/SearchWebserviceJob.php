@@ -30,7 +30,7 @@ class SearchWebserviceJob implements ShouldQueue
      * @param  Search  $search
      * @param  string  $mode
      */
-    public function __construct(public Search $search, public string $mode = self::SEARCH_MODE_TEXT)
+    public function __construct(public Searchable $search, public string $mode = self::SEARCH_MODE_TEXT)
     {
     }
 

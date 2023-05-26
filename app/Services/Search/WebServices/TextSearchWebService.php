@@ -4,6 +4,7 @@
 namespace App\Services\Search\WebServices;
 
 
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 use App\Services\Search\TextSearchCreationService;
 use Illuminate\Support\Facades\Http;
@@ -15,11 +16,11 @@ class TextSearchWebService
 
     /**
      * TextSearchWebService constructor.
-     * @param string[]|Search $search_string
+     * @param string[]|Searchable $search_string
      * @param string|null $operator
      */
     public function __construct(
-        public string|array|Search $search_string,
+        public string|array|Searchable $search_string,
         public ?string             $operator = 'and',
         public array               $params = ['textsearch' => 'Y', 'advanced_search' => 'N'],
         public array               $fields = [],
@@ -32,7 +33,7 @@ class TextSearchWebService
     {
         $url = config('pm-search.text_search_url');
 
-        if ($this->search_string instanceof Search) {
+        if ($this->search_string instanceof Searchable) {
             $data = $this->search_string->search_data;
         } else {
             $data = [
@@ -47,7 +48,7 @@ class TextSearchWebService
             }
         }
 
-        logger('text search with data: ' . json_encode($data));
+        //logger('text search with data: ' . json_encode($data));
 
         $this->response = Http::timeout(60)->post($url, $data);
 

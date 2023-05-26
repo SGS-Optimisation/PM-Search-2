@@ -46,7 +46,7 @@ function formatAdvancedSearchField(field, value) {
                     <div :class="{'col-6': detailed, 'col-12': !detailed}">
                         <div class="flex flex-column xl:flex-row xl:align-items-start pb-1 gap-4 ">
                             <Link class="text-blue-500 hover:text-blue-700 underline"
-                                  :href="route('collection.show', [slotProps.data.id])">
+                                  :href="route('collections.show', [slotProps.data.id])">
                                 {{ slotProps.data.name }}
                             </Link>
                         </div>

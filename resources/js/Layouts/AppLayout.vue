@@ -84,7 +84,7 @@ onMounted(() => {
                                 <NavLink :href="route('search.image')" :active="route().current('search.image')">
                                     Image Search
                                 </NavLink>
-                                <NavLink :href="route('collection.index')" :active="route().current('collection.index')">
+                                <NavLink :href="route('collections.index')" :active="route().current('collection.index')">
                                     Collections
                                 </NavLink>
                             </div>

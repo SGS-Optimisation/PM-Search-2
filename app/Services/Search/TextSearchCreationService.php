@@ -4,7 +4,6 @@
 namespace App\Services\Search;
 
 
-use App\Jobs\ImageSearchJob;
 use App\Jobs\SearchWebserviceJob;
 use App\Models\Interfaces\Searchable;
 use App\Models\Search;
@@ -17,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 class TextSearchCreationService
 {
 
-    public ?Search $search;
+    public Searchable $search;
 
     const TEXT_SEARCH_TYPE_THUMBNAIL = 'thumbnail';
     const TEXT_SEARCH_TYPE_MYSGS = 'mysgs';

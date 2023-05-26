@@ -29,7 +29,7 @@ import useHotkey from "vue3-hotkey";
 
 const props = defineProps({
     collectionMode: {type: Boolean, default: false},
-    search_id: {type: Number, required: true},
+    search_id: {type: Number, required: false},
     parent_search_id: {type: Number, required: false,},
     mode: {type: String, required: true},
     search_data: {type: Object, required: false},
@@ -70,7 +70,7 @@ provide('fields', {fields: props.fields, fields_config: props.fields_config});
 provide('report', props.report);
 
 watch(
-    () => [filters, filterText],
+    () => [filters, filterText, props.report],
     (newValue, oldValue) => {
         filteredSearchData.value = getSearchData();
     },
