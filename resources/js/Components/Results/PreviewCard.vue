@@ -24,7 +24,7 @@ const backgroundImage = computed(() => {
 
 onMounted(() => {
     for (const field in props.item) {
-        if (Array.isArray(props.item[field])) {
+        if (field === 'printer_name' && Array.isArray(props.item[field])) {
             const result = props.item[field]
             props.item[field] = result.toString()
         }
