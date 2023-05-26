@@ -5,12 +5,14 @@ import Welcome from '@/Components/Jetstream/Welcome.vue';
 import LatestSearch from "@/Components/Search/LatestSearch.vue";
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
+import CollectionList from "@/Components/Collections/CollectionList.vue";
 
 defineOptions({layout: AppLayout})
 
 defineProps({
     latestSearches: Array,
     soz: String,
+    collections: Array,
 });
 
 
@@ -33,7 +35,10 @@ defineProps({
                     </div>
                 </div>
                 <div class="col-3">
-                    <LatestSearch :latest-searches="latestSearches"/>
+                    <CollectionList :collections="collections"/>
+                    <div class="mt-2">
+                        <LatestSearch :latest-searches="latestSearches"/>
+                    </div>
                 </div>
             </div>
 

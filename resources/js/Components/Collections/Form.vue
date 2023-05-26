@@ -8,21 +8,16 @@ import PrimaryButton from "@/Components/Jetstream/PrimaryButton.vue";
 import ActionMessage from "@/Components/Jetstream/ActionMessage.vue";
 import {useForm} from "@inertiajs/vue3";
 
-const props = defineProps({
-    search: {
-        type: Number,
-        required: true
-    }
-})
-
 const form = useForm({
     name: null,
 })
 
+const search = ref();
+
 const dialogRef = inject('dialogRef');
 const addCollection = () => {
     console.log('adding collection');
-    form.post(route('api.collections.create-from-search', {id: props.search}),{
+    form.post(route('api.collections.create-from-search', {id: search.value}),{
         preserveScroll: true,
         onSuccess: (data) => {
             dialogRef.value.close(data);
@@ -31,6 +26,12 @@ const addCollection = () => {
         },
     });
 }
+
+onMounted(() => {
+    if(dialogRef.value) {
+        search.value = dialogRef.value.data.search;
+    }
+});
 
 </script>
 

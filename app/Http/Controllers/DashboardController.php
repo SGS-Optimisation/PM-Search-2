@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Collection;
 use App\Models\Search;
 use Illuminate\Http\Request;
 use Laravel\Jetstream\Jetstream;
@@ -21,8 +22,11 @@ class DashboardController extends Controller
             ->select(['id', 'search_mode', 'search_data', 'working_data'])
             ->get();
 
+        $collections = Collection::where('user_id', $request->user()->id)->get();
+
         return Jetstream::inertia()->render($request, 'Dashboard', [
             'latestSearches' => $latest_searches,
+            'collections' => $collections,
         ]);
     }
 }

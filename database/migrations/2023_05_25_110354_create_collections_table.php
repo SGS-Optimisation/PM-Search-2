@@ -22,7 +22,7 @@ return new class extends Migration
             $table->json('working_data')->nullable();
             $table->json('report')->nullable();
             $table->timestamps();
-            $table->dateTime('consulted_at');
+            $table->dateTime('consulted_at')->nullable();
             $table->softDeletes();
         });
     }

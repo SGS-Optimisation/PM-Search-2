@@ -27,6 +27,14 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: false,
+    },
+    allowSave: {
+        type: Boolean,
+        default: false
+    },
+    searchId: {
+        type: Number,
+        required: false,
     }
 })
 
@@ -34,6 +42,7 @@ const dialog = useDialog();
 const toast = useToast();
 
 const openAddCollectionDialog = () => {
+    console.log('saving to collection');
     const addDialogRef = dialog.open(AddCollectionForm, {
         props: {
             header: 'Create Collection',
@@ -46,6 +55,9 @@ const openAddCollectionDialog = () => {
             },
             modal: true
         },
+        data: {
+            search: props.searchId,
+        },
         templates: {
             //footer: markRaw(FooterDemo)
         },
@@ -54,7 +66,6 @@ const openAddCollectionDialog = () => {
                 toast.add({
                     severity: 'info',
                     summary: 'Collection created',
-                    detail: 'You can <a href="' + route('collection.show') +'">view your collection here</a>',
                     life: 3000});
             }
         }
@@ -256,7 +267,8 @@ const titleCase = (str) => window.titleCase(str);
 
 
 <template>
-    <div>
+    <div class="flex">
+        <Button v-if="allowSave" icon="pi pi-save" size="small" class="mr-3" @click="openAddCollectionDialog"/>
         <jet-form-section @submitted="doSearch" :compact-mode="compactMode">
             <template #title>
                 Text Search

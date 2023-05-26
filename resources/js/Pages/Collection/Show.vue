@@ -4,6 +4,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Results from "@/Components/Results/Results.vue";
 
 const props = defineProps({
+    collection_name: {type: String, required: true},
     search_id: {type: Number, required: true},
     parent_search_id: {type: Number, required: false,},
     mode: {type: String, required: true},
@@ -24,7 +25,11 @@ defineOptions({layout: AppLayout})
 </script>
 
 <template>
-    <Head title="Search results"/>
+    <Head :title="'Collection: ' + collection_name"/>
+
+    <div class="px-6 text-center bg-green-600 text-white">
+        Collection: {{ collection_name }}
+    </div>
 
     <Results :search_id="search_id"
              :parent_search_id="parent_search_id"
@@ -38,6 +43,7 @@ defineOptions({layout: AppLayout})
              :fields="fields"
              :fields_config="fields_config"
              :meta="meta"
+             :collection-mode="true"
     />
 
 

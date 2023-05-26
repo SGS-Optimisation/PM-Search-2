@@ -58,6 +58,7 @@ class Collection extends Model implements Searchable
     use SoftDeletes, HasSearchCapability;
 
     protected $fillable = [
+        'name',
         'search_mode',
         'user_id',
         'search_data',
@@ -65,6 +66,7 @@ class Collection extends Model implements Searchable
         'image_path',
         'working_data',
         'report',
+        'consulted_at',
     ];
 
     /**

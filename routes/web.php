@@ -75,6 +75,7 @@ Route::middleware([
     Route::name('collection.')->prefix('/collection')
         ->group(function(){
 
-            Route::get('/', [CollectionController::class, 'show'])->name('show');
+            Route::get('/', [CollectionController::class, 'index'])->name('index');
+            Route::get('/{collection}', [CollectionController::class, 'show'])->name('show');
         });
 });

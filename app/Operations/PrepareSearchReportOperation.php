@@ -21,6 +21,10 @@ class PrepareSearchReportOperation extends BaseOperation
 
     public function handle()
     {
+        logger('PrepareSearchReportOperation', [
+            'search' => $this->search->toArray(),
+        ]);
+
         $this->report_output = match ($this->search->search_mode) {
             Searchable::SEARCH_MODE_TEXT => $this->search->report['output'] ?? [],
             Searchable::SEARCH_MODE_IMAGE => static::merge_outputs($this->search->report['output'] ?? []),
