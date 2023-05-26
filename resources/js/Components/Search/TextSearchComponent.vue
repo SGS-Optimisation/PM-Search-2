@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {defineComponent, watch, ref, reactive, onMounted, onUpdated, computed} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted, onUpdated, computed, defineAsyncComponent} from "vue";
 import JetFormSection from '@/Components/Jetstream/FormSection.vue';
 import route from "ziggy-js";
 import AutoComplete from 'primevue/autocomplete';
@@ -13,6 +13,9 @@ import {useDialog} from 'primevue/usedialog';
 import InputText from "primevue/inputtext";
 import {configStore} from "@/stores/config-store";
 import axios from "axios";
+import {useToast} from "primevue/usetoast";
+
+const AddCollectionForm = defineAsyncComponent(() => import('@/Components/Collections/Form.vue'));
 
 const props = defineProps({
     initialValues: {
@@ -24,14 +27,56 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: false,
+    },
+    allowSave: {
+        type: Boolean,
+        default: false
+    },
+    searchId: {
+        type: Number,
+        required: false,
     }
 })
+
+const dialog = useDialog();
+const toast = useToast();
+
+const openAddCollectionDialog = () => {
+    console.log('saving to collection');
+    const addDialogRef = dialog.open(AddCollectionForm, {
+        props: {
+            header: 'Create Collection',
+            style: {
+                width: '50vw',
+            },
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            modal: true
+        },
+        data: {
+            search: props.searchId,
+        },
+        templates: {
+            //footer: markRaw(FooterDemo)
+        },
+        onClose: (options) => {
+            if (options.data) {
+                toast.add({
+                    severity: 'info',
+                    summary: 'Collection created',
+                    life: 3000});
+            }
+        }
+    });
+}
 
 const form = useForm({
     search_string: Array,
     operator: <String>'and',
 })
-const dialog = useDialog();
+
 const tags = ref<Array<String>>([])
 const resetOnSuccess = ref<boolean>(false)
 const operatorOptions = ref([
@@ -222,8 +267,9 @@ const titleCase = (str) => window.titleCase(str);
 
 
 <template>
-    <div>
-        <jet-form-section @submitted="doSearch" :compact-mode="compactMode">
+    <div class="flex">
+        <Button v-if="allowSave" icon="pi pi-save" size="small" class="mr-3" @click="openAddCollectionDialog"/>
+        <jet-form-section @submitted="doSearch" :compact-mode="compactMode" class="grow">
             <template #title>
                 Text Search
             </template>

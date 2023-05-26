@@ -4,19 +4,18 @@
 namespace App\Services\Search\Azure;
 
 
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 
 class GeneratePublicLinksForReportImages
 {
-    public Search $search;
 
     /**
      * ReportImageLinks constructor.
-     * @param  Search  $search
+     * @param Searchable $search
      */
-    public function __construct(Search $search)
+    public function __construct(public Searchable $search)
     {
-        $this->search = $search;
     }
 
 
@@ -30,17 +29,19 @@ class GeneratePublicLinksForReportImages
                 || !$this->search->working_data['image_linking'])
         ) {
 
+            logger('generating public links for report images');
+
             $working_data = $this->search->working_data;
             $working_data['image_linking'] = false;
 
             $report = $this->search->report;
 
 
-            if ($this->search->search_mode == Search::SEARCH_MODE_TEXT) {
+            if ($this->search->search_mode == Searchable::SEARCH_MODE_TEXT) {
                 foreach ($report['output'] as &$entry) {
                     $this->processEntry($entry);
                 }
-            } elseif ($this->search->search_mode == Search::SEARCH_MODE_IMAGE) {
+            } elseif ($this->search->search_mode == Searchable::SEARCH_MODE_IMAGE) {
                 foreach ($report['output'] as &$search_tech) {
                     foreach ($search_tech as &$entry) {
                         $this->processEntry($entry);
@@ -54,6 +55,8 @@ class GeneratePublicLinksForReportImages
             $this->search->working_data = $working_data;
 
             $this->search->save();
+        } else {
+            logger('skipping generating public links for report images');
         }
     }
 

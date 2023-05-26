@@ -4,6 +4,7 @@
 namespace App\Services\Search\WebServices;
 
 
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -12,10 +13,10 @@ class ImageSearchWebService
 {
     /**
      * SearchApi constructor.
-     * @param string|Search $filepath
+     * @param string|Searchable $filepath
      * @param array $search_techs
      */
-    public function __construct(public string|Search $filepath, public array $search_techs = [])
+    public function __construct(public string|Searchable $filepath, public array $search_techs = [])
     {
         if (!is_string($this->filepath)) {
             $search = $this->filepath;

@@ -3,7 +3,7 @@
 use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\CollectionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,6 +41,16 @@ Route::name('api.')
         })->name('configs');
 
         Route::post('/convert', [UploadController::class, 'convert'])->name('pdf-to-image');
+
+        Route::name('collections.')->prefix('/collections')
+            ->group(function() {
+
+                Route::post('/', [CollectionController::class, 'create'])->name('create');
+                Route::post('/from-search/{id}', [CollectionController::class, 'createFromSearch'])->name('create-from-search');
+
+                Route::get('/{collection}/fresh', [CollectionController::class, 'fresh'])->name('fresh');
+            });
+
 
     });
 

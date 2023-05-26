@@ -4,8 +4,8 @@
 namespace App\Services\Search;
 
 
-use App\Jobs\ImageSearchJob;
 use App\Jobs\SearchWebserviceJob;
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 use App\Models\User;
 use App\Services\PDF\PdfToImage;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 class TextSearchCreationService
 {
 
-    public ?Search $search;
+    public Searchable $search;
 
     const TEXT_SEARCH_TYPE_THUMBNAIL = 'thumbnail';
     const TEXT_SEARCH_TYPE_MYSGS = 'mysgs';
@@ -74,12 +74,12 @@ class TextSearchCreationService
         }
 
         $working_data = [
-            Search::FLAG_PROCESSED => false,
-            Search::FLAG_HAS_SOURCE_IMAGE => false,
+            Searchable::FLAG_PROCESSED => false,
+            Searchable::FLAG_HAS_SOURCE_IMAGE => false,
         ];
 
         $search = Search::create([
-            'search_mode' => Search::SEARCH_MODE_TEXT,
+            'search_mode' => Searchable::SEARCH_MODE_TEXT,
             'user_id' => optional($this->user)->id,
             'search_data' => $search_data,
             'working_data' => $working_data

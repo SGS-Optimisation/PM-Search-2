@@ -6,6 +6,7 @@ namespace App\Services\Search;
 
 use App\Jobs\GenerateSearchImagesJob;
 use App\Jobs\SearchWebserviceJob;
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 use App\Models\User;
 use App\Services\PDF\PdfToImage;
@@ -65,13 +66,13 @@ class ImageSearchCreationService
 
         $working_data = [
             'original_filename' => $this->original_filename,
-            Search::FLAG_PROCESSED => false,
-            Search::FLAG_HAS_SOURCE_IMAGE => false,
+            Searchable::FLAG_PROCESSED => false,
+            Searchable::FLAG_HAS_SOURCE_IMAGE => false,
             'search_techs' => $this->search_techs,
         ];
 
         $search = Search::create([
-            'search_mode' => Search::SEARCH_MODE_IMAGE,
+            'search_mode' => Searchable::SEARCH_MODE_IMAGE,
             'user_id' => optional($this->user)->id,
             'parent_id' => optional($this->parent_search)->id,
             'source_filepath' => $this->filepath,

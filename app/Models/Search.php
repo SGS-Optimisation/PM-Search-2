@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Interfaces\Searchable;
+use App\Models\Traits\HasSearchCapability;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 /**
  * App\Models\Search
@@ -28,24 +29,27 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder|Search whereWorkingData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Search whereImagePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Search whereSourceFilepath($value)
- * @mixin \Eloquent
-
  * @property object|null $search_data
  * @method static \Illuminate\Database\Eloquent\Builder|Search whereSearchData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Search whereSearchMode($value)
+ * @property int|null $parent_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Search> $children
+ * @property-read int|null $children_count
+ * @property-read mixed $search_data_is_ocr
+ * @property-read mixed $search_data_is_phrase
+ * @property-read mixed $search_data_kv
+ * @property-read mixed $search_data_operator
+ * @property-read mixed $search_data_search_string
+ * @property-read mixed $search_data_type
+ * @property-read mixed $title
+ * @property-read Search|null $parent
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Search whereParentId($value)
+ * @mixin \Eloquent
  */
-class Search extends Model
+class Search extends Model implements Searchable
 {
-
-    const SEARCH_MODE_TEXT = 'text';
-    const SEARCH_MODE_IMAGE = 'image';
-
-    const SEARCH_SOURCE_FILENAME = 'source.jpg';
-    const SEARCH_THUMB_FILENAME = 'thumb.jpg';
-
-    const FLAG_PROCESSED = 'processed';
-    const FLAG_HAS_SOURCE_IMAGE = 'source_as_image';
-    const FLAG_ERROR = 'error';
+    use HasSearchCapability;
 
     /**
      * Attributes that should be mass-assignable.
@@ -80,14 +84,6 @@ class Search extends Model
         'working_data' => 'array',
         'report' => 'array',
     ];
-
-
-    // Scopes...
-
-    // Functions ...
-
-    // Relations ...
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -109,61 +105,5 @@ class Search extends Model
         return $this->hasMany(Search::class, 'parent_id');
     }
 
-    public function getTitleAttribute()
-    {
-        if (empty($this->search_data)) {
-            return '';
-        }
-        if ($this->search_mode == static::SEARCH_MODE_TEXT) {
-            return Str::slug(implode(' '.$this->search_data->operator.' ', $this->search_data->search_string));
-        }
-        if ($this->search_mode == static::SEARCH_MODE_IMAGE) {
-            return $this->working_data['original_filename'];
-        }
-    }
 
-    protected function getSearchDataParam($param)
-    {
-        if (empty($this->search_data)) {
-            return 'Empty';
-        }
-
-        return $this->search_data->$param ?? 'Empty';
-    }
-
-    public function getSearchDataKvAttribute()
-    {
-        $kv = $this->search_data;
-
-        if ($this->search_mode == static::SEARCH_MODE_TEXT) {
-            $kv->search_string = implode(', ', $kv->search_string);
-        }
-
-        return $kv;
-    }
-
-    public function getSearchDataSearchStringAttribute()
-    {
-        return implode(', ', $this->search_data->search_string ?? []);
-    }
-
-    public function getSearchDataOperatorAttribute()
-    {
-        return $this->getSearchDataParam('operator');
-    }
-
-    public function getSearchDataIsPhraseAttribute()
-    {
-        return $this->getSearchDataParam('isPhrase');
-    }
-
-    public function getSearchDataIsOcrAttribute()
-    {
-        return $this->getSearchDataParam('isOCR');
-    }
-
-    public function getSearchDataTypeAttribute()
-    {
-        return $this->getSearchDataParam('type');
-    }
 }

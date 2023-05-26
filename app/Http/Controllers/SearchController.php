@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\SearchReportExport;
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 use App\Operations\PrepareSearchReportOperation;
 use App\Services\Search\ImageSearchCreationService;
@@ -68,15 +69,15 @@ class SearchController extends Controller
     public function status(Request $request, Search $search)
     {
         return response()->json([
-            'processed' => $search->working_data[Search::FLAG_PROCESSED] ?? false,
-            'error' => $search->working_data[Search::FLAG_ERROR] ?? false,
+            'processed' => $search->working_data[Searchable::FLAG_PROCESSED] ?? false,
+            'error' => $search->working_data[Searchable::FLAG_ERROR] ?? false,
         ]);
     }
 
 
     public function pending(Request $request, Search $search)
     {
-        if ($search->working_data[Search::FLAG_PROCESSED]) {
+        if ($search->working_data[Searchable::FLAG_PROCESSED]) {
             return redirect(route('search.show', [$search->id]));
         }
 
@@ -99,7 +100,7 @@ class SearchController extends Controller
         $report_preparor = (new PrepareSearchReportOperation($search))->handle();
 
         $meta = [];
-        if($search->search_mode == Search::SEARCH_MODE_IMAGE) {
+        if($search->search_mode == Searchable::SEARCH_MODE_IMAGE) {
             $meta['image_processing_duration'] = $search->working_data['generate_search_image_duration'] ?? null;
         }
 

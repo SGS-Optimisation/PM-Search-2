@@ -4,6 +4,7 @@
 namespace App\Operations;
 
 
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -14,15 +15,15 @@ class PrepareSearchReportOperation extends BaseOperation
     public array $fields;
     public array $headers;
 
-    public function __construct(public Search $search)
+    public function __construct(public Searchable $search)
     {
     }
 
     public function handle()
     {
         $this->report_output = match ($this->search->search_mode) {
-            Search::SEARCH_MODE_TEXT => $this->search->report['output'] ?? [],
-            Search::SEARCH_MODE_IMAGE => static::merge_outputs($this->search->report['output'] ?? []),
+            Searchable::SEARCH_MODE_TEXT => $this->search->report['output'] ?? [],
+            Searchable::SEARCH_MODE_IMAGE => static::merge_outputs($this->search->report['output'] ?? []),
         };
 
         /*

@@ -17,8 +17,10 @@ import {Ziggy} from './ziggy';
 
 import type {DefineComponent} from "vue";
 import PrimeVue from 'primevue/config';
+import ConfirmationService from 'primevue/confirmationservice';
 import DialogService from 'primevue/dialogservice';
 import Tooltip from 'primevue/tooltip';
+import ToastService from 'primevue/toastservice';
 
 import {createPinia} from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -37,7 +39,9 @@ createInertiaApp({
             .directive('tooltip', Tooltip)
             .use(plugin)
             .use(PrimeVue)
+            .use(ConfirmationService)
             .use(DialogService)
+            .use(ToastService)
             .use(ZiggyVue, (window as any).Ziggy)
             .mixin({ methods: { route } })
             .use(pinia)

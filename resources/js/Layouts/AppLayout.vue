@@ -3,10 +3,13 @@ import {onBeforeMount, onMounted, ref} from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/Jetstream/ApplicationMark.vue';
 import Banner from '@/Components/Jetstream/Banner.vue';
+import ConfirmPopup from 'primevue/confirmpopup';
 import Dropdown from '@/Components/Jetstream/Dropdown.vue';
 import DropdownLink from '@/Components/Jetstream/DropdownLink.vue';
+import DynamicDialog from 'primevue/dynamicdialog';
 import NavLink from '@/Components/Jetstream/NavLink.vue';
 import ResponsiveNavLink from '@/Components/Jetstream/ResponsiveNavLink.vue';
+import Toast from 'primevue/toast';
 import { defineComponent } from "vue";
 import route from "ziggy-js";
 import axios from "axios";
@@ -51,7 +54,10 @@ onMounted(() => {
 <template>
     <div>
 
-        <Banner />
+        <Toast/>
+        <Banner/>
+        <DynamicDialog/>
+        <ConfirmPopup/>
 
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
@@ -77,6 +83,9 @@ onMounted(() => {
                                 </NavLink>
                                 <NavLink :href="route('search.image')" :active="route().current('search.image')">
                                     Image Search
+                                </NavLink>
+                                <NavLink :href="route('collections.index')" :active="route().current('collection.index')">
+                                    Collections
                                 </NavLink>
                             </div>
                         </div>

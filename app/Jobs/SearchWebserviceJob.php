@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Interfaces\Searchable;
 use App\Models\Search;
 use App\Services\Search\Azure\GeneratePublicLinksForReportImages;
 use App\Services\Search\WebServices\ImageSearchWebService;
@@ -29,7 +30,7 @@ class SearchWebserviceJob implements ShouldQueue
      * @param  Search  $search
      * @param  string  $mode
      */
-    public function __construct(public Search $search, public string $mode = self::SEARCH_MODE_TEXT)
+    public function __construct(public Searchable $search, public string $mode = self::SEARCH_MODE_TEXT)
     {
     }
 
@@ -61,7 +62,7 @@ class SearchWebserviceJob implements ShouldQueue
         (new GeneratePublicLinksForReportImages($this->search))->handle();
 
         $working_data = $this->search->working_data;
-        $working_data[Search::FLAG_PROCESSED] = true;
+        $working_data[Searchable::FLAG_PROCESSED] = true;
         $working_data[$this->mode. '_webservice_duration'] = round($this->end_time - $this->start_time, 2) . 's';
         $this->search->working_data = $working_data;
         $this->search->save();
@@ -76,7 +77,7 @@ class SearchWebserviceJob implements ShouldQueue
     public function failed(\Throwable $exception)
     {
         $working_data = $this->search->working_data;
-        $working_data[Search::FLAG_ERROR] = true;
+        $working_data[Searchable::FLAG_ERROR] = true;
         $this->search->working_data = $working_data;
         $this->search->save();
     }

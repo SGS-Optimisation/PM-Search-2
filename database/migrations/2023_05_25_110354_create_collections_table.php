@@ -4,18 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSearchesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('searches', function (Blueprint $table) {
+        Schema::create('collections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->nullable();
+            $table->string('name')->nullable();
             $table->string('search_mode');
             $table->foreignId('user_id')->constrained();
             $table->json('search_data')->nullable();
@@ -24,16 +22,16 @@ class CreateSearchesTable extends Migration
             $table->json('working_data')->nullable();
             $table->json('report')->nullable();
             $table->timestamps();
+            $table->dateTime('consulted_at')->nullable();
+            $table->softDeletes();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('searches');
+        Schema::dropIfExists('collections');
     }
-}
+};
