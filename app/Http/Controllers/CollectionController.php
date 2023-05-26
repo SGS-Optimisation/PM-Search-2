@@ -49,7 +49,7 @@ class CollectionController extends Controller
             'report' => $search->report,
         ]);
 
-        return redirect()->route('collection.show', ['collection' => $collection->id]);
+        return redirect(route('collection.show', ['collection' => $collection->id]));
     }
 
     /**
