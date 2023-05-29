@@ -1,8 +1,14 @@
 <script lang="ts" setup>
+import Button from "primevue/button";
 import DataView from "primevue/dataview";
-import {Link} from "@inertiajs/vue3";
+import InputText from "primevue/inputtext";
+import {Link, router, useForm} from "@inertiajs/vue3";
 import Tag from "primevue/tag";
 import {configStore} from "@/stores/config-store";
+import route from "ziggy-js";
+import {useToast} from "primevue/usetoast";
+import {useConfirm} from "primevue/useconfirm";
+import {ref} from "vue";
 
 const props = defineProps({
     collections: Array,
@@ -15,6 +21,12 @@ const props = defineProps({
         default: false
     }
 })
+
+const toast = useToast();
+const confirm = useConfirm();
+
+const editing = ref(false);
+const editingCollection = ref(null);
 
 function formatAdvancedSearchField(field, value) {
     if (!configStore.getAdvancedSearchFields().hasOwnProperty(field)) {
@@ -30,6 +42,60 @@ function formatAdvancedSearchField(field, value) {
     return config.key + ':' + value;
 }
 
+function editCollection(collection) {
+    editingCollection.value = collection;
+    editing.value = true;
+}
+
+const updateForm = useForm({
+    id: null,
+    name: null,
+})
+
+function saveCollection(collection) {
+    updateForm.id = collection.id;
+    updateForm.name = collection.name;
+    updateForm.put(route('collections.update', collection.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            updateForm.reset();
+            editing.value = false;
+            editCollection.valuet = null;
+            toast.add({severity: 'success', summary: 'Confirmed', detail: 'Collection updated', life: 3000});
+            router.reload();
+        },
+    })
+}
+
+const deleteForm = useForm({
+    id: null,
+})
+
+const confirmDelete = (event, collection) => {
+    confirm.require({
+        target: event.currentTarget,
+        message: 'Are you sure you want to proceed? ',
+        icon: 'pi pi-exclamation-triangle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            console.log('collection', collection);
+            deleteForm.id = collection.id;
+            deleteForm.delete(route('collections.delete', collection.id), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    deleteForm.reset();
+                    toast.add({severity: 'success', summary: 'Confirmed', detail: 'Collection deleted', life: 3000});
+                    router.reload();
+                },
+            })
+
+        },
+        reject: () => {
+            toast.add({severity: 'info', summary: 'Cancelled', detail: 'Action cancelled', life: 3000});
+        }
+    });
+};
+
 
 </script>
 
@@ -42,16 +108,25 @@ function formatAdvancedSearchField(field, value) {
             </template>
 
             <template #list="slotProps">
-                <div class="col-12 flex border border-gray-100 hover:bg-gray-50">
+                <div class="col-12 flex border border-gray-100 hover:bg-gray-50 item-row">
                     <div :class="{'col-6': detailed, 'col-12': !detailed}">
                         <div class="flex flex-column xl:flex-row xl:align-items-start pb-1 gap-4 ">
-                            <Link class="text-blue-500 hover:text-blue-700 underline"
+
+                            <template v-if="editing && editingCollection.id === slotProps.data.id">
+                                <div class="flex flex-row">
+                                    <InputText v-model="slotProps.data.name"/>
+                                    <Button @click="saveCollection(slotProps.data)" icon="pi pi-check"
+                                            class="p-button-rounded p-button-success ml-1 "/>
+                                </div>
+                            </template>
+
+                            <Link v-else class="text-blue-500 hover:text-blue-700 underline"
                                   :href="route('collections.show', [slotProps.data.id])">
                                 {{ slotProps.data.name }}
                             </Link>
                         </div>
                     </div>
-                    <div class="col-6" v-if="detailed">
+                    <div class="col-6 flex justify-content-between" v-if="detailed">
                         <div class="flex flex-column xl:flex-row xl:align-items-start pb-1 gap-4">
                             <span>
                                 <i class="pi" :class="{
@@ -84,6 +159,14 @@ function formatAdvancedSearchField(field, value) {
                                 {{ slotProps.data.working_data.original_filename }}
                             </span>
                         </div>
+                        <div class="flex actions">
+                            <Button severity="info" icon="pi pi-pencil" class="mx-2" size="sm"
+                                    @click="editCollection(slotProps.data)"
+                            ></Button>
+                            <Button severity="danger" icon="pi pi-trash" class="mx-2" size="sm"
+                                    @click="confirmDelete($event, slotProps.data)"
+                            ></Button>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -92,3 +175,15 @@ function formatAdvancedSearchField(field, value) {
         </DataView>
     </div>
 </template>
+
+<style lang="scss" scoped>
+.item-row {
+    .actions {
+        visibility: hidden;
+    }
+
+    &:hover .actions {
+        visibility: visible;
+    }
+}
+</style>

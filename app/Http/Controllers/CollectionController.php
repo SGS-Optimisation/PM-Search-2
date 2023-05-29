@@ -116,4 +116,22 @@ class CollectionController extends Controller
 
         }
     }
+
+    public function update(Request $request, Collection $collection)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $collection->update($request->all());
+
+        return back(303);
+    }
+
+    public function delete(Request $request, Collection $collection)
+    {
+        $collection->delete();
+
+        return redirect(route('collections.index'));
+    }
 }

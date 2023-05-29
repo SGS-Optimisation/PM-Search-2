@@ -56,7 +56,7 @@ Route::middleware([
             Route::get('/image', [SearchController::class, 'image'])->name('image');
             Route::get('/text', [SearchController::class, 'text'])->name('text');
 
-            Route::prefix('/{search}')->group(function ($group) {
+            Route::prefix('/{search}')->group(function () {
                 Route::get('/', [SearchController::class, 'show'])->name('show');
                 Route::get('/status', [SearchController::class, 'status'])->name('status');
                 Route::get('/pending', [SearchController::class, 'pending'])->name('pending');
@@ -76,6 +76,12 @@ Route::middleware([
         ->group(function(){
 
             Route::get('/', [CollectionController::class, 'index'])->name('index');
-            Route::get('/{collection}', [CollectionController::class, 'show'])->name('show');
+
+            Route::prefix('/{collection}')->group(function () {
+                Route::get('/', [CollectionController::class, 'show'])->name('show');
+                Route::put('/', [CollectionController::class, 'update'])->name('update');
+                Route::delete('/', [CollectionController::class, 'delete'])->name('delete');
+            });
+
         });
 });
