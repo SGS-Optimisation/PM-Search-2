@@ -18,7 +18,9 @@ class CollectionController extends Controller
     public function index(Request $request)
     {
         $collections = Collection::where('user_id', $request->user()->id)
-            ->select(['id','name', 'search_mode', 'search_data', 'source_filepath', 'image_path', 'working_data'])->get();
+            ->select(['id','name', 'search_mode', 'search_data', 'source_filepath', 'image_path', 'working_data'])
+            ->orderByDesc('created_at')
+            ->get();
 
         return Jetstream::inertia()->render($request, 'Collection/Index', [
             'collections' => $collections,
