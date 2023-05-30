@@ -2,7 +2,7 @@
 
 import {computed} from "@vue/reactivity";
 
-defineProps({
+const props = defineProps({
     field: {
         type: String,
         required: true
@@ -15,6 +15,10 @@ defineProps({
         required: false,
         default: null
     },
+})
+
+const computedValue = computed(() => {
+    return Object.values(props.value).map(function(k) { return k }).join(" , ")
 })
 
 function isEcode(str) {
@@ -60,6 +64,9 @@ function ecode(str) {
             >
                 {{ value }} <i class="text-xs pi pi-external-link"></i>
             </a>
+        </template>
+        <template v-else-if="typeof value==='object'">
+             {{ computedValue }}
         </template>
         <template v-else>
             {{ value }}
