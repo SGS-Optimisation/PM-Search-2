@@ -25,6 +25,8 @@ import QuickViewSearchEntry from "@/Components/Results/QuickViewSearchEntry.vue"
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
 import {snakeCase} from "lodash";
+import useHotkey from "vue3-hotkey";
+
 
 const props = defineProps({
     collectionMode: {type: Boolean, default: false},
@@ -248,6 +250,7 @@ const hotkeys = ref([
         }
     }
 ])
+const stop = useHotkey(hotkeys.value)
 
 </script>
 
