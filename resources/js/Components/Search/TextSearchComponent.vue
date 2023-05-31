@@ -340,7 +340,7 @@ const titleCase = (str) => window.titleCase(str);
 
                     <div class="text-right">
                         <SelectButton v-model="form.operator" :options="operatorOptions"
-                                      :unselectable=false
+                                      :unselectable=true
                                       optionLabel="name" optionValue="value"/>
                     </div>
                     <div class="ml-2">
