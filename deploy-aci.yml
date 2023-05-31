@@ -1,0 +1,39 @@
+apiVersion: 2019-12-01
+location: eastus
+name: pm-search-ui
+properties:
+  containers:
+    - name: web
+      properties:
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-web:latest
+        resources:
+          requests:
+            cpu: 1
+            memoryInGb: 1
+        ports:
+          - port: 80
+          - port: 443
+    - name: php
+      properties:
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-php:latest
+        resources:
+          requests:
+            cpu: 2
+            memoryInGb: 2
+    - name: queue
+      properties:
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue:latest
+        resources:
+          requests:
+            cpu: 2
+            memoryInGb: 2
+  osType: Linux
+  ipAddress:
+    type: Public
+    ports:
+      - protocol: tcp
+        port: 80
+      - protocol: tcp
+        port: 443
+tags: {project: ai-search, scope: ui}
+type: Microsoft.ContainerInstance/containerGroups
