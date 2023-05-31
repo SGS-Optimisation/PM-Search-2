@@ -213,35 +213,35 @@ const toggleGridConfig = (event) => {
 
 const hotkeys = ref([
     {
-        keys: ['f'],
+        keys: ['Alt+f'],
         preventDefault: true,
         handler() {
             userPreferences.backgroundMode = 'contain';
         }
     },
     {
-        keys: ['c'],
+        keys: ['Alt+c'],
         preventDefault: true,
         handler() {
             userPreferences.backgroundMode = 'cover';
         }
     },
     {
-        keys: ['z'],
+        keys: ['Alt+z'],
         preventDefault: true,
         handler() {
             userPreferences.backgroundMode = 'zoom';
         }
     },
     {
-        keys: ['s'],
+        keys: ['Alt+s'],
         preventDefault: true,
         handler() {
             openComparisonView();
         }
     },
     {
-        keys: ['l'],
+        keys: ['Alt+l'],
         preventDefault: true,
         handler() {
             clearSelection();

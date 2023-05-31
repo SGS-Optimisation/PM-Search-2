@@ -2,11 +2,6 @@
 import {Head} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Results from "@/Components/Results/Results.vue";
-import {userPreferencesStore} from "@/stores/userPreferencesStore";
-import useHotkey from "vue3-hotkey";
-import {ref} from "vue";
-import PreviewCard from "@/Components/Results/PreviewCard.vue";
-import PreviewRow from "@/Components/Results/PreviewRow.vue";
 
 const props = defineProps({
     search_id: {type: Number, required: true},
@@ -24,68 +19,6 @@ const props = defineProps({
 })
 
 defineOptions({layout: AppLayout})
-
-const userPreferences = userPreferencesStore();
-const previewCards = ref<PreviewCard[]>([]);
-const compareSelection = ref<Object[]>([]);
-const comparing = ref(false);
-const previewRows = ref<PreviewRow[]>([]);
-
-function openComparisonView() {
-    if (!(compareSelection.value.length < 2 || compareSelection.value.length > 4)) {
-        comparing.value = true;
-    }
-}
-
-
-function clearSelection() {
-    compareSelection.value = [];
-    for (const card of previewCards.value) {
-        card.clearSelection();
-    }
-    for (const card of previewRows.value) {
-        card.clearSelection();
-    }
-}
-
-const hotkeys = ref([
-    {
-        keys: ['Alt+f'],
-        preventDefault: true,
-        handler() {
-            userPreferences.backgroundMode = 'contain';
-        }
-    },
-    {
-        keys: ['Alt+c'],
-        preventDefault: true,
-        handler() {
-            userPreferences.backgroundMode = 'cover';
-        }
-    },
-    {
-        keys: ['Alt+z'],
-        preventDefault: true,
-        handler() {
-            userPreferences.backgroundMode = 'zoom';
-        }
-    },
-    {
-        keys: ['Alt+s'],
-        preventDefault: true,
-        handler() {
-            openComparisonView();
-        }
-    },
-    {
-        keys: ['Alt+l'],
-        preventDefault: true,
-        handler() {
-            clearSelection();
-        }
-    }
-])
-const stop = useHotkey(hotkeys.value)
 
 </script>
 
