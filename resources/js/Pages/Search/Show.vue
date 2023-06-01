@@ -5,7 +5,7 @@ import Results from "@/Components/Results/Results.vue";
 
 const props = defineProps({
     search_id: {type: Number, required: true},
-    parent_search_id: {type: Number, required: false,},
+    parent_search_id: {type: Number, required: false},
     mode: {type: String, required: true},
     search_data: {type: Object, required: false},
     thumb: {type: String, required: false},
@@ -19,7 +19,6 @@ const props = defineProps({
 })
 
 defineOptions({layout: AppLayout})
-
 
 </script>
 

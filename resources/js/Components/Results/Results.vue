@@ -25,6 +25,8 @@ import QuickViewSearchEntry from "@/Components/Results/QuickViewSearchEntry.vue"
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
 import {snakeCase} from "lodash";
+import useHotkey from "vue3-hotkey";
+
 
 const props = defineProps({
     collectionMode: {type: Boolean, default: false},
@@ -213,41 +215,42 @@ const toggleGridConfig = (event) => {
 
 const hotkeys = ref([
     {
-        keys: ['f'],
+        keys: ['Alt+f'],
         preventDefault: true,
         handler() {
             userPreferences.backgroundMode = 'contain';
         }
     },
     {
-        keys: ['c'],
+        keys: ['Alt+c'],
         preventDefault: true,
         handler() {
             userPreferences.backgroundMode = 'cover';
         }
     },
     {
-        keys: ['z'],
+        keys: ['Alt+z'],
         preventDefault: true,
         handler() {
             userPreferences.backgroundMode = 'zoom';
         }
     },
     {
-        keys: ['s'],
+        keys: ['Alt+s'],
         preventDefault: true,
         handler() {
             openComparisonView();
         }
     },
     {
-        keys: ['l'],
+        keys: ['Alt+l'],
         preventDefault: true,
         handler() {
             clearSelection();
         }
     }
 ])
+const stop = useHotkey(hotkeys.value)
 
 </script>
 
