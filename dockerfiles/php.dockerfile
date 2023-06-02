@@ -38,7 +38,8 @@ COPY --chown=laravel:laravel --from=frontend /frontend/public/build /var/www/htm
 
 #RUN chmod +x /usr/local/bin/scheduler
 
-RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+#RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+COPY ./dockerfiles/php/php.ini /usr/local/etc/php/php.ini
 
 RUN sed -i "s/user = www-data/user = laravel/g" /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i "s/group = www-data/group = laravel/g" /usr/local/etc/php-fpm.d/www.conf

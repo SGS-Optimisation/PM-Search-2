@@ -26,7 +26,7 @@ services:
         networks:
             - laravel
         volumes:
-            - pmsearch-uploads:/var/www/html/storage/app
+            - pmsearch-uploads:/var/www/html/storage/app/public
         expose:
             - 80
             - 443
@@ -44,7 +44,7 @@ services:
         networks:
             - laravel
         volumes:
-            - pmsearch-uploads:/var/www/html/storage/app
+            - pmsearch-uploads:/var/www/html/storage/app/public
             - pmsearch-db:/var/www/html/database/mounted
         environment:
             APP_ENV: local
@@ -64,7 +64,7 @@ services:
         networks:
             - laravel
         volumes:
-            - pmsearch-uploads:/var/www/html/storage/app
+            - pmsearch-uploads:/var/www/html/storage/app/public
             - pmsearch-db:/var/www/html/database/mounted
         environment:
             APP_ENV: local
