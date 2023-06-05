@@ -367,7 +367,7 @@ const titleCase = (str) => window.titleCase(str);
 
         </jet-form-section>
 
-        <OverlayPanel ref="advancedSearchOverlay" appendTo="body" @hide="parseAdvancedFields" id="resetForm1" show-close-icon>
+        <OverlayPanel ref="advancedSearchOverlay" appendTo="body" @hide="parseAdvancedFields" show-close-icon>
             <div class="md:grid md:grid-cols-4 gap-x-6 gap-y-3 justify-content-center align-items-center p-2">
                 <template v-for="(config, field) in configStore.getAdvancedSearchFields()" :key="field">
                     <template v-if="!config.hasOwnProperty('standalone') || config.standalone !== true">
