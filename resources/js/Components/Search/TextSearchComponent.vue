@@ -149,6 +149,7 @@ const simplified_group_name = ref('')
 
 const advancedSearchField = ref({})
 const advancedSearchOverlay = ref();
+const inputTextField = ref();
 const advancedSearchFieldSuggestions = ref({})
 
 function autocompleteSearch(event, field) {
@@ -262,6 +263,13 @@ const toggleAdvanced = (event) => {
     advancedSearchOverlay.value.toggle(event);
 };
 
+function resetFilters() {
+    tags.value = ""
+    form.reset();
+    advancedSearchField.value = ""
+    inputTextField.value=""
+}
+
 const titleCase = (str) => window.titleCase(str);
 
 </script>
@@ -298,7 +306,7 @@ const titleCase = (str) => window.titleCase(str);
                             <span class="p-float-label">
 
                                 <template v-if="config.type === 'text'">
-                                    <InputText :id="field" v-model="advancedSearchField[field]"/>
+                                    <InputText ref="inputTextField" :id="field" v-model="advancedSearchField[field]"/>
                                 </template>
                                 <template v-else-if="config.type === 'autocomplete'">
                                     <AutoComplete :id="field" v-model="advancedSearchField[field]"
@@ -323,7 +331,7 @@ const titleCase = (str) => window.titleCase(str);
                         <div class="flex flex-row items-between relative">
                             <vue3-tags-input
                                 id="main-search"
-                                class="grow"
+                                class="grow pl-4"
                                 v-tooltip="'Enter up to 8 terms, separated by a comma. Avoid using long search terms.'"
                                 :tags="tags"
                                 :add-tag-on-keys="[13, 188]"
@@ -334,6 +342,11 @@ const titleCase = (str) => window.titleCase(str);
                             <span class="absolute right-1 top-2 cursor-pointer"
                                   @click="toggleAdvanced">
                                 <i class="text-gray-300 pi pi-filter"></i>
+                            </span>
+
+                            <span class="absolute left-1 top-2 cursor-pointer"
+                                  @click="resetFilters">
+                                <i class="text-gray-300 pi pi-times-circle"></i>
                             </span>
                         </div>
 
@@ -354,7 +367,7 @@ const titleCase = (str) => window.titleCase(str);
 
         </jet-form-section>
 
-        <OverlayPanel ref="advancedSearchOverlay" appendTo="body" @hide="parseAdvancedFields" show-close-icon>
+        <OverlayPanel ref="advancedSearchOverlay" appendTo="body" @hide="parseAdvancedFields" id="resetForm1" show-close-icon>
             <div class="md:grid md:grid-cols-4 gap-x-6 gap-y-3 justify-content-center align-items-center p-2">
                 <template v-for="(config, field) in configStore.getAdvancedSearchFields()" :key="field">
                     <template v-if="!config.hasOwnProperty('standalone') || config.standalone !== true">
