@@ -177,7 +177,7 @@ return [
     ],
 
     'advanced_search' => [
-        'simplified_group_name' => ['key' => 'simplified', 'type' => 'autocomplete', 'standalone' => true, 'title' => 'Customer'],
+        'customer_name' => ['key' => 'portfolio', 'type' => 'autocomplete', 'standalone' => true, 'title' => 'Customer'],
 
         'brand' => ['key' => 'brand', 'type' => 'autocomplete'],
         'printer_name' => ['key' => 'printer', 'type' => 'autocomplete'],

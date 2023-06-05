@@ -21,9 +21,9 @@ class TextSearchWebService
      */
     public function __construct(
         public string|array|Searchable $search_string,
-        public ?string             $operator = 'and',
-        public array               $params = ['textsearch' => 'Y', 'advanced_search' => 'N'],
-        public array               $fields = [],
+        public ?string                 $operator = 'and',
+        public array                   $params = ['textsearch' => 'Y', 'advanced_search' => 'N'],
+        public array                   $fields = [],
     )
     {
     }
@@ -35,6 +35,14 @@ class TextSearchWebService
 
         if ($this->search_string instanceof Searchable) {
             $data = $this->search_string->search_data;
+
+            if (isset($data->fields->printer_name)) {
+                $data->fields->customer_name = $data->fields->printer_name;
+                $data->fields->customer_type = 'Printer';
+
+                unset($data->fields->printer_name);
+            }
+
         } else {
             $data = [
                 'textsearchstrings' => $this->search_string,
@@ -44,7 +52,19 @@ class TextSearchWebService
 
             if (count($this->fields) > 0) {
                 $data['searchparameters']['advanced_search'] = 'Y';
-                $data['searchparameters']['fields'] = $this->fields;
+
+                $parsed_fields = $this->fields;
+
+                // custom behavior for printer name
+                if (isset($parsed_fields['printer_name'])) {
+                    logger('found printer name: ' . $parsed_fields['printer_name']);
+                    $parsed_fields['customer_name'] = $parsed_fields['printer_name'];
+                    $parsed_fields['customer_type'] = 'Printer';
+
+                    unset($parsed_fields['printer_name']);
+                }
+
+                $data['searchparameters']['fields'] = $parsed_fields;
             }
         }
 
