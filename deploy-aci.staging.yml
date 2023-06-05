@@ -12,12 +12,12 @@ properties:
       azureFile:
         shareName: pmsearchuiuploads
         storageAccountName: pmsearchuistorage
-        storageAccountKey: Oyr4KcwKfkotWjc0iTxTntkm6T/scS4qauRVIZeWm3rIrQt/7JHPa8uog01+0vtWXdiPi3I+LINX+AStwEbMSA==
+        storageAccountKey: wEJLAXfQb9V7TgtgAsoE5FB2NcdUucG2y9u1ORIXAlNx663eM2Tr+GzCHmLP0DVMEa6IOamRj/Mg+AStYkM5OA==
     - name: dbvolume
       azureFile:
         shareName: pmsearchuitestvolume
         storageAccountName: pmsearchuistorage
-        storageAccountKey: Oyr4KcwKfkotWjc0iTxTntkm6T/scS4qauRVIZeWm3rIrQt/7JHPa8uog01+0vtWXdiPi3I+LINX+AStwEbMSA==
+        storageAccountKey: wEJLAXfQb9V7TgtgAsoE5FB2NcdUucG2y9u1ORIXAlNx663eM2Tr+GzCHmLP0DVMEa6IOamRj/Mg+AStYkM5OA==
   containers:
     - name: web
       properties:
