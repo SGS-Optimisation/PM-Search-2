@@ -69,7 +69,7 @@ properties:
             value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/login/azure/callback'
           - name: 'AZURE_STORAGE_NAME'
             value: 'mysgseastusstorage'
-          - nale: 'AZURE_STORAGE_KEY'
+          - name: 'AZURE_STORAGE_KEY'
             secureValue: ${AZURE_STORAGE_KEY}
           - name: 'AZURE_STORAGE_CONTAINER'
             value: 'mysgs-thumbnails'
