@@ -29,3 +29,12 @@ Stop the containers:
 
 ### Docker / Azure auth
 `docker login azure`
+
+
+## YAML usage
+
+Deploy:
+`az container create --resource-group AIsearchfrontend --file deploy-aci.yml`
+
+Check status
+`az container show --resource-group AIsearchfrontend --name pm-search-ui --output table`

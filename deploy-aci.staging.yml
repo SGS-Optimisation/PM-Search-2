@@ -1,0 +1,217 @@
+apiVersion: 2019-12-01
+location: eastus
+name: pm-search-ui
+type: Microsoft.ContainerInstance/containerGroups
+properties:
+  imageRegistryCredentials:
+    - server: sgscoaisearchfrontend.azurecr.io
+      username: sgscoaisearchfrontend
+      password: PqBppZmIlAMmYboVIphHWolb5Q420vI+btkdhRlLGx+ACRDXS+Ge
+  volumes:
+    - name: uploadsvolume
+      azureFile:
+        shareName: pmsearchuiuploads
+        storageAccountName: pmsearchuistorage
+        storageAccountKey: Oyr4KcwKfkotWjc0iTxTntkm6T/scS4qauRVIZeWm3rIrQt/7JHPa8uog01+0vtWXdiPi3I+LINX+AStwEbMSA==
+    - name: dbvolume
+      azureFile:
+        shareName: pmsearchuitestvolume
+        storageAccountName: pmsearchuistorage
+        storageAccountKey: Oyr4KcwKfkotWjc0iTxTntkm6T/scS4qauRVIZeWm3rIrQt/7JHPa8uog01+0vtWXdiPi3I+LINX+AStwEbMSA==
+  containers:
+    - name: web
+      properties:
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-web
+        environmentVariables:
+          - name: 'APP_NAME'
+            value: 'PM Search v2'
+          - name: 'APP_ENV'
+            value: 'local'
+          - name: 'APP_DEBUG'
+            value: 'true'
+          - name: 'APP_URL'
+            value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/'
+          - name: 'LOG_CHANNEL'
+            value: 'stack'
+          - name: 'LOG_DEPRECATIONS_CHANNEL'
+            value: 'null'
+          - name: 'LOG_LEVEL'
+            value: 'debug'
+          - name: 'DB_CONNECTION'
+            value: 'sqlite'
+          - name: 'DB_DATABASE'
+            value: '/var/www/html/database/mounted/db_staging.sqlite'
+          - name: 'BROADCAST_DRIVER'
+            value: 'log'
+          - name: 'CACHE_DRIVER'
+            value: 'redis'
+          - name: 'FILESYSTEM_DISK'
+            value: 'public'
+          - name: 'QUEUE_CONNECTION'
+            value: 'redis'
+          - name: 'SESSION_DRIVER'
+            value: 'redis'
+          - name: 'SESSION_LIFETIME'
+            value: '43200'
+          - name: 'REDIS_HOST'
+            value: 'tls://pmsearch-test.redis.cache.windows.net'
+          - name: 'REDIS_PORT'
+            value: '6380'
+          - name: 'AZURE_AD_CLIENT_ID'
+            secureValue: '0671dfdc-27f7-4c7d-a23b-e056d2d71681'
+          - name: 'AZURE_AD_CLIENT_REDIRECT_URI'
+            value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/login/azure/callback'
+          - name: 'AZURE_STORAGE_NAME'
+            value: 'mysgseastusstorage'
+          - name: 'AZURE_STORAGE_CONTAINER'
+            value: 'mysgs-thumbnails'
+          - name: 'PM_SEARCH_IMAGE_ENDPOINT'
+            value: 'http://4.236.138.222:5000/search/'
+          - name: 'PM_SEARCH_TEXT_ENDPOINT'
+            value: 'http://4.236.138.222:5000/textsearch/'
+          - name: 'AUTOCOMPLETE_SUGGESTER'
+            value: 'https://autocomplete-ai.kindgrass-c3eef62a.eastus.azurecontainerapps.io/suggest'
+        resources:
+          requests:
+            cpu: 0.5
+            memoryInGb: 1
+        ports:
+          - port: 80
+          - port: 443
+        volumeMounts:
+          - mountPath: /var/www/html/storage/app/public
+            name: uploadsvolume
+    - name: php
+      properties:
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-php
+        environmentVariables:
+          - name: 'APP_NAME'
+            value: 'PM Search v2'
+          - name: 'APP_ENV'
+            value: 'local'
+          - name: 'APP_DEBUG'
+            value: 'true'
+          - name: 'APP_URL'
+            value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/'
+          - name: 'LOG_CHANNEL'
+            value: 'stack'
+          - name: 'LOG_DEPRECATIONS_CHANNEL'
+            value: 'null'
+          - name: 'LOG_LEVEL'
+            value: 'debug'
+          - name: 'DB_CONNECTION'
+            value: 'sqlite'
+          - name: 'DB_DATABASE'
+            value: '/var/www/html/database/mounted/db_staging.sqlite'
+          - name: 'BROADCAST_DRIVER'
+            value: 'log'
+          - name: 'CACHE_DRIVER'
+            value: 'redis'
+          - name: 'FILESYSTEM_DISK'
+            value: 'public'
+          - name: 'QUEUE_CONNECTION'
+            value: 'redis'
+          - name: 'SESSION_DRIVER'
+            value: 'redis'
+          - name: 'SESSION_LIFETIME'
+            value: '43200'
+          - name: 'REDIS_HOST'
+            value: 'tls://pmsearch-test.redis.cache.windows.net'
+          - name: 'REDIS_PORT'
+            value: '6380'
+          - name: 'AZURE_AD_CLIENT_ID'
+            secureValue: '0671dfdc-27f7-4c7d-a23b-e056d2d71681'
+          - name: 'AZURE_AD_CLIENT_REDIRECT_URI'
+            value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/login/azure/callback'
+          - name: 'AZURE_STORAGE_NAME'
+            value: 'mysgseastusstorage'
+          - name: 'AZURE_STORAGE_CONTAINER'
+            value: 'mysgs-thumbnails'
+          - name: 'PM_SEARCH_IMAGE_ENDPOINT'
+            value: 'http://4.236.138.222:5000/search/'
+          - name: 'PM_SEARCH_TEXT_ENDPOINT'
+            value: 'http://4.236.138.222:5000/textsearch/'
+          - name: 'AUTOCOMPLETE_SUGGESTER'
+            value: 'https://autocomplete-ai.kindgrass-c3eef62a.eastus.azurecontainerapps.io/suggest'
+        resources:
+          requests:
+            cpu: 2
+            memoryInGb: 2
+        volumeMounts:
+          - mountPath: /var/www/html/storage/app/public
+            name: uploadsvolume
+          - mountPath: /var/www/html/database/mounted
+            name: dbvolume
+    - name: queue
+      properties:
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue
+        command: [ 'php', '/var/www/html/artisan', "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
+        environmentVariables:
+          - name: 'APP_NAME'
+            value: 'PM Search v2'
+          - name: 'APP_ENV'
+            value: 'local'
+          - name: 'APP_DEBUG'
+            value: 'true'
+          - name: 'APP_URL'
+            value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/'
+          - name: 'LOG_CHANNEL'
+            value: 'stack'
+          - name: 'LOG_DEPRECATIONS_CHANNEL'
+            value: 'null'
+          - name: 'LOG_LEVEL'
+            value: 'debug'
+          - name: 'DB_CONNECTION'
+            value: 'sqlite'
+          - name: 'DB_DATABASE'
+            value: '/var/www/html/database/mounted/db_staging.sqlite'
+          - name: 'BROADCAST_DRIVER'
+            value: 'log'
+          - name: 'CACHE_DRIVER'
+            value: 'redis'
+          - name: 'FILESYSTEM_DISK'
+            value: 'public'
+          - name: 'QUEUE_CONNECTION'
+            value: 'redis'
+          - name: 'SESSION_DRIVER'
+            value: 'redis'
+          - name: 'SESSION_LIFETIME'
+            value: '43200'
+          - name: 'REDIS_HOST'
+            value: 'tls://pmsearch-test.redis.cache.windows.net'
+          - name: 'REDIS_PORT'
+            value: '6380'
+          - name: 'AZURE_AD_CLIENT_ID'
+            secureValue: '0671dfdc-27f7-4c7d-a23b-e056d2d71681'
+          - name: 'AZURE_AD_CLIENT_REDIRECT_URI'
+            value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/login/azure/callback'
+          - name: 'AZURE_STORAGE_NAME'
+            value: 'mysgseastusstorage'
+          - name: 'AZURE_STORAGE_CONTAINER'
+            value: 'mysgs-thumbnails'
+          - name: 'PM_SEARCH_IMAGE_ENDPOINT'
+            value: 'http://4.236.138.222:5000/search/'
+          - name: 'PM_SEARCH_TEXT_ENDPOINT'
+            value: 'http://4.236.138.222:5000/textsearch/'
+          - name: 'AUTOCOMPLETE_SUGGESTER'
+            value: 'https://autocomplete-ai.kindgrass-c3eef62a.eastus.azurecontainerapps.io/suggest'
+        resources:
+          requests:
+            cpu: 1
+            memoryInGb: 2
+        volumeMounts:
+          - mountPath: /var/www/html/storage/app/public
+            name: uploadsvolume
+          - mountPath: /var/www/html/database/mounted
+            name: dbvolume
+  osType: Linux
+  ipAddress:
+    type: Public
+    dnsNameLabel: sgscopmsearchv2
+    ports:
+      - protocol: tcp
+        port: 80
+      - protocol: tcp
+        port: 443
+tags: {project: ai-search, scope: ui}
+

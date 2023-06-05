@@ -24,3 +24,4 @@ ADD ./dockerfiles/caddy/Caddyfile /etc/caddy/Caddyfile
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 COPY --from=frontend /frontend/ /var/www/html
+RUN ln -s /var/www/html/storage/app/public /var/www/html/public/storage
