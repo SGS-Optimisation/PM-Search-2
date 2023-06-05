@@ -14,6 +14,7 @@ import InputText from "primevue/inputtext";
 import {configStore} from "@/stores/config-store";
 import axios from "axios";
 import {useToast} from "primevue/usetoast";
+import moment from "moment";
 
 const AddCollectionForm = defineAsyncComponent(() => import('@/Components/Collections/Form.vue'));
 
@@ -183,8 +184,8 @@ function parseAdvancedFields() {
                 if (!checkValidRange(key))
                     continue;
 
-                var d1 = advancedSearchField.value[key][0].toISOString().split('T')[0];
-                var d2 = advancedSearchField.value[key][1].toISOString().split('T')[0];
+                var d1 = moment(new Date(advancedSearchField.value[key][0])).format("yyyy-MM-DD")
+                var d2 = moment(new Date(advancedSearchField.value[key][1])).format("yyyy-MM-DD")
                 keepFields.push(tagKey + ':' + d1 + '>' + d2);
             } else if (!fieldConfig.hasOwnProperty('standalone') || !fieldConfig.standalone) {
                 keepFields.push(tagKey + ':' + advancedSearchField.value[key]);
