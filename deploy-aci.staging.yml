@@ -28,7 +28,7 @@ properties:
           - name: 'APP_ENV'
             value: 'local'
           - name: 'APP_KEY'
-            secureValue: ${searchui_staging.APP_KEY}
+            secureValue: ${APP_KEY}
           - name: 'APP_DEBUG'
             value: 'true'
           - name: 'APP_URL'
@@ -58,19 +58,19 @@ properties:
           - name: 'REDIS_HOST'
             value: 'tls://pmsearch-test.redis.cache.windows.net'
           - name: 'REDIS_PASSWORD'
-            secureValue: ${searchui_staging.REDIS_PASSWORD}
+            secureValue: ${REDIS_PASSWORD}
           - name: 'REDIS_PORT'
             value: '6380'
           - name: 'AZURE_AD_CLIENT_ID'
             secureValue: '0671dfdc-27f7-4c7d-a23b-e056d2d71681'
           - name: 'AZURE_AD_CLIENT_SECRET'
-            secureValue: ${searchui_staging.AZURE_AD_CLIENT_SECRET}
+            secureValue: ${AZURE_AD_CLIENT_SECRET}
           - name: 'AZURE_AD_CLIENT_REDIRECT_URI'
             value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/login/azure/callback'
           - name: 'AZURE_STORAGE_NAME'
             value: 'mysgseastusstorage'
           - name: 'AZURE_STORAGE_KEY'
-            secureValue: ${searchui_staging.AZURE_STORAGE_KEY}
+            secureValue: ${AZURE_STORAGE_KEY}
           - name: 'AZURE_STORAGE_CONTAINER'
             value: 'mysgs-thumbnails'
           - name: 'PM_SEARCH_IMAGE_ENDPOINT'
@@ -98,7 +98,7 @@ properties:
           - name: 'APP_ENV'
             value: 'local'
           - name: 'APP_KEY'
-            secureValue: ${searchui_staging.APP_KEY}
+            secureValue: ${APP_KEY}
           - name: 'APP_DEBUG'
             value: 'true'
           - name: 'APP_URL'
@@ -128,19 +128,19 @@ properties:
           - name: 'REDIS_HOST'
             value: 'tls://pmsearch-test.redis.cache.windows.net'
           - name: 'REDIS_PASSWORD'
-            secureValue: ${searchui_staging.REDIS_PASSWORD}
+            secureValue: ${REDIS_PASSWORD}
           - name: 'REDIS_PORT'
             value: '6380'
           - name: 'AZURE_AD_CLIENT_ID'
             secureValue: '0671dfdc-27f7-4c7d-a23b-e056d2d71681'
           - name: 'AZURE_AD_CLIENT_SECRET'
-            secureValue: ${searchui_staging.AZURE_AD_CLIENT_SECRET}
+            secureValue: ${AZURE_AD_CLIENT_SECRET}
           - name: 'AZURE_AD_CLIENT_REDIRECT_URI'
             value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/login/azure/callback'
           - name: 'AZURE_STORAGE_NAME'
             value: 'mysgseastusstorage'
           - name: 'AZURE_STORAGE_KEY'
-            secureValue: ${searchui_staging.AZURE_STORAGE_KEY}
+            secureValue: ${AZURE_STORAGE_KEY}
           - name: 'AZURE_STORAGE_CONTAINER'
             value: 'mysgs-thumbnails'
           - name: 'PM_SEARCH_IMAGE_ENDPOINT'
@@ -168,7 +168,7 @@ properties:
           - name: 'APP_ENV'
             value: 'local'
           - name: 'APP_KEY'
-            secureValue: ${searchui_staging.APP_KEY}
+            secureValue: ${APP_KEY}
           - name: 'APP_DEBUG'
             value: 'true'
           - name: 'APP_URL'
@@ -198,19 +198,19 @@ properties:
           - name: 'REDIS_HOST'
             value: 'tls://pmsearch-test.redis.cache.windows.net'
           - name: 'REDIS_PASSWORD'
-            secureValue: ${searchui_staging.REDIS_PASSWORD}
+            secureValue: ${REDIS_PASSWORD}
           - name: 'REDIS_PORT'
             value: '6380'
           - name: 'AZURE_AD_CLIENT_ID'
             secureValue: '0671dfdc-27f7-4c7d-a23b-e056d2d71681'
           - name: 'AZURE_AD_CLIENT_SECRET'
-            secureValue: ${searchui_staging.AZURE_AD_CLIENT_SECRET}
+            secureValue: ${AZURE_AD_CLIENT_SECRET}
           - name: 'AZURE_AD_CLIENT_REDIRECT_URI'
             value: 'https://sgscopmsearchv2.eastus.azurecontainer.io/login/azure/callback'
           - name: 'AZURE_STORAGE_NAME'
             value: 'mysgseastusstorage'
           - name: 'AZURE_STORAGE_KEY'
-            secureValue: ${searchui_staging.AZURE_STORAGE_KEY}
+            secureValue: ${AZURE_STORAGE_KEY}
           - name: 'AZURE_STORAGE_CONTAINER'
             value: 'mysgs-thumbnails'
           - name: 'PM_SEARCH_IMAGE_ENDPOINT'
