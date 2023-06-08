@@ -228,6 +228,13 @@ properties:
             name: uploadsvolume
           - mountPath: /var/www/html/database/mounted
             name: dbvolume
+        livenessProbe:
+          exec:
+            command:
+              - "php"
+              - "artisan"
+              - "horizon:status"
+          periodSeconds: 60
   osType: Linux
   ipAddress:
     type: Public

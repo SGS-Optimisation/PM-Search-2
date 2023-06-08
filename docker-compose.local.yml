@@ -11,6 +11,13 @@ volumes:
 services:
     web:
       env_file: ./.env.docker
+      build:
+        context: .
+        dockerfile: dockerfiles/nginx.dockerfile
+        args:
+          - UID=${UID:-1000}
+          - GID=${GID:-1000}
+      image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-nginx
 
     php:
       env_file: ./.env.docker
