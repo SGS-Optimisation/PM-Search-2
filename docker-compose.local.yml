@@ -22,7 +22,7 @@ services:
     php:
       env_file: ./.env.docker
 
-    queue:
+    worker:
       env_file: ./.env.docker
 
     redis:

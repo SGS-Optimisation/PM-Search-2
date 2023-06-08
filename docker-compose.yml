@@ -22,7 +22,7 @@ services:
             - "443:443"
         depends_on:
             - php
-            - queue
+            - worker
         networks:
             - laravel
         volumes:
@@ -52,7 +52,7 @@ services:
             NOVA_USERNAME: ${NOVA_USERNAME}
             NOVA_LICENSE_KEY: ${NOVA_LICENSE_KEY}
 
-    queue:
+    worker:
         build:
             context: .
             dockerfile: dockerfiles/php.dockerfile
@@ -60,7 +60,7 @@ services:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue
-        command: [ 'php', '/var/www/html/artisan', "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
+        command: [ 'php', '/var/www/html/artisan', "horizon"]
         networks:
             - laravel
         volumes:
@@ -71,5 +71,13 @@ services:
             CONTAINER_ROLE: worker
             NOVA_USERNAME: ${NOVA_USERNAME}
             NOVA_LICENSE_KEY: ${NOVA_LICENSE_KEY}
+        healthcheck:
+            test:
+                - CMD
+                - php
+                - artisan
+                - horizon:status
+            retries: 3
+            timeout: 10s
 
 
