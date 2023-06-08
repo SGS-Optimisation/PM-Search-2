@@ -151,17 +151,17 @@ properties:
             value: 'https://autocomplete-ai.kindgrass-c3eef62a.eastus.azurecontainerapps.io/suggest'
         resources:
           requests:
-            cpu: 2
+            cpu: 1
             memoryInGb: 2
         volumeMounts:
           - mountPath: /var/www/html/storage/app/public
             name: uploadsvolume
           - mountPath: /var/www/html/database/mounted
             name: dbvolume
-    - name: queue
+    - name: worker
       properties:
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue
-        command: [ 'php', '/var/www/html/artisan', "queue:work", "--verbose", "--tries=3", "--timeout=90" ]
+        command: [ 'php', '/var/www/html/artisan', "horizon" ]
         environmentVariables:
           - name: 'APP_NAME'
             value: 'PM Search v2'
@@ -221,7 +221,7 @@ properties:
             value: 'https://autocomplete-ai.kindgrass-c3eef62a.eastus.azurecontainerapps.io/suggest'
         resources:
           requests:
-            cpu: 1
+            cpu: 2
             memoryInGb: 2
         volumeMounts:
           - mountPath: /var/www/html/storage/app/public
