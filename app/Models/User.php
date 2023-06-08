@@ -122,4 +122,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Search::class);
     }
+
+    public function collections()
+    {
+        return $this->hasMany(Collection::class);
+    }
 }

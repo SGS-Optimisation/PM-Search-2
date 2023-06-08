@@ -22,7 +22,10 @@ class DashboardController extends Controller
             ->select(['id', 'search_mode', 'search_data', 'working_data'])
             ->get();
 
-        $collections = Collection::where('user_id', $request->user()->id)->get();
+        $collections = $request->user()->collections()
+            ->latest()->take(40)
+            ->select(['id', 'search_mode', 'search_data', 'working_data'])
+            ->get();
 
         return Jetstream::inertia()->render($request, 'Dashboard', [
             'latestSearches' => $latest_searches,
