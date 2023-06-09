@@ -117,8 +117,8 @@ return [
         // BRIDGE FIELDS
         'color_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'title' => 'Colour Name', 'position' => 100],
         'book' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        'color_type' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
-        'hex_colors' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
+        'color_type' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'title' => 'Colour Type', 'position' => 100],
+        'hex_colors' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'title' => 'Hex Colours', 'position' => 100],
         'font_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
         'layer_name' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'position' => 100],
 

@@ -151,7 +151,7 @@ function next() {
                                     <tr>
                                         <template v-for="field in table.fields">
                                             <th class="border-b dark:border-slate-600 font-medium px-4 pl-3 pt-0 pb-1 text-slate-400 text-left">
-                                                {{ titleCase(field) }}
+                                                {{ fields_config[field].hasOwnProperty('title') ? fields_config[field].title : titleCase(field) }}
                                             </th>
                                         </template>
                                     </tr>
