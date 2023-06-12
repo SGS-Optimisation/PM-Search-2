@@ -107,7 +107,7 @@ class CollectionController extends Controller
 
             dispatch_sync(new SearchWebserviceJob($collection, $collection->search_mode));
 
-            $collection = $collection->fresh();
+            $collection->refresh();
 
             $report_preparator = (new PrepareSearchReportOperation($collection))->handle();
 
