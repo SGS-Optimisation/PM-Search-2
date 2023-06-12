@@ -278,7 +278,7 @@ const titleCase = (str) => window.titleCase(str);
 <template>
     <div class="flex">
         <Button v-if="allowSave" icon="pi pi-save" size="small" class="mr-3" @click="openAddCollectionDialog"/>
-        <jet-form-section @submitted="doSearch" :compact-mode="compactMode" class="grow">
+        <jet-form-section :compact-mode="compactMode" class="grow">
             <template #title>
                 Text Search
             </template>
