@@ -3,6 +3,10 @@ import {mount, shallowMount} from "@vue/test-utils";
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import {configStore} from "@/stores/config-store";
 import Tooltip from "primevue/tooltip";
+import PrimeVue from "primevue/config";
+import ToastService from "primevue/toastservice";
+import ConfirmationService from "primevue/confirmationservice";
+import DialogService from "primevue/dialogservice";
 
 describe('TextSearchComponent', () => {
     //test 1
@@ -14,6 +18,7 @@ describe('TextSearchComponent', () => {
         configStore.state.advancedSearchFields = searchFields
         const wrapper = mount(TextSearchComponent, {
             global: {
+                plugins: [PrimeVue, ToastService, ConfirmationService, DialogService],
                 mocks: {
                     ['$primevue']: {
                         config: {
@@ -37,15 +42,9 @@ describe('TextSearchComponent', () => {
                 compactMode: false
             }
         })
-        console.log(wrapper.html())
         expect(wrapper.find('h3').text()).toBe('Text Search')
         expect(wrapper.find('.text-right .p-buttonset .p-component').html()).toContain("And");
         expect(wrapper.find('button').exists()).toBe(true)
 
-        for (const key in configStore.getAdvancedSearchFields()) {
-            if (configStore.getAdvancedSearchFields()[key].type === 'text') {
-                console.log("hi")
-            }
-        }
     })
 });

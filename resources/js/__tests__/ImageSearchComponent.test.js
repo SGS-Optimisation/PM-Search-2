@@ -25,7 +25,6 @@ describe('ImageSearchComponent', () => {
                 compactMode: false
             }
         })
-        console.log(wrapper.html())
         expect(wrapper.find('h3').text()).toBe('Image Search')
 
     })
