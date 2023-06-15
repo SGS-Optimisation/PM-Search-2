@@ -205,7 +205,7 @@ const currentSearchImage = computed(() => {
 
                     <div class="flex justify-start">
                         <FileUpload mode="basic" name="imageSearch" ref="uploadInput"
-                                    :url="route('image-search')"
+                                    url="route('image-search')"
                                     chooseLabel="Select File"
                                     accept="image/*,.pdf" :maxFileSize="10000000"
                                     @select="selectFile"/>
