@@ -127,6 +127,6 @@ class SearchController extends Controller
 
     public function download(Request $request, Search $search)
     {
-        return Excel::download(new SearchReportExport($search), $search->title.'.xlsx');
+        return Excel::download(new SearchReportExport($search), $search->id.'.xlsx');
     }
 }

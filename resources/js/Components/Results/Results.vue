@@ -26,6 +26,7 @@ import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
 import {snakeCase} from "lodash";
 import useHotkey from "vue3-hotkey";
+import route from "ziggy-js";
 
 
 const props = defineProps({
@@ -363,6 +364,15 @@ const stop = useHotkey(hotkeys.value)
                                                 @click="clearSelection">
                                             C<u>l</u>ear Selection
                                         </Button>
+                                    </div>
+                                    <div class="flex">
+                                        <form method="get" class="w-full" :action="route('search.download', search_id)">
+                                            <Button type="submit" icon="pi pi-columns"
+                                                    class="w-full"
+                                                    :severity="report.length !== 0 ? 'secondary' : 'primary'">
+                                                Download Results
+                                            </Button>
+                                        </form>
                                     </div>
                                 </div>
                             </OverlayPanel>
