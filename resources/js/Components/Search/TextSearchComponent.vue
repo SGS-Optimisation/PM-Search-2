@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {defineComponent, watch, ref, reactive, onMounted, onUpdated, computed, defineAsyncComponent} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted, onUpdated, computed, defineAsyncComponent, inject} from "vue";
 import JetFormSection from '@/Components/Jetstream/FormSection.vue';
 import route from "ziggy-js";
 import AutoComplete from 'primevue/autocomplete';
@@ -39,6 +39,8 @@ const props = defineProps({
     }
 })
 
+const {filters} = inject('filters');
+
 const dialog = useDialog();
 const toast = useToast();
 
@@ -58,6 +60,7 @@ const openAddCollectionDialog = () => {
         },
         data: {
             search: props.searchId,
+            filters,
         },
         templates: {
             //footer: markRaw(FooterDemo)
