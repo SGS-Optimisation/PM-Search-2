@@ -29,7 +29,7 @@ function formatAdvancedSearchField(field, value) {
 
         <DataView :value="latestSearches" paginator :rows="5">
             <template #header>
-                <h4 class="h4 font-bold text-lg">My latest searches</h4>
+                <h4 class="h4 font-bold text-lg">My Latest Searches</h4>
             </template>
 
             <template #list="slotProps">
