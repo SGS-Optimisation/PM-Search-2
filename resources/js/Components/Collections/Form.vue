@@ -10,6 +10,7 @@ import {useForm} from "@inertiajs/vue3";
 
 const form = useForm({
     name: null,
+    filters: {},
 })
 
 const search = ref();
@@ -30,6 +31,7 @@ const addCollection = () => {
 onMounted(() => {
     if(dialogRef.value) {
         search.value = dialogRef.value.data.search;
+        form.filters = dialogRef.value.data.filters;
     }
 });
 

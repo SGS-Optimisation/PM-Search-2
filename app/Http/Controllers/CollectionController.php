@@ -37,9 +37,18 @@ class CollectionController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             //'id' => 'required|integer|exists:searches,id',
+            'filters' => 'nullable|array',
         ]);
 
         $search = Search::findOrFail($id);
+
+        $filters = $request->get('filters', []);
+        /**
+         * [
+         *      ['taxonomy' => 'Printer', 'value' => 'BALL MEXICO'],
+         *      ['taxonomy' => 'Print Process', 'value' => 'Dry Offset'],
+         * ]
+         */
 
         $collection = Collection::create([
             'name' => $request->name,
@@ -50,6 +59,7 @@ class CollectionController extends Controller
             'image_path' => $search->image_path,
             'working_data' => $search->working_data,
             'report' => $search->report,
+            'filters' => $filters,
         ]);
 
         return redirect(route('collections.show', [$collection->id]));
@@ -93,6 +103,7 @@ class CollectionController extends Controller
                     return $item['position'];
                 })->toArray(),
             'meta' => $meta,
+            'savedFilters' => $collection->filters,
         ]);
     }
 

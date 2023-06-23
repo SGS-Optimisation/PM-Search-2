@@ -17,6 +17,7 @@ import Sidebar from "primevue/sidebar";
 import FullModal from "@/Components/Utility/FullModal.vue";
 import ViewSearchEntry from "@/Components/Results/ViewSearchEntry.vue";
 import {userPreferencesStore} from "@/stores/userPreferencesStore";
+import {advancedFiltersStore} from "@/stores/advancedFiltersStore";
 import moment from "moment/moment";
 import _ from "lodash";
 import ResultsSidebar from "@/Components/Results/ResultsSidebar.vue";
@@ -43,6 +44,7 @@ const props = defineProps({
     fields: {type: Object, required: false},
     fields_config: {type: Object, required: false},
     meta: {type: Object, required: false},
+    savedFilters: {type: Object, required: false},
 })
 
 const items = ref();
@@ -88,9 +90,17 @@ onMounted(() => {
         item.booked_date_fmt = moment(item.booked_date).format('YYYY-MM-DD');
     })
 
-    userPreferences.selectedTaxonomy.forEach((item) => {
-        filters.value[item] = [];
-    })
+    //Are there saved filters?
+    if (props.savedFilters) {
+        //filters.value = props.savedFilters;
+        // enabled proper taxonomy, in user preferences?
+        advancedFiltersStore.selectedTaxonomy = props.savedFilters.selectedTaxonomy;
+    } else {
+
+        userPreferences.selectedTaxonomy.forEach((item) => {
+            filters.value[item] = [];
+        })
+    }
 
     filteredSearchData.value = getSearchData();
 });
