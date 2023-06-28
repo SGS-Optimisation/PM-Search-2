@@ -1,5 +1,5 @@
 FROM node:lts AS frontend
-WORKDIR /
+WORKDIR /frontend
 COPY / /frontend
 RUN true
 RUN npm install
