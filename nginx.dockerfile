@@ -1,30 +1,8 @@
 FROM node:lts AS frontend
-WORKDIR /
-COPY app/ /app/
-RUN true
-COPY bootstrap/ /bootstrap/
-RUN true
-COPY config/ /config/
-RUN true
-COPY database/ /database/
-RUN true
-COPY dockerfiles/ /dockerfiles/
-RUN true
-COPY lang/ /lang/
-RUN true
-COPY public/ /public/
-RUN true
-COPY resources/ /resources/
-RUN true
-COPY routes/ /routes/
-RUN true
-COPY storage/ /storage/
-RUN true
-COPY package.json /
-RUN true
-COPY package-lock.json /
-RUN true
+WORKDIR /frontend
+COPY package*.json ./
 RUN npm install
+COPY . .
 RUN npm run build
 
 
