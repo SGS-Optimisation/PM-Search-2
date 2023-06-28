@@ -1,6 +1,6 @@
 FROM node:lts AS frontend
 WORKDIR /frontend
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
@@ -29,7 +29,7 @@ RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 COPY --chown=nginx:nginx --from=frontend /frontend/ /var/www/html
 
-#RUN apk add nodejs npm 
+#RUN apk add nodejs npm
 
 #USER laravel
 #RUN npm install && npm run build
