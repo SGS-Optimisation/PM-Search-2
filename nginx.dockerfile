@@ -1,5 +1,5 @@
 FROM node:lts AS frontend
-WORKDIR ../
+WORKDIR /
 COPY app/ /app/
 RUN true
 COPY bootstrap/ /bootstrap/

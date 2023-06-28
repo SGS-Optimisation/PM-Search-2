@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '70658e8e-d6ac-4b10-917a-34d62e17139a'
   imageRepository: 'pmsearchuinginx'
   containerRegistry: 'sgscoaisearchfrontend.azurecr.io'
-  dockerfilePath: 'dockerfiles/nginx.dockerfile'
+  dockerfilePath: 'nginx.dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
