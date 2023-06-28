@@ -1,10 +1,10 @@
 FROM node:lts AS frontend
-WORKDIR /frontend
+WORKDIR /
+COPY / /frontend/
+RUN true
 COPY package.json /frontend/
 RUN true
 COPY package-lock.json /frontend/
-RUN true
-COPY / /frontend/
 RUN true
 RUN npm install
 RUN npm run build
