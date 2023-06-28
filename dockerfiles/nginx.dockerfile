@@ -1,8 +1,10 @@
 FROM node:lts AS frontend
 WORKDIR /frontend
 COPY package*.json ./
+RUN true
 RUN npm install
 COPY . .
+RUN true
 RUN npm run build
 
 
@@ -28,7 +30,7 @@ ADD ./dockerfiles/nginx/default.conf /etc/nginx/conf.d/
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 COPY --chown=nginx:nginx --from=frontend /frontend/ /var/www/html
-
+RUN true
 #RUN apk add nodejs npm
 
 #USER laravel
