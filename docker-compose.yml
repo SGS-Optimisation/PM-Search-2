@@ -9,19 +9,19 @@ volumes:
     pmsearch-db:
 
 services:
-    web:
+    frontend:
         build:
             context: .
-            dockerfile: dockerfiles/caddy.dockerfile
+            dockerfile: dockerfiles/nginx.dockerfile
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
-        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-web
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-nginx
         ports:
             - "80:80"
             - "443:443"
         depends_on:
-            - php
+            - backend
             - worker
         networks:
             - laravel
@@ -31,7 +31,7 @@ services:
             - 80
             - 443
 
-    php:
+    backend:
         build:
             context: .
             dockerfile: dockerfiles/php.dockerfile
@@ -60,7 +60,7 @@ services:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
         image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-queue
-        command: [ 'php', '/var/www/html/artisan', "horizon"]
+        command: [ 'php', '/var/www/html/artisan', "horizon" ]
         networks:
             - laravel
         volumes:

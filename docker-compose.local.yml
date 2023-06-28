@@ -9,7 +9,7 @@ volumes:
     pmsearch-db:
 
 services:
-    web:
+    frontend:
       env_file: ./.env.docker
       build:
         context: .
@@ -19,7 +19,7 @@ services:
           - GID=${GID:-1000}
       image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-nginx
 
-    php:
+    backend:
       env_file: ./.env.docker
 
     worker:

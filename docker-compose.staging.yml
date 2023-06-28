@@ -13,7 +13,7 @@ volumes:
             storage_account_name: pmsearchuistorage
 
 services:
-    web:
+    frontend:
         domainname: sgscopmsearchv2
         deploy:
             resources:
@@ -24,7 +24,7 @@ services:
                     cpus: '1'
                     memory: 1G
 
-    php:
+    backend:
         deploy:
             resources:
                 reservations:
@@ -34,7 +34,7 @@ services:
                     cpus: '2'
                     memory: 2G
 
-    queue:
+    worker:
         deploy:
             resources:
                 reservations:
