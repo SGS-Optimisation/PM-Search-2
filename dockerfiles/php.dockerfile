@@ -10,8 +10,8 @@ FROM sgscoaisearchfrontend.azurecr.io/superbase:latest
 
 ARG UID
 ARG GID
-ARG NOVA_USERNAME
-ARG NOVA_LICENSE_KEY
+ARG NOVA_USERNAME="dpkgmu-dev-licences@sgsintl.onmicrosoft.com"
+ARG NOVA_LICENSE_KEY="I2qlHEoTyiQITUFvm25cFdfD4bNFXZAGLXk1H4UfndkNqGqKe1"
 
 ENV UID=${UID:-1080}
 ENV GID=${GID:-1080}
@@ -21,6 +21,8 @@ ENV NOVA_USERNAME=$NOVA_USERNAME
 ENV NOVA_LICENSE_KEY=$NOVA_LICENSE_KEY
 
 ENV NODE_VERSION=${NODE_VERSION:-20.0.0}
+
+RUN echo "nova user email: $NOVA_USERNAME"
 
 RUN delgroup dialout
 
