@@ -151,6 +151,11 @@ class CollectionController extends Controller
 
     public function updateFilters(Request $request, Collection $collection)
     {
+        logger('updating collection ' . $collection->name);
+        $request->validate([
+            //'filters' => 'required', // TODO: uncomment this when there are actual values being sent from frontend
+        ]);
+
         //$collection->update(['filters' => $request->filters]);
         $collection->update($request->all());
 

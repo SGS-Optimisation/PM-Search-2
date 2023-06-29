@@ -78,7 +78,7 @@ class PrepareSearchReportOperation extends BaseOperation
         $customer_types = $entry['customer_type'];
 
         if(count ($customer_names) != count($customer_types)){
-            logger('error in entry ' . print_r($entry, true));
+            //logger('error in entry ' . print_r($entry, true));
             return;
         }
 
