@@ -62,5 +62,6 @@ RUN composer config --global http-basic.nova.laravel.com $NOVA_USERNAME $NOVA_LI
 RUN composer install
 #RUN npm install && npm run build
 #RUN php artisan migrate
+EXPOSE 9000
 
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
