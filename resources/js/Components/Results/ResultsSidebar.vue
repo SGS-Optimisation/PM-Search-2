@@ -2,10 +2,19 @@
 import {userPreferencesStore} from "@/stores/userPreferencesStore";
 import TaxonomySelector from "@/Components/Results/TaxonomySelector.vue";
 import {computed} from "@vue/reactivity";
-import {inject, onMounted, ref, watch} from "vue";
+import {defineAsyncComponent, inject, onMounted, ref, watch} from "vue";
 import Button from 'primevue/button';
 import MultiSelect from "primevue/multiselect";
 import InputText from "primevue/inputtext";
+import axios from "axios";
+import route from "ziggy-js";
+import {useToast} from "primevue/usetoast";
+import {useDialog} from 'primevue/usedialog';
+
+const props = defineProps({
+    collectionId: {type: Number, required: false},
+    collectionMode: {type: Boolean, default: false},
+});
 
 const {filters, filteredSearchData, filterText} = inject('filters');
 const report: Object[] = inject('report');
@@ -104,6 +113,54 @@ function getFilterOptions() {
     return options;
 }
 
+const dialog = useDialog();
+const toast = useToast();
+const AddCollectionForm = defineAsyncComponent(() => import('@/Components/Collections/Form.vue'));
+const openAddCollectionDialog = () => {
+    console.log('saving to collection');
+    const addDialogRef = dialog.open(AddCollectionForm, {
+        props: {
+            header: 'Create Collection',
+            style: {
+                width: '50vw',
+            },
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            modal: true
+        },
+        data: {
+            collection_id: props.collectionId,
+            filters,
+        },
+        templates: {
+            //footer: markRaw(FooterDemo)
+        },
+        onClose: (options) => {
+            if (options.data) {
+                toast.add({
+                    severity: 'info',
+                    summary: 'Collection created',
+                    life: 3000});
+            }
+        }
+    });
+}
+
+function updateCollectionFilters() {
+    axios.post(route('api.collections.update-filters', {collection: props.collectionId}))
+        .then(response => {
+            //backgroundLoading.value = false;
+
+            if (response) {
+                console.log("saved")
+            } else {
+                console.log("error")
+            }
+        })
+}
+
 </script>
 
 <template>
@@ -164,10 +221,18 @@ function getFilterOptions() {
                         />
                     </div>
 
+                    <div class="mx-2 flex flex-col gap-3">
                     <template v-if="userPreferences.selectedTaxonomy.length">
                         <Button class="px-3" size="small" label="Clear Filters" icon="pi pi-times"
                                 @click="clearFilters"/>
                     </template>
+                    <template v-if="collectionMode">
+                        <Button class="px-3" size="small" label="Save Collection" icon="pi pi-save"
+                                @click="openAddCollectionDialog"/>
+                        <Button class="px-3" size="small" label="Update Collection" icon="pi pi-refresh"
+                                @click="updateCollectionFilters"/>
+                    </template>
+                    </div>
                 </div>
             </div>
         </div>

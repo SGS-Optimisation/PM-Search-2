@@ -148,4 +148,12 @@ class CollectionController extends Controller
 
         return redirect(route('collections.index'));
     }
+
+    public function updateFilters(Request $request, Collection $collection)
+    {
+        //$collection->update(['filters' => $request->filters]);
+        $collection->update($request->all());
+
+        return redirect(route('collections.show', $collection));
+    }
 }

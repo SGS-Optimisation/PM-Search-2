@@ -14,11 +14,13 @@ const form = useForm({
 })
 
 const search = ref();
+const collection_id = ref();
 
 const dialogRef = inject('dialogRef');
 const addCollection = () => {
     console.log('adding collection');
-    form.post(route('api.collections.create-from-search', {id: search.value}),{
+    let formId = collection_id ? collection_id.value : search.value
+    form.post(route('api.collections.create-from-search', {id: formId}),{
         preserveScroll: true,
         onSuccess: (data) => {
             dialogRef.value.close(data);
@@ -30,7 +32,7 @@ const addCollection = () => {
 
 onMounted(() => {
     if(dialogRef.value) {
-        search.value = dialogRef.value.data.search;
+        collection_id.value = dialogRef.value.data.collection_id;
         form.filters = dialogRef.value.data.filters;
     }
 });

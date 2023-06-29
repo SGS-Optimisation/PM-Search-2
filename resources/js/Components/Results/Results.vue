@@ -32,6 +32,7 @@ import route from "ziggy-js";
 
 const props = defineProps({
     collectionMode: {type: Boolean, default: false},
+    collectionId: {type: Number, required: false},
     search_id: {type: Number, required: false},
     parent_search_id: {type: Number, required: false,},
     mode: {type: String, required: true},
@@ -289,7 +290,7 @@ const stop = useHotkey(hotkeys.value)
 
     <div class="md:grid md:grid-cols-4 lg:grid-cols-5">
 
-        <ResultsSidebar/>
+        <ResultsSidebar :collection-id="collectionId" :collection-mode="collectionMode" />
 
         <div class="results-content md:col-span-3 lg:col-span-4 mt-2">
             <DataView :value="filteredSearchData" :layout="userPreferences.layout" paginator paginatorPosition="bottom"

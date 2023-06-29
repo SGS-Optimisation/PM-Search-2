@@ -71,6 +71,7 @@ function checkFreshness() {
              :meta="meta"
              :collection-mode="true"
              :saved-filters="savedFilters"
+             :collection-id="collection_id"
     />
 
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import MultiSelect from "primevue/multiselect";
 
 const props = defineProps({
@@ -16,6 +16,10 @@ const selection = ref<String[]>([]);
 
 watch(() => props.modelValue, (value) => {
     selection.value = value;
+});
+
+onMounted(() => {
+    selection.value = props.modelValue;
 });
 
 const sortedTerms = computed(() => {
