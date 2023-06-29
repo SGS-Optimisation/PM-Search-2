@@ -31,7 +31,7 @@ COPY --chown=nginx:nginx --from=frontend /frontend/ /var/www/html
 RUN true
 #RUN apk add nodejs npm
 
-EXPOSE 8080
+EXPOSE 9000 80
 #USER laravel
 #RUN npm install && npm run build
 #CMD ["nginx" "-g" "daemon off;"]
