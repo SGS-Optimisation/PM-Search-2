@@ -55,8 +55,8 @@ RUN echo "php_admin_flag[log_errors] = on" >> /usr/local/etc/php-fpm.d/www.conf
 
 USER laravel
 RUN mkdir -p /home/laravel/.composer
-RUN echo "nova user email: ${NOVA_USERNAME}"
-RUN composer config --global http-basic.nova.laravel.com ${NOVA_USERNAME} ${NOVA_LICENSE_KEY}
+RUN echo "nova user email: $NOVA_USERNAME"
+RUN composer config --global http-basic.nova.laravel.com $NOVA_USERNAME $NOVA_LICENSE_KEY
 RUN composer install
 #RUN npm install && npm run build
 #RUN php artisan migrate
