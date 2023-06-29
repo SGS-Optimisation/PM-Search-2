@@ -31,12 +31,12 @@ stages:
           vmImage: $(vmImageName)
         steps:
           - task: Docker@2
-            displayName: Build and push backend image to container registry
+            displayName: Build backend image to container registry
             env:
               NOVA_USERNAME: $(NOVA_USERNAME)
               NOVA_LICENSE_KEY: $(NOVA_LICENSE_KEY)
             inputs:
-              command: buildAndPush
+              command: build
               repository: $(backendImageRepository)
               buildContext: $(Build.Repository.LocalPath)
               dockerfile: $(backendDockerfilePath)
@@ -44,6 +44,18 @@ stages:
               tags: |
                 $(tag)
                 latest
+              arguments: '--build-arg NOVA_USERNAME=$(NOVA_USERNAME) --build-arg NOVA_LICENSE_KEY=$(NOVA_LICENSE_KEY)'
+
+          - task: Docker@2
+            displayName: Push
+            inputs:
+              command: push
+              containerRegistry: $(dockerRegistryServiceConnection)
+              repository: $(backendImageRepository)
+              tags: |
+                latest
+                $(Build.BuildId)
+
           - task: Docker@2
             displayName: Build and push frontend image to container registry
             inputs:

@@ -10,8 +10,8 @@ FROM sgscoaisearchfrontend.azurecr.io/superbase:latest
 
 ARG UID
 ARG GID
-ARG NOVA_USERNAME="dpkgmu-dev-licences@sgsintl.onmicrosoft.com"
-ARG NOVA_LICENSE_KEY="I2qlHEoTyiQITUFvm25cFdfD4bNFXZAGLXk1H4UfndkNqGqKe1"
+ARG NOVA_USERNAME
+ARG NOVA_LICENSE_KEY
 
 ENV UID=${UID:-1080}
 ENV GID=${GID:-1080}
