@@ -29,9 +29,6 @@ RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 COPY --chown=nginx:nginx --from=frontend /frontend/ /var/www/html
 RUN true
-#RUN apk add nodejs npm
 
-EXPOSE 9000 80
-#USER laravel
-#RUN npm install && npm run build
-#CMD ["nginx" "-g" "daemon off;"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
