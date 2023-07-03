@@ -381,6 +381,7 @@ const titleCase = (str) => window.titleCase(str);
                         <template v-else-if="config.type === 'autocomplete'">
                             <AutoComplete v-model="advancedSearchField[field]"
                                           :suggestions="advancedSearchFieldSuggestions[field]"
+                                          :dropdown="config.dropdown"
                                           @complete="autocompleteSearch($event, field)"/>
                         </template>
                         <template v-else-if="config.type === 'date'">

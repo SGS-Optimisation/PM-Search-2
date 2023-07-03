@@ -24,7 +24,7 @@ onBeforeMount(() => {
 function waitMode() {
     setTimeout(() => {
         queryProcessed();
-    }, 5000);
+    }, 1000);
 }
 
 function queryProcessed() {

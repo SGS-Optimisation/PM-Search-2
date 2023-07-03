@@ -177,22 +177,26 @@ return [
     ],
 
     'advanced_search' => [
-        'customer_name' => ['key' => 'customer', 'type' => 'autocomplete', 'standalone' => true, 'title' => 'Customer'],
+        //'customer_name' => ['key' => 'customer', 'type' => 'autocomplete', 'standalone' => true, 'title' => 'Customer'],
+        'customer_name' => ['key' => 'customer', 'type' => 'autocomplete', 'standalone' => false, 'title' => 'Customer'],
 
-        'brand' => ['key' => 'brand', 'type' => 'autocomplete'],
         'printer_name' => ['key' => 'printer', 'type' => 'autocomplete'],
+        'brand' => ['key' => 'brand', 'type' => 'autocomplete'],
 
+        'print_process' => ['key' => 'process', 'type' => 'autocomplete', 'dropdown' => true],
         'variety' => ['key' => 'variety', 'type' => 'autocomplete'],
-        'print_process' => ['key' => 'process', 'type' => 'text'],
 
-        'weight' => ['key' => 'weight', 'type' => 'text'],
         'pcm_type_profile_name' => ['key' => 'profile', 'type' => 'text', 'title' => 'E-Number/Profile'],
+        'weight' => ['key' => 'weight', 'type' => 'text'],
+
+
+        'package_type' => ['key' => 'pack', 'type' => 'autocomplete', 'dropdown' => true],
+        //'printer_spec_url' => ['key' => 'spec', 'type' => 'text', 'title' => 'Printer Spec ID'],
 
         'customer_design_ref' => ['key' => 'ref', 'type' => 'text', 'title' => 'Design / End User Reference'],
-        'printer_spec_url' => ['key' => 'spec', 'type' => 'text', 'title' => 'Printer Spec ID'],
 
-        'package_type' => ['key' => 'pack', 'type' => 'text'],
         'booked_date' => ['key' => 'date', 'type' => 'date'],
+
     ],
 
     'results_row_fields' => [
