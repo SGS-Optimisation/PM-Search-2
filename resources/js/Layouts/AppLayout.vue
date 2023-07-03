@@ -14,6 +14,7 @@ import { defineComponent } from "vue";
 import route from "ziggy-js";
 import axios from "axios";
 import {configStore} from "@/stores/config-store";
+import {photonAuthStore} from "@/stores/photon-store";
 
 defineProps({
     title: String,
@@ -35,6 +36,7 @@ const logout = () => {
 
 onBeforeMount(() => {
     configStore.init();
+    photonAuthStore.init();
 });
 
 onMounted(() => {
@@ -46,6 +48,13 @@ onMounted(() => {
         configStore.setTableFields(data.table_fields);
         configStore.setAutocompleteSuggester(data.autocomplete_suggester_url);
         configStore.setAdvancedSearchFields(data.advanced_search_fields);
+    });
+
+    axios.get(route('api.photon.token')).then(({data}) => {
+        photonAuthStore.setToken(data.token);
+        photonAuthStore.setTokenExpiry(data.expiry);
+        photonAuthStore.setSubscription(data.subscription);
+        photonAuthStore.setHost(data.host);
     });
 });
 

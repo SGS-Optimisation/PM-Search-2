@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 use Laravel\Nova\Panel;
+use Outl1ne\NovaSettings\NovaSettings;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -20,7 +22,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
-        \Outl1ne\NovaSettings\NovaSettings::addSettingsFields([
+        NovaSettings::addSettingsFields([
             Panel::make('Matomo Tracking', [
                 Boolean::make('Enable', 'matomo_tracking_enabled')
                     ->required()->default(false),
@@ -29,6 +31,21 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 Text::make('Matomo Site ID', 'matomo_site_id'),
             ])
         ], [], 'features');
+
+        NovaSettings::addSettingsFields([
+            Text::make('Api Auth Path', 'photon_api_auth_path')->required(),
+            Text::make('Api Base Path', 'photon_api_base_path')->required(),
+            Text::make('Api Version', 'photon_api_version')->required(),
+            Text::make('Api App Id', 'photon_api_app_id')->required(),
+            Text::make('Api App Key', 'photon_api_app_key')->required(),
+            Text::make('Subscription Key', 'photon_subscription_key')->required(),
+
+            Number::make('Cache Duration', 'photon_api_cache_duration')
+                ->min(0)
+                ->default(5)
+                ->help('In minutes'),
+
+        ], [], 'photon-api');
     }
 
     /**
@@ -39,9 +56,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function routes()
     {
         Nova::routes()
-                ->withAuthenticationRoutes()
-                ->withPasswordResetRoutes()
-                ->register();
+            ->withAuthenticationRoutes()
+            ->withPasswordResetRoutes()
+            ->register();
     }
 
     /**

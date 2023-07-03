@@ -40,6 +40,26 @@ Route::name('api.')
             ];
         })->name('configs');
 
+
+        Route::name('photon.')->prefix('/photon')
+            ->group(function () {
+
+            Route::get('/token', function(){
+                \App\Services\Photon\Api\AuthApi::appAuth();
+
+                return [
+                    'token' => Cache::get('photon_token'),
+                    'expiry' => \Carbon\Carbon::parse(Cache::get('photon_token_expiry'))->toDateTimeString(),
+                    'subscription' => nova_get_setting('photon_subscription_key'),
+                    'host' => nova_get_setting('photon_api_base_path'),
+                ];
+            })->name('token');
+
+            Route::get('job-colours/{jobNumber}', function($jobNumber){
+                return \App\Services\Photon\Api\JobApi::jobColours($jobNumber);
+            })->name('job-colours');
+        });
+
         Route::post('/convert', [UploadController::class, 'convert'])->name('pdf-to-image');
 
         Route::name('collections.')->prefix('/collections')

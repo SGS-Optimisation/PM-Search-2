@@ -47,3 +47,7 @@ window.isValidHttpUrl = function(string) {
 window.titleCase = (s) =>
     s.replace (/^[-_]*(.)/, (_, c) => c.toUpperCase())       // Initial char (after -/_)
         .replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase()) // First char after each -/_
+
+
+window.snakeToTitle = (text) =>
+    text.charAt(0).toUpperCase() + text.replace(/([A-Z])/g, " $1").slice(1);

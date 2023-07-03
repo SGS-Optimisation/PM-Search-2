@@ -3,11 +3,12 @@ import Fieldset from 'primevue/fieldset';
 import Image from 'primevue/image';
 import ProgressSpinner from 'primevue/progressspinner';
 import VueLoadImage from 'vue-load-image'
-import InnerImageZoom from 'vue-inner-image-zoom';
 import {configStore} from "@/stores/config-store";
-import {ref, onMounted, computed} from "vue";
+import {ref, onMounted, computed, onUpdated} from "vue";
 import {snakeCase} from "lodash";
 import GenericField from "@/Components/Search/GenericField.vue";
+import job_api from "@/Api/Photon/job_api";
+import _ from "lodash";
 
 const emit = defineEmits(['next', 'prev', 'exit']);
 
@@ -22,12 +23,27 @@ const props = defineProps({
     },
 })
 
+const jobColours = ref([]);
+
 
 const modal = ref();
 
 onMounted(() => {
     modal.value.focus()
+    getJobColours();
 })
+
+onUpdated(() => {
+    jobColours.value = [];
+    getJobColours();
+})
+
+function getJobColours() {
+    job_api.jobColour(props.entry['formatted_job_number']).then((response) => {
+        console.log(response.data);
+        jobColours.value = _.sortBy(response.data, 'seq');
+    })
+}
 
 const fields_config = computed(() => {
     return configStore.getFields();
@@ -63,6 +79,7 @@ const backgroundStyle = computed(() => {
 })
 
 const titleCase = (str) => window.titleCase(str);
+const snakeToTitle = (str) => window.snakeToTitle(str);
 
 function isEcode(str) {
     return str.match(/^[0-9]{6}[eE]$/);
@@ -103,7 +120,7 @@ function next() {
                         </div>
                     </template>
                     <template v-slot:preloader>
-                        <div class="flex flex-col h-full justify-items-center items-center"  :style="backgroundStyle">
+                        <div class="flex flex-col h-full justify-items-center items-center" :style="backgroundStyle">
 
                             <ProgressSpinner/>
                         </div>
@@ -145,13 +162,15 @@ function next() {
 
                     <template v-for="table in table_fields">
                         <template v-if="table.section === section">
-                            <div class="flex mt-3 justify-content-center">
+                            <div class="flex mt-3 justify-content-around">
                                 <table class="border-collapse table-auto w-50 text-sm" :id="snakeCase(table.name)">
                                     <thead>
                                     <tr>
                                         <template v-for="field in table.fields">
                                             <th class="border-b dark:border-slate-600 font-medium px-4 pl-3 pt-0 pb-1 text-slate-400 text-left">
-                                                {{ fields_config[field].hasOwnProperty('title') ? fields_config[field].title : titleCase(field) }}
+                                                {{
+                                                    fields_config[field].hasOwnProperty('title') ? fields_config[field].title : titleCase(field)
+                                                }}
                                             </th>
                                         </template>
                                     </tr>
@@ -178,6 +197,30 @@ function next() {
                                     </template>
                                     </tbody>
                                 </table>
+
+                                <template v-if="section === 'Colour Details' && jobColours.length">
+                                    <table class="border-collapse table-auto ml-20 text-sm max-w-[50%]">
+                                        <thead>
+                                        <tr>
+                                            <template v-for="field in Object.keys(jobColours[0])">
+                                                <th class="border-b dark:border-slate-600 font-medium px-4 pl-3 pt-0 pb-1 text-slate-400 text-left">
+                                                    {{ snakeToTitle(field) }}
+                                                </th>
+                                            </template>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="row of jobColours" :data-row="JSON.stringify(row)">
+                                            <td v-for="field in row" class="border-b border-slate-300 p-1 pl-3 text-slate-500" >
+                                                <span class="align-middle" :data-field="field">
+                                                    {{ field }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </template>
                             </div>
                         </template>
                     </template>
