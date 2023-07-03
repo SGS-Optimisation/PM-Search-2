@@ -96,23 +96,24 @@ return [
         // ROW 1
 
         // printer_name is a generated row
-        'printer_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 1, 'title' => 'Printer', 'section' => 'Printer Specifications'],
-        'print_process' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 2, 'section' => 'Printer Specifications'],
-        'packaging_reference' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 3, 'title' => 'Package / Printer Reference', 'section' => 'Printer Specifications'],
-        'printer_spec_url' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 4, 'title' => 'Printer Spec ID', 'section' => 'Printer Specifications'],
-        'dieline' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 5, 'section' => 'Printer Specifications'],
-        'print_orientation' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 6, 'section' => 'Printer Specifications'],
+        'printer_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 41, 'title' => 'Printer', 'section' => 'Printer Specifications'],
+        'print_process' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 42, 'section' => 'Printer Specifications'],
+        'packaging_reference' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 43, 'title' => 'Package / Printer Reference', 'section' => 'Printer Specifications'],
+        'printer_spec_url' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 44, 'title' => 'Printer Spec ID', 'section' => 'Printer Specifications'],
+        'dieline' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 45, 'section' => 'Printer Specifications'],
+        'print_orientation' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 56, 'section' => 'Printer Specifications'],
 
         // ROW 2
-        'plate_type' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 10, 'section' => 'Printer Specifications'],
-        'plate_thickness' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 11, 'section' => 'Printer Specifications'],
-        'screen_resolution' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 12, 'section' => 'Printer Specifications'],
-        'substrate' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 13, 'section' => 'Printer Specifications'],
+        'plate_type' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 50, 'section' => 'Printer Specifications'],
+        'plate_thickness' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 51, 'section' => 'Printer Specifications'],
+        'screen_resolution' => ['search' => false, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 52, 'section' => 'Printer Specifications'],
+
 
         // Colour Details
-        'pcm_type_desc' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 1, 'title' => 'Proof Type', 'section' => 'Colour Details'],
-        'pcm_type_profile_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 2, 'title' => 'Profile', 'section' => 'Colour Details'],
-        'number_of_colors' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'int', 'position' => 3, 'title' => 'Number Of Colours', 'section' => 'Colour Details'],
+        'pcm_type_desc' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 61, 'title' => 'Proof Type', 'section' => 'Colour Details'],
+        'pcm_type_profile_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 62, 'title' => 'Profile', 'section' => 'Colour Details'],
+        'number_of_colors' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'int', 'position' => 63, 'title' => 'Number Of Colours', 'section' => 'Colour Details'],
+        'substrate' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'str', 'position' => 64, 'section' => 'Colour Details'],
 
         // BRIDGE FIELDS
         'color_name' => ['search' => true, 'display' => true, 'type' => 'list', 'response_type' => 'list', 'title' => 'Colour Name', 'position' => 100],
