@@ -185,7 +185,7 @@ function next() {
             </template>
 
 
-            <Fieldset v-for="group in grouped_fields">
+            <Fieldset v-for="group in grouped_fields" :id="snakeCase(group.name)">
                 <template #legend>
                     <div class="flex align-items-center text-gray-50">
                         <span class="pi pi-user mr-2"></span>

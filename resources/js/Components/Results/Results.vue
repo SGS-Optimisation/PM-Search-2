@@ -478,6 +478,7 @@ const stop = useHotkey(hotkeys.value)
                             {{ section }}
                         </a>
                     </template>
+                    <a class="p-button p-button-info p-button-outlined p-button-sm mx-2" href="#file_attributes">File Attributes</a>
                 </div>
             </template>
         </template>
