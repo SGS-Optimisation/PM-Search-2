@@ -14,6 +14,7 @@ import {useDialog} from 'primevue/usedialog';
 const props = defineProps({
     collectionId: {type: Number, required: false},
     collectionMode: {type: Boolean, default: false},
+    savedFilters: {type: Object, default: false}
 });
 
 const {filters, filteredSearchData, filterText} = inject('filters');
@@ -212,7 +213,7 @@ function updateCollectionFilters() {
                 </div>
 
                 <div class="">
-                    <div class="px-3 py-3" v-for="field in userPreferences.selectedTaxonomy" :key="field">
+                    <div class="px-3 py-3" v-for="field in savedFilters" :key="field">
 
                         <TaxonomySelector :taxonomy-name="field"
                                           :filtered-terms="filteredSearchOptions[field]"

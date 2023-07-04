@@ -290,7 +290,7 @@ const stop = useHotkey(hotkeys.value)
 
     <div class="md:grid md:grid-cols-4 lg:grid-cols-5">
 
-        <ResultsSidebar :collection-id="collectionId" :collection-mode="collectionMode" />
+        <ResultsSidebar :collection-id="collectionId" :collection-mode="collectionMode" :saved-filters="savedFilters" />
 
         <div class="results-content md:col-span-3 lg:col-span-4 mt-2">
             <DataView :value="filteredSearchData" :layout="userPreferences.layout" paginator paginatorPosition="bottom"
