@@ -13,7 +13,7 @@ services:
       env_file: ./.env.docker
       build:
         context: .
-        dockerfile: dockerfiles/nginx.dockerfile
+        dockerfile: nginx.dockerfile
         args:
           - UID=${UID:-1000}
           - GID=${GID:-1000}
