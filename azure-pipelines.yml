@@ -16,6 +16,8 @@ variables:
   frontendDockerfilePath: 'nginx.dockerfile'
   backendImageRepository: 'pm-search-ui-php'
   backendDockerfilePath: 'dockerfiles/php.dockerfile'
+  workerImageRepository: 'pm-search-ui-worker'
+  workerDockerfilePath: 'dockerfiles/worker.dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
