@@ -205,7 +205,7 @@ function next() {
                                     <table class="border-collapse table-auto ml-20 text-sm max-w-[50%]">
                                         <thead>
                                         <tr>
-                                            <th colspan="8">Colours From MYSGS</th>
+                                            <th colspan="8">Colours From MySGS</th>
                                         </tr>
                                         <tr>
                                             <template v-for="field in Object.keys(jobColours[0])">
