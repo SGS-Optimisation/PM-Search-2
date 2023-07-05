@@ -166,6 +166,9 @@ function next() {
                                 <table class="border-collapse table-auto w-50 text-sm" :id="snakeCase(table.name)">
                                     <thead>
                                     <tr>
+                                        <th colspan="8">Colours From File</th>
+                                    </tr>
+                                    <tr>
                                         <template v-for="field in table.fields">
                                             <th class="border-b dark:border-slate-600 font-medium px-4 pl-3 pt-0 pb-1 text-slate-400 text-left">
                                                 {{
@@ -201,6 +204,9 @@ function next() {
                                 <template v-if="section === 'Colour Details' && jobColours.length">
                                     <table class="border-collapse table-auto ml-20 text-sm max-w-[50%]">
                                         <thead>
+                                        <tr>
+                                            <th colspan="8">Colours From MYSGS</th>
+                                        </tr>
                                         <tr>
                                             <template v-for="field in Object.keys(jobColours[0])">
                                                 <th class="border-b dark:border-slate-600 font-medium px-4 pl-3 pt-0 pb-1 text-slate-400 text-left">
