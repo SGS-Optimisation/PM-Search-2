@@ -28,6 +28,10 @@ Route::name('api.')
         //'cache.headers:public;max_age=3600;etag',
     ])->group(function () {
 
+        Route::get('/', function(){
+            return ['message' => 'Hello, this is (probably) not the API you are looking for.'];
+        });
+
         Route::get('/configs', function(){
             return [
                 'fields_config' => config('pm-search.fields'),
