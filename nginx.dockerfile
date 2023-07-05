@@ -28,7 +28,7 @@ ADD ./dockerfiles/nginx/default.conf /etc/nginx/conf.d/
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 COPY --chown=nginx:nginx --from=frontend /frontend/ /var/www/html
-RUN true
+RUN ln -s /var/www/html/storage/app/public /var/www/html/public/storage
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

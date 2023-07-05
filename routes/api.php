@@ -29,7 +29,7 @@ Route::name('api.')
     ])->group(function () {
 
         Route::get('/', function(){
-            return ['message' => 'Hello, this is (probably) not the API you are looking for.'];
+            return ['message' => 'Hello, this is not the API you are looking for.'];
         });
 
         Route::get('/configs', function(){
