@@ -67,6 +67,8 @@ Route::name('api.')
 
                 Route::post('/', [CollectionController::class, 'create'])->name('create');
                 Route::post('/from-search/{id}', [CollectionController::class, 'createFromSearch'])->name('create-from-search');
+                Route::post('/from-collection/{id}', [CollectionController::class, 'createFromCollection'])->name('create-from-collection');
+                Route::post('/{collection}/updateFilters', [CollectionController::class, 'updateFilters'])->name('update-filters');
 
                 Route::get('/{collection}/fresh', [CollectionController::class, 'fresh'])->name('fresh');
             });

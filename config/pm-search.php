@@ -198,6 +198,7 @@ return [
 
         'booked_date' => ['key' => 'date', 'type' => 'date'],
 
+        'ocr' => ['key' => 'ocr_text', 'type' => 'text', 'title' => 'OCR Text'],
     ],
 
     'results_row_fields' => [

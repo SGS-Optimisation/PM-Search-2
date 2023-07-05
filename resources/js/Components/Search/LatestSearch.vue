@@ -6,6 +6,14 @@ import {configStore} from "@/stores/config-store";
 
 const props = defineProps({
     latestSearches: Array,
+    perPage: {
+        type: Number,
+        default: 5
+    },
+    title: {
+        type: String,
+        default: 'My Latest Searches'
+    }
 })
 
 function formatAdvancedSearchField(field, value) {
@@ -27,9 +35,9 @@ function formatAdvancedSearchField(field, value) {
 <template>
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg pt-2 pb-12 px-2">
 
-        <DataView :value="latestSearches" paginator :rows="5">
+        <DataView :value="latestSearches" paginator :rows="perPage">
             <template #header>
-                <h4 class="h4 font-bold text-lg">My Latest Searches</h4>
+                <h4 class="h4 font-bold text-lg">{{title}}</h4>
             </template>
 
             <template #list="slotProps">

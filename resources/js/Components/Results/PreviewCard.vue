@@ -66,6 +66,15 @@ const height = computed(() => {
     }[props.gridSize]
 })
 
+function limitedValue(str, len = 40) {
+    let adjustedLen = Math.floor(len/props.gridSize) + (10 * 2/props.gridSize)
+    return str.length > adjustedLen ? str.substring(0, adjustedLen) + '...' : str;
+}
+
+function isLimited(str, len = 40) {
+    return str.length > len;
+}
+
 const colClass = computed(() => {
     return props.gridSize === 5 ? 'col-2' : 'col-' + (12 / props.gridSize) + ' ' + props.extraClass;
 })
@@ -97,7 +106,7 @@ defineExpose({
         <article class="hover:drop-shadow-2xl p-2 surface-border surface-card border-round relative shadow-sm">
             <Checkbox v-model="checked" :binary="true" @click="$emit('selection-changed', item)"/>
 
-            <div class="ribbon z-0" v-if="item.tag !== '' && item.tag !== 'textsearch'">
+            <div class="ribbon z-0" v-if="item.tag !== '' && item.tag !== 'text_search' && item.tag !== 'textsearch'">
                 <span :title="item.tag"
                       class="text-xxs text-white font-semibold text-center"
                       :class="{
@@ -171,7 +180,9 @@ defineExpose({
 
                     <div class="md:grid grid-flow-row auto-rows-max gap-y-1 text-right">
                         <template v-if="!isEcode(item.pcm_type_profile_name)">
-                            <span class="bg-blue-100 px-1" title="Profile Name">{{ item.pcm_type_profile_name }}</span>
+                            <span class="bg-blue-100 px-1" :title="'Profile Name' + (isLimited(item.pcm_type_profile_name) ? ': ' + item.pcm_type_profile_name : '')">
+                                {{ limitedValue(item.pcm_type_profile_name, 20) }}
+                            </span>
                         </template>
 
                         <span v-if="item.customer_design_ref" title="Design / End User Reference">

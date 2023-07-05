@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $search_mode
  * @property int $user_id
  * @property object|null $search_data
+ * @property object|null $filters
  * @property string|null $source_filepath
  * @property string|null $image_path
  * @property array|null $working_data
@@ -62,6 +63,7 @@ class Collection extends Model implements Searchable
         'search_mode',
         'user_id',
         'search_data',
+        'filters',
         'source_filepath',
         'image_path',
         'working_data',
@@ -76,6 +78,7 @@ class Collection extends Model implements Searchable
      */
     protected $casts = [
         'search_data' => 'object',
+        'filters' => 'object',
         'working_data' => 'array',
         'report' => 'array',
         'consulted_at' => 'datetime',

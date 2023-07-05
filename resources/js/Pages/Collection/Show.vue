@@ -20,6 +20,7 @@ const props = defineProps({
     fields: {type: Object, required: false},
     fields_config: {type: Object, required: false},
     meta: {type: Object, required: false},
+    savedFilters: {type: Object, required: false},
 })
 
 defineOptions({layout: AppLayout})
@@ -69,6 +70,8 @@ function checkFreshness() {
              :fields_config="fields_config"
              :meta="meta"
              :collection-mode="true"
+             :saved-filters="savedFilters"
+             :collection-id="collection_id"
     />
 
 

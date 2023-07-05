@@ -17,6 +17,7 @@ import Sidebar from "primevue/sidebar";
 import FullModal from "@/Components/Utility/FullModal.vue";
 import ViewSearchEntry from "@/Components/Results/ViewSearchEntry.vue";
 import {userPreferencesStore} from "@/stores/userPreferencesStore";
+import {advancedFiltersStore} from "@/stores/advancedFiltersStore";
 import moment from "moment/moment";
 import _ from "lodash";
 import ResultsSidebar from "@/Components/Results/ResultsSidebar.vue";
@@ -31,6 +32,7 @@ import route from "ziggy-js";
 
 const props = defineProps({
     collectionMode: {type: Boolean, default: false},
+    collectionId: {type: Number, required: false},
     search_id: {type: Number, required: false},
     parent_search_id: {type: Number, required: false,},
     mode: {type: String, required: true},
@@ -43,6 +45,7 @@ const props = defineProps({
     fields: {type: Object, required: false},
     fields_config: {type: Object, required: false},
     meta: {type: Object, required: false},
+    savedFilters: {type: Object, required: false},
 })
 
 const items = ref();
@@ -88,9 +91,17 @@ onMounted(() => {
         item.booked_date_fmt = moment(item.booked_date).format('YYYY-MM-DD');
     })
 
-    userPreferences.selectedTaxonomy.forEach((item) => {
-        filters.value[item] = [];
-    })
+    //Are there saved filters?
+    if (props.savedFilters) {
+        //filters.value = props.savedFilters;
+        // enabled proper taxonomy, in user preferences?
+        advancedFiltersStore.selectedTaxonomy = props.savedFilters.selectedTaxonomy;
+    } else {
+
+        userPreferences.selectedTaxonomy.forEach((item) => {
+            filters.value[item] = [];
+        })
+    }
 
     filteredSearchData.value = getSearchData();
 });
@@ -279,7 +290,7 @@ const stop = useHotkey(hotkeys.value)
 
     <div class="md:grid md:grid-cols-4 lg:grid-cols-5">
 
-        <ResultsSidebar/>
+        <ResultsSidebar :collection-id="collectionId" :collection-mode="collectionMode" :saved-filters="savedFilters" />
 
         <div class="results-content md:col-span-3 lg:col-span-4 mt-2">
             <DataView :value="filteredSearchData" :layout="userPreferences.layout" paginator paginatorPosition="bottom"

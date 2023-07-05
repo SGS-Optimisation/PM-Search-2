@@ -6,15 +6,16 @@ import LatestSearch from "@/Components/Search/LatestSearch.vue";
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
 import CollectionList from "@/Components/Collections/CollectionList.vue";
+import {provide} from "vue";
 
 defineOptions({layout: AppLayout})
 
 defineProps({
     latestSearches: Array,
-    soz: String,
     collections: Array,
 });
 
+provide('filters', {});
 
 </script>
 
