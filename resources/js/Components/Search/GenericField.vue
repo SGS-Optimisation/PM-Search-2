@@ -29,6 +29,14 @@ function ecode(str) {
     return parseInt(str.toString().toLowerCase().replace('e', ''));
 }
 
+function limitedValue(str) {
+    return str.length > 40 ? str.substring(0, 40) + '...' : str;
+}
+
+function isLimited(str) {
+    return str.length > 40;
+}
+
 </script>
 
 <template>

@@ -65,6 +65,34 @@ class CollectionController extends Controller
         return redirect(route('collections.show', [$collection->id]));
     }
 
+    public function createFromCollection(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            //'id' => 'required|integer|exists:searches,id',
+            'filters' => 'nullable|array',
+        ]);
+
+        $collection = Collection::findOrFail($id);
+
+        $filters = $request->get('filters', []);
+        /**
+         * [
+         *      ['taxonomy' => 'Printer', 'value' => 'BALL MEXICO'],
+         *      ['taxonomy' => 'Print Process', 'value' => 'Dry Offset'],
+         * ]
+         */
+
+        $new_collection = $collection->replicate()->fill([
+            'name' => $request->name,
+            'filters' => $filters,
+        ]);
+
+        $new_collection->save();
+
+        return redirect(route('collections.show', [$new_collection->id]));
+    }
+
     /**
      * Display the specified resource.
      *
@@ -153,10 +181,10 @@ class CollectionController extends Controller
     {
         logger('updating collection ' . $collection->name);
         $request->validate([
-            //'filters' => 'required', // TODO: uncomment this when there are actual values being sent from frontend
+            'filters' => 'required',
         ]);
 
-        //$collection->update(['filters' => $request->filters]);
+        $collection->update(['filters' => $request->filters]);
         $collection->update($request->all());
 
         return redirect(route('collections.show', $collection));

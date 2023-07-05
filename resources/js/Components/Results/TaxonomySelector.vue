@@ -99,7 +99,7 @@ function setSelected(value) {
                          filter-placeholder="Browse"
                          class="w-full"/>
             <label class="block text-xs font-medium text-gray-700 capitalize">
-                {{taxonomyName}}
+                {{ titleCase(taxonomyName).replace(/Id$/, '') }}
             </label>
         </span>
     </div>
