@@ -29,12 +29,24 @@ class SearchController extends Controller
 
     public function image(Request $request)
     {
-        return Jetstream::inertia()->render($request, 'Search/ImageSearch', []);
+        return Jetstream::inertia()->render($request, 'Search/ImageSearch', [
+            'searches' =>  $request->user()->searches()
+                ->modeImage()
+                ->latest()->take(40)
+                ->select(['id', 'search_mode', 'search_data', 'working_data'])
+                ->get()
+        ]);
     }
 
     public function text(Request $request)
     {
-        return Jetstream::inertia()->render($request, 'Search/TextSearch', ['someprop' => 'somevalue']);
+        return Jetstream::inertia()->render($request, 'Search/TextSearch', [
+            'searches' =>  $request->user()->searches()
+                ->modeText()
+                ->latest()->take(40)
+                ->select(['id', 'search_mode', 'search_data', 'working_data'])
+                ->get()
+        ]);
     }
 
     /**

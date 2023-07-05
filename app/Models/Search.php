@@ -84,6 +84,17 @@ class Search extends Model implements Searchable
         'working_data' => 'array',
         'report' => 'array',
     ];
+
+    public function scopeModeText()
+    {
+        return $this->where('search_mode', 'text');
+    }
+
+    public function scopeModeImage()
+    {
+        return $this->where('search_mode', 'image');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

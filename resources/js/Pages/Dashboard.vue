@@ -12,7 +12,6 @@ defineOptions({layout: AppLayout})
 
 defineProps({
     latestSearches: Array,
-    soz: String,
     collections: Array,
 });
 
