@@ -30,5 +30,5 @@ WORKDIR /var/www/html
 COPY --chown=nginx:nginx --from=frontend /frontend/ /var/www/html
 RUN true
 
-EXPOSE 80
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
