@@ -91,7 +91,7 @@ function formatAdvancedSearchField(field, value) {
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex flex-col items-center justify-center p-2 overflow-hidden sm:rounded-md">
                 <template v-if="error || search.working_data.hasOwnProperty('error') && search.working_data.error">
-                    An error has occured. Please try again later.
+                    An error has occurred. Please try again later.
                 </template>
                 <template v-else>
                     <ProgressSpinner style="width: 50px; height: 50px;"/>

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import {Head} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Results from "@/Components/Results/Results.vue";
 import CollectionList from "@/Components/Collections/CollectionList.vue";
 
 const props = defineProps({

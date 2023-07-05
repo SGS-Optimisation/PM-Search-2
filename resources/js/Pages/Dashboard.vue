@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import {Head, useForm, usePage} from "@inertiajs/vue3";
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Welcome from '@/Components/Jetstream/Welcome.vue';
 import LatestSearch from "@/Components/Search/LatestSearch.vue";
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";

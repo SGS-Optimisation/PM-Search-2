@@ -69,7 +69,6 @@ class CollectionController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            //'id' => 'required|integer|exists:searches,id',
             'filters' => 'nullable|array',
         ]);
 

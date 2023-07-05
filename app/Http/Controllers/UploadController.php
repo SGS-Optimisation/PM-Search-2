@@ -25,12 +25,9 @@ class UploadController extends Controller
         $filename = $request->file('document')->getClientOriginalName();
         $search_techs = $request->search_techs;
 
-
         $iscs = new ImageSearchCreationService($document_path, $filename, $search_techs, $request->user(), $search);
         $iscs->handle();
         $iscs->getReport();
-
-        //dd($document_path, $filename, $search_techs);
 
         return redirect(route('search.pending', [$iscs->search->id]));
     }

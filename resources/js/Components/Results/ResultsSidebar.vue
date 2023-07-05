@@ -10,7 +10,6 @@ import axios from "axios";
 import route from "ziggy-js";
 import {useToast} from "primevue/usetoast";
 import {useDialog} from 'primevue/usedialog';
-import _ from "lodash";
 
 const props = defineProps({
     collectionId: {type: Number, required: false},
