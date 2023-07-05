@@ -19,12 +19,13 @@ const collection_id = ref();
 const dialogRef = inject('dialogRef');
 const addCollection = () => {
     console.log('adding collection');
-    let formId = collection_id ? collection_id.value : search.value
-    form.post(route('api.collections.create-from-search', {id: formId}),{
+    let formId = collection_id.value ? collection_id.value : search.value
+    let route_name = collection_id.value ? 'api.collections.create-from-collection' : 'api.collections.create-from-search'
+
+    form.post(route(route_name, {id: formId}),{
         preserveScroll: true,
         onSuccess: (data) => {
             dialogRef.value.close(data);
-
             form.reset();
         },
     });
@@ -32,6 +33,7 @@ const addCollection = () => {
 
 onMounted(() => {
     if(dialogRef.value) {
+        search.value = dialogRef.value.data.search;
         collection_id.value = dialogRef.value.data.collection_id;
         form.filters = dialogRef.value.data.filters;
     }

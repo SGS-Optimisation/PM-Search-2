@@ -14,7 +14,7 @@ import {useDialog} from 'primevue/usedialog';
 const props = defineProps({
     collectionId: {type: Number, required: false},
     collectionMode: {type: Boolean, default: false},
-    savedFilters: {type: Object, default: false}
+    savedFilters: {type: [Object, Boolean], default: false}
 });
 
 const {filters, filteredSearchData, filterText} = inject('filters');
@@ -64,6 +64,13 @@ const totalResults = computed(() => {
 
 const filteredResults = computed(() => {
     return filteredSearchData.value.length;
+})
+
+const displayedTaxonomies = computed(() => {
+    if(props.savedFilters) {
+        return props.savedFilters;
+    }
+    return userPreferences.selectedTaxonomy;
 })
 
 function clearSelectedFields() {
@@ -213,7 +220,7 @@ function updateCollectionFilters() {
                 </div>
 
                 <div class="">
-                    <div class="px-3 py-3" v-for="field in savedFilters" :key="field">
+                    <div class="px-3 py-3" v-for="field in displayedTaxonomies" :key="field">
 
                         <TaxonomySelector :taxonomy-name="field"
                                           :filtered-terms="filteredSearchOptions[field]"
