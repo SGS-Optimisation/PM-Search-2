@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {Head, useForm, usePage} from "@inertiajs/vue3";
-import {defineComponent, watch, ref, reactive, onMounted} from "vue";
+import {defineComponent, watch, ref, reactive, onMounted, defineAsyncComponent} from "vue";
 import {computed} from "@vue/reactivity";
 import VuePictureCropper, {cropper} from 'vue-picture-cropper'
 import JetFormSection from '@/Components/Jetstream/FormSection.vue';
@@ -13,6 +13,8 @@ import {router} from '@inertiajs/vue3'
 import route from "ziggy-js";
 import Image from 'primevue/image';
 import axios from "axios";
+import {useDialog} from "primevue/usedialog";
+import {useToast} from "primevue/usetoast";
 
 const props = defineProps({
     initialValues: {
@@ -24,8 +26,18 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: false,
+    },
+    allowSave: {
+        type: Boolean,
+        default: false
+    },
+    searchId: {
+        type: Number,
+        required: false,
     }
 })
+
+const AddCollectionForm = defineAsyncComponent(() => import('@/Components/Collections/Form.vue'));
 
 const isShowModal = ref<boolean>(false)
 const uploadInput = ref<HTMLInputElement | null>(null)
@@ -187,6 +199,40 @@ const currentSearchImage = computed(() => {
     return props.initialValues.thumb;
 })
 
+const dialog = useDialog();
+const toast = useToast();
+
+const openAddCollectionDialog = () => {
+    console.log('saving to collection');
+    const addDialogRef = dialog.open(AddCollectionForm, {
+        props: {
+            header: 'Create Collection',
+            style: {
+                width: '50vw',
+            },
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            modal: true
+        },
+        data: {
+            search: props.searchId,
+        },
+        templates: {
+            //footer: markRaw(FooterDemo)
+        },
+        onClose: (options) => {
+            if (options.data) {
+                toast.add({
+                    severity: 'info',
+                    summary: 'Collection created',
+                    life: 3000});
+            }
+        }
+    });
+}
+
 </script>
 
 <template>
@@ -204,12 +250,14 @@ const currentSearchImage = computed(() => {
                 <div class="py-2 col-span-6">
 
                     <div class="flex justify-start">
+                        <Button v-if="allowSave" id="collectionButton" icon="pi pi-save" size="small" @click="openAddCollectionDialog"/>
+                        <div class="px-2 flex flex-col">
                         <FileUpload mode="basic" name="imageSearch" ref="uploadInput"
                                     url="route('image-search')"
                                     chooseLabel="Select File"
                                     accept="image/*,.pdf" :maxFileSize="10000000"
                                     @select="selectFile"/>
-
+                        </div>
 
                         <div class="px-2 flex flex-col">
                             <div v-for="tech of searchTechs" :key="tech.name" class="px-2">
