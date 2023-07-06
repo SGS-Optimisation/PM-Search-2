@@ -25,7 +25,6 @@ class DashboardController extends Controller
         $collections = $request->user()->collections()
             ->latest()->take(40)
             ->select(['id', 'name', 'search_mode', 'search_data', 'working_data', 'created_at'])
-            ->orderByDesc('created_at')
             ->get();
 
         return Jetstream::inertia()->render($request, 'Dashboard', [
