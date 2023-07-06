@@ -12,11 +12,11 @@ services:
     frontend:
         build:
             context: .
-            dockerfile: dockerfiles/nginx.dockerfile
+            dockerfile: dockerfiles/caddy.dockerfile
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
-        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-nginx
+        image: sgscoaisearchfrontend.azurecr.io/pm-search-ui-caddy
         ports:
             - "80:80"
             - "443:443"
@@ -45,7 +45,6 @@ services:
             - laravel
         volumes:
             - pmsearch-uploads:/var/www/html/storage/app/public
-            - pmsearch-db:/var/www/html/database/mounted
         environment:
             APP_ENV: local
             CONTAINER_ROLE: app
@@ -65,7 +64,6 @@ services:
             - laravel
         volumes:
             - pmsearch-uploads:/var/www/html/storage/app/public
-            - pmsearch-db:/var/www/html/database/mounted
         environment:
             APP_ENV: local
             CONTAINER_ROLE: worker

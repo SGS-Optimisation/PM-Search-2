@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '70658e8e-d6ac-4b10-917a-34d62e17139a'
   containerRegistry: 'sgscoaisearchfrontend.azurecr.io'
   frontendImageRepository: 'pm-search-ui-nginx'
-  frontendDockerfilePath: 'nginx.dockerfile'
+  frontendDockerfilePath: 'dockerfiles/nginx.dockerfile'
   backendImageRepository: 'pm-search-ui-php'
   backendDockerfilePath: 'dockerfiles/php.dockerfile'
   workerImageRepository: 'pm-search-ui-worker'
@@ -63,6 +63,7 @@ stages:
             inputs:
               command: buildAndPush
               repository: $(frontendImageRepository)
+              buildContext: $(Build.Repository.LocalPath)
               dockerfile: $(frontendDockerfilePath)
               containerRegistry: $(dockerRegistryServiceConnection)
               tags: |

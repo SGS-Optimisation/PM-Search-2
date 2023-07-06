@@ -33,8 +33,13 @@ Stop the containers:
 
 ## YAML usage
 
-Deploy:
-`az container create --resource-group AIsearchfrontend --file deploy-aci.yml`
+Deploy staging:
+`az container create --resource-group AIsearchfrontend --file deploy-aci.staging.yml`
 
 Check status
 `az container show --resource-group AIsearchfrontend --name pm-search-ui --output table`
+
+
+Deploy prod
+`az container create --resource-group ai-search-frontend-p-eus-rg --file deploy-aci.prod.yml`
+

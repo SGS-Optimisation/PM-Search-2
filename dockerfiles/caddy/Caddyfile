@@ -1,4 +1,4 @@
-sgscopmsearchv2.eastus.azurecontainer.io, :80 {
+sgscopmsearchv2.eastus.azurecontainer.io, sgscoaisearch.eastus.azurecontainer.io, :80 {
 	root * /var/www/html/public
 	encode zstd gzip
 	php_fastcgi localhost:9000
