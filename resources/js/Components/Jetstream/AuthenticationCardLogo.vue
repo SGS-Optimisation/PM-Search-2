@@ -13,7 +13,7 @@ import { Link } from '@inertiajs/vue3';
                   transform="translate(-259 -384.89)" fill="#302e29"/>
         </svg>
         <p class="text-red-700 text-xl text-center cursor-pointer">
-            PM Search v2
+            AI Search v2
         </p>
     </Link>
 </template>
