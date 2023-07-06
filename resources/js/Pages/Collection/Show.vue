@@ -6,6 +6,7 @@ import ProgressSpinner from "primevue/progressspinner";
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import route from "ziggy-js";
+import {trackPage} from "@/Components/Utility/track";
 
 const props = defineProps({
     collection_id: {type: Number, required: true},
@@ -30,6 +31,7 @@ const backgroundLoading = ref(false);
 onMounted(() => {
     backgroundLoading.value = true;
     checkFreshness();
+    trackPage('Collection: ' + props.collection_name);
 });
 
 const latestReport = ref(props.report);

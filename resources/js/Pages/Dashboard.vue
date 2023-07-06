@@ -5,13 +5,18 @@ import LatestSearch from "@/Components/Search/LatestSearch.vue";
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
 import CollectionList from "@/Components/Collections/CollectionList.vue";
-import {provide} from "vue";
+import {onMounted, provide} from "vue";
+import {trackPage} from "@/Components/Utility/track";
 
 defineOptions({layout: AppLayout})
 
 defineProps({
     latestSearches: Array,
     collections: Array,
+});
+
+onMounted(() => {
+    trackPage('Dashboard');
 });
 
 provide('filters', {});

@@ -2,6 +2,8 @@
 import {Head} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Results from "@/Components/Results/Results.vue";
+import {trackPage} from "@/Components/Utility/track";
+import {onMounted} from "vue";
 
 const props = defineProps({
     search_id: {type: Number, required: true},
@@ -19,6 +21,10 @@ const props = defineProps({
 })
 
 defineOptions({layout: AppLayout})
+
+onMounted(() => {
+    trackPage('Search Results');
+});
 
 </script>
 

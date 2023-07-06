@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {onBeforeMount, onMounted, ref} from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/Jetstream/ApplicationMark.vue';
 import Banner from '@/Components/Jetstream/Banner.vue';
 import ConfirmPopup from 'primevue/confirmpopup';
@@ -20,6 +20,8 @@ defineProps({
     title: String,
 });
 
+const page = usePage()
+
 const showingNavigationDropdown = ref(false);
 
 const switchToTeam = (team) => {
@@ -37,6 +39,23 @@ const logout = () => {
 onBeforeMount(() => {
     configStore.init();
     photonAuthStore.init();
+
+    console.log('tracking enabled: ' + (window.matomo_settings.matomo_tracking_enabled ? 'yes' : 'no'));
+
+    if(window.matomo_settings.matomo_tracking_enabled) {
+        var _paq = window._paq = window._paq || [];
+        (() => {
+            var u=window.matomo_settings.matomo_host;
+            window._paq.push(['setTrackerUrl', u+'/matomo.php']);
+            window._paq.push(['setSiteId', window.matomo_settings.matomo_site_id]);
+            window._paq.push(['setUserId', page.props.auth.user.email]);
+            window._paq.push(['enableLinkTracking']);
+            window._paq.push(['enableHeartBeatTimer', 10]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.type='text/javascript'; g.async=true; g.src=u+'/matomo.js'; s.parentNode.insertBefore(g,s);
+            console.log('tracking setup complete');
+        })();
+    }
 });
 
 onMounted(() => {
@@ -56,6 +75,8 @@ onMounted(() => {
         photonAuthStore.setSubscription(data.subscription);
         photonAuthStore.setHost(data.host);
     });
+
+
 });
 
 </script>

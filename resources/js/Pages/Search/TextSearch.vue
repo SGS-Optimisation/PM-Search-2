@@ -1,16 +1,21 @@
 <script lang="ts" setup>
 import {Head, useForm, usePage} from "@inertiajs/vue3";
-import {defineComponent, watch, ref, reactive, provide} from "vue";
+import {defineComponent, watch, ref, reactive, provide, onMounted} from "vue";
 import route from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextSearchComponent from "@/Components/Search/TextSearchComponent.vue";
 import LatestSearch from "@/Components/Search/LatestSearch.vue";
+import {trackPage} from "@/Components/Utility/track";
 
 defineOptions({layout: AppLayout})
 defineProps({
     searches: Array,
 });
 provide('filters', {});
+
+onMounted(() => {
+    trackPage('Text Search');
+});
 
 </script>
 

@@ -3,10 +3,16 @@ import {Head} from "@inertiajs/vue3";
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ImageSearchComponent from "@/Components/Search/ImageSearchComponent.vue";
 import LatestSearch from "@/Components/Search/LatestSearch.vue";
+import {trackPage} from "@/Components/Utility/track";
+import {onMounted} from "vue";
 
 defineOptions({layout: AppLayout})
 defineProps({
     searches: Array,
+});
+
+onMounted(() => {
+    trackPage('Image Search');
 });
 
 </script>
