@@ -4,14 +4,14 @@ import {ref} from "vue";
 export const userPreferencesStore = defineStore(
     'main',
     () => {
-        const gridSize = ref(40)
+        const gridSize = ref(4)
         const imageSize = ref('sml')
         const backgroundMode = ref('fit')
         const perPage = ref(25)
         const layout = ref('grid');
 
         const sortOrder = ref(-1)
-        const sortField = ref('Score')
+        const sortField = ref('score')
 
         const selectedTaxonomy = ref([]);
 
