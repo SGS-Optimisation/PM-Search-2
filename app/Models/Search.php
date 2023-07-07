@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Interfaces\Searchable;
 use App\Models\Traits\HasSearchCapability;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -85,14 +86,14 @@ class Search extends Model implements Searchable
         'report' => 'array',
     ];
 
-    public function scopeModeText()
+    public function scopeModeText(Builder $query)
     {
-        return $this->where('search_mode', 'text');
+        $query->where('search_mode', 'text');
     }
 
-    public function scopeModeImage()
+    public function scopeModeImage(Builder $query)
     {
-        return $this->where('search_mode', 'image');
+        $query->where('search_mode', 'image');
     }
 
     /**
