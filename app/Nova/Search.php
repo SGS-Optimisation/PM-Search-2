@@ -8,6 +8,7 @@ use App\Nova\Filters\DateRangeFilter;
 use App\Nova\Metrics\SearchByWeekTrend;
 use dddeeemmmooonnn\NovaMulticolumnFilter\NovaMulticolumnFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\KeyValue;
@@ -41,7 +42,7 @@ class Search extends Resource
      * @var  array
      */
     public static $search = [
-        'search_mode', 'search_data', 'report', 'working_data', 'user_id'
+        'search_mode', 'search_data', 'working_data', 'user_id'
     ];
 
     /**
@@ -67,7 +68,7 @@ class Search extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return  array
      */
     public function fields(Request $request)
@@ -75,11 +76,6 @@ class Search extends Resource
         return [
             ID::make(__('Id'), 'id')
                 ->rules('required')
-                ->sortable()
-            ,
-            BelongsTo::make('Search', 'parent')
-                ->searchable()
-                ->hideFromIndex()
                 ->sortable()
             ,
             Text::make(__('Search Mode'), 'search_mode')
@@ -91,44 +87,54 @@ class Search extends Resource
                 ->sortable()
             ,
             Stack::make('Details', [
-                Text::make('Title'),
-                Text::make('SearchDataType'),
-            ])->onlyOnIndex(),
-            /*Code::make(__('Search Data'), 'search_data')
-                ->sortable()
+                Text::make('Search Mode'),
+                Text::make('Query', 'search_data->textsearchstrings'),
+                Text::make('Query (Adv)')->resolveUsing(function () {
+                    if (optional($this->resource)->search_mode != 'text'
+                    ) {
+                        return "";
+                    }
+
+                    $str = "";
+
+                    if (isset(optional($this->resource)->search_data->fields)) {
+                        foreach (optional($this->search_data)->fields as $field => $value) {
+                            $str .= $field . ": " . $value . "\n";
+                        }
+                    }
+
+                    return $str;
+                }),])->onlyOnIndex(),
+            Code::make(__('Search Data'), 'search_data')
                 ->json()
-            ,*/
-            KeyValue::make('Search Data Kv')->rules('json'),
+            ,
+            KeyValue::make('Search Data')->rules('json'),
             Text::make(__('Source Filepath'), 'source_filepath')
-                ->sortable()
                 ->hideFromIndex()
             ,
             Text::make(__('Image Path'), 'image_path')
-                ->sortable()
                 ->hideFromIndex()
             ,
             Code::make(__('Working Data'), 'working_data')
-                ->sortable()
                 ->json()
             ,
-            Code::make(__('Report'), 'report')
+            /*Code::make(__('Report'), 'report')
                 ->sortable()
                 ->json()
-            ,
+            ,*/
             DateTime::make(__('Created At'), 'created_at')
                 ->sortable()
-            ,
-
-        ];
+            ,];
     }
 
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return  array
      */
-    public function cards(Request $request)
+    public
+    function cards(Request $request)
     {
         return [];
     }
@@ -136,10 +142,11 @@ class Search extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return  array
      */
-    public function filters(Request $request)
+    public
+    function filters(Request $request)
     {
         return [
             //(new DateRangeFilter),
@@ -168,10 +175,11 @@ class Search extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return  array
      */
-    public function lenses(Request $request)
+    public
+    function lenses(Request $request)
     {
         return [];
     }
@@ -179,13 +187,14 @@ class Search extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return  array
      */
-    public function actions(Request $request)
+    public
+    function actions(Request $request)
     {
         return [
-            new ExportUserSearches(),
+            //new ExportUserSearches(),
         ];
     }
 }
