@@ -64,10 +64,6 @@ class TextSearchWebService
                     unset($parsed_fields['printer_name']);
                 }
 
-                foreach ($parsed_fields as $term) {
-                    $parsed_fields[] = $parsed_fields[$term];
-                }
-
                 $data['searchparameters']['fields'] = $parsed_fields;
             }
         }
