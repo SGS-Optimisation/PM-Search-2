@@ -10,9 +10,9 @@ properties:
   volumes:
     - name: uploadsvolume
       azureFile:
-        shareName: pmsearchuitestvolume
-        storageAccountName: pmsearchuistorage
-        storageAccountKey: wEJLAXfQb9V7TgtgAsoE5FB2NcdUucG2y9u1ORIXAlNx663eM2Tr+GzCHmLP0DVMEa6IOamRj/Mg+AStYkM5OA==
+        shareName: aisearchuiuploads
+        storageAccountName: aisearchui
+        storageAccountKey: iDvv/B2jxtlTb+g6iIKTDOeaW2LX09HdMLwvWx1kPW5WtiwS3sXuDGIz8QEAkvgXsDcdNAabgkk9+AStY7Rj6g==
   containers:
     - name: frontend
       properties:
@@ -37,15 +37,15 @@ properties:
           - name: 'DB_CONNECTION'
             value: 'sqlsrv'
           - name : 'DB_HOST'
-            value: 'sgsdagobah.database.windows.net'
+            value: 'sgscoaisearchclient.database.windows.net'
           - name: 'DB_PORT'
             value: '1433'
           - name: 'DB_DATABASE'
-            value: 'ai_search'
+            value: 'ai_search_prod'
           - name: 'DB_USERNAME'
-            secureValue: 'DagobahAdmin'
+            secureValue: 'SearchAdmin'
           - name: 'DB_PASSWORD'
-            secureValue: 'd@G0b@hAd1n'
+            secureValue: '8n@5*7s5DP27M&Y3'
           - name: 'BROADCAST_DRIVER'
             value: 'log'
           - name: 'CACHE_DRIVER'
@@ -77,11 +77,13 @@ properties:
           - name: 'AZURE_STORAGE_CONTAINER'
             value: 'mysgs-thumbnails'
           - name: 'PM_SEARCH_IMAGE_ENDPOINT'
-            value: 'http://4.236.138.222:5000/search/'
+            value: 'https://elastic-search.kindgrass-c3eef62a.eastus.azurecontainerapps.io/search/'
           - name: 'PM_SEARCH_TEXT_ENDPOINT'
-            value: 'http://4.236.138.222:5000/textsearch/'
+            value: 'https://elastic-search.kindgrass-c3eef62a.eastus.azurecontainerapps.io/textsearch/'
           - name: 'AUTOCOMPLETE_SUGGESTER'
             value: 'https://autocomplete-ai.kindgrass-c3eef62a.eastus.azurecontainerapps.io/suggest'
+          - name: 'CACHE_BREAKER'
+            value: '1.0.0'
         resources:
           requests:
             cpu: 1
@@ -115,15 +117,15 @@ properties:
           - name: 'DB_CONNECTION'
             value: 'sqlsrv'
           - name: 'DB_HOST'
-            value: 'sgsdagobah.database.windows.net'
+            value: 'sgscoaisearchclient.database.windows.net'
           - name: 'DB_PORT'
             value: '1433'
           - name: 'DB_DATABASE'
-            value: 'ai_search'
+            value: 'ai_search_prod'
           - name: 'DB_USERNAME'
-            secureValue: 'DagobahAdmin'
+            secureValue: 'SearchAdmin'
           - name: 'DB_PASSWORD'
-            secureValue: 'd@G0b@hAd1n'
+            secureValue: '8n@5*7s5DP27M&Y3'
           - name: 'BROADCAST_DRIVER'
             value: 'log'
           - name: 'CACHE_DRIVER'
@@ -155,9 +157,9 @@ properties:
           - name: 'AZURE_STORAGE_CONTAINER'
             value: 'mysgs-thumbnails'
           - name: 'PM_SEARCH_IMAGE_ENDPOINT'
-            value: 'http://4.236.138.222:5000/search/'
+            value: 'https://elastic-search.kindgrass-c3eef62a.eastus.azurecontainerapps.io/search/'
           - name: 'PM_SEARCH_TEXT_ENDPOINT'
-            value: 'http://4.236.138.222:5000/textsearch/'
+            value: 'https://elastic-search.kindgrass-c3eef62a.eastus.azurecontainerapps.io/textsearch/'
           - name: 'AUTOCOMPLETE_SUGGESTER'
             value: 'https://autocomplete-ai.kindgrass-c3eef62a.eastus.azurecontainerapps.io/suggest'
         resources:
@@ -191,15 +193,15 @@ properties:
           - name: 'DB_CONNECTION'
             value: 'sqlsrv'
           - name: 'DB_HOST'
-            value: 'sgsdagobah.database.windows.net'
+            value: 'sgscoaisearchclient.database.windows.net'
           - name: 'DB_PORT'
             value: '1433'
           - name: 'DB_DATABASE'
-            value: 'ai_search'
+            value: 'ai_search_prod'
           - name: 'DB_USERNAME'
-            secureValue: 'DagobahAdmin'
+            secureValue: 'SearchAdmin'
           - name: 'DB_PASSWORD'
-            secureValue: 'd@G0b@hAd1n'
+            secureValue: '8n@5*7s5DP27M&Y3'
           - name: 'BROADCAST_DRIVER'
             value: 'log'
           - name: 'CACHE_DRIVER'
@@ -231,9 +233,9 @@ properties:
           - name: 'AZURE_STORAGE_CONTAINER'
             value: 'mysgs-thumbnails'
           - name: 'PM_SEARCH_IMAGE_ENDPOINT'
-            value: 'http://4.236.138.222:5000/search/'
+            value: 'https://elastic-search.kindgrass-c3eef62a.eastus.azurecontainerapps.io/search/'
           - name: 'PM_SEARCH_TEXT_ENDPOINT'
-            value: 'http://4.236.138.222:5000/textsearch/'
+            value: 'https://elastic-search.kindgrass-c3eef62a.eastus.azurecontainerapps.io/textsearch/'
           - name: 'AUTOCOMPLETE_SUGGESTER'
             value: 'https://autocomplete-ai.kindgrass-c3eef62a.eastus.azurecontainerapps.io/suggest'
         resources:
