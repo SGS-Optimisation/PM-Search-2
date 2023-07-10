@@ -71,7 +71,13 @@ class TextSearchCreationService
         ];
 
         if(count($this->advanced_fields) > 0) {
-            $search_data['fields'] = $this->advanced_fields;
+            //will add if condition here
+            $search_data['searchparameters']['advanced_search'] = 'N';
+            foreach ($this->advanced_fields as $term) {
+                $search_data['textsearchstrings'][] = $term;
+            }
+            //else part
+            //$search_data['fields'] = $this->advanced_fields;
         }
 
         $working_data = [
@@ -126,59 +132,5 @@ class TextSearchCreationService
             logger("search_strings: " . json_encode($segment));
         }
     }
-
-    protected function convertAdvancedFields()
-    {
-        $query = $this->input_string;
-
-        if (!is_array($query)) {
-            $query = explode(',', $query);
-        }
-        if (str_contains($query, ':')) {
-            /*$query = array_diff($query, array($segment));
-            $segment = explode(':', $segment);
-            $segment = array_push($query, $segment[1]);*/
-            $segment = explode(':', $query);
-            $segment = $segment[1];
-        }
-
-        foreach ($query as $segment) {
-            $segment = trim($segment);
-            /*if (str_contains($segment, ':')) {
-                /*$query = array_diff($query, array($segment));
-                $segment = explode(':', $segment);
-                $segment = array_push($query, $segment[1]);*/
-            /*$segment = explode(':', $segment);
-            $segment = $segment[1];
-        }*/ //this was working
-            if (preg_match('/^(\w+):(.*)$/', $segment, $matches)) {
-
-                logger('matches: '. json_encode($matches));
-                //matches: ["variety:  SUGAR","variety","  SUGAR"]
-
-                $field_config = Arr::where(config('pm-search.advanced_search'), function ($config, $key) use ($matches) {
-                    return $config['key'] === $matches[1];
-                });
-                $field = array_key_first($field_config);
-
-                $value = $matches[2];
-
-                if (config('pm-search.advanced_search')[$field]['type'] === 'date') {
-                    $dates = explode('>', $value);
-                    $value = json_encode([
-                        Carbon::parse($dates[0])->toISOString(),
-                        Carbon::parse($dates[1])->toISOString(),
-                    ]);
-                }
-
-                $this->advanced_fields[$field] = $value;
-
-            } else {
-                $this->search_strings[] = $segment;
-            }
-        }
-        logger("search_strings: " . json_encode($segment));
-    }
-
 
 }
