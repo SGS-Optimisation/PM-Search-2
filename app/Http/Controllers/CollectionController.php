@@ -180,7 +180,7 @@ class CollectionController extends Controller
     {
         logger('updating collection ' . $collection->name);
         $request->validate([
-            'filters' => 'required',
+            'filters' => 'nullable|array',
         ]);
 
         $collection->update(['filters' => $request->filters]);

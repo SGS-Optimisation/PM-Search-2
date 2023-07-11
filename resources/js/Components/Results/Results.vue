@@ -93,7 +93,6 @@ onMounted(() => {
 
     //Are there saved filters?
     if (props.savedFilters) {
-        //filters.value = props.savedFilters;
         // enabled proper taxonomy, in user preferences?
         advancedFiltersStore.selectedTaxonomy = props.savedFilters.selectedTaxonomy;
     } else {

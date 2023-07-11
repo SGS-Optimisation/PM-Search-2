@@ -61,14 +61,25 @@ watch(
     () => filters,
     (newValue, oldValue) => {
         console.log('generating filtered search options because of filters watcher');
-        filteredSearchOptions.value = getFilterOptions();
-
-        if (!allSearchOptions.value || Object.keys(allSearchOptions.value).length === 0) {
-            allSearchOptions.value = filteredSearchOptions.value;
-        }
+        popuplateSearchOptions()
     },
     {deep: true}
 )
+
+watch(
+    () => filteredSearchData.value,
+    (newValue, oldValue) => {
+        popuplateSearchOptions()
+    },
+)
+
+function popuplateSearchOptions() {
+    filteredSearchOptions.value = getFilterOptions();
+
+    if (!allSearchOptions.value || Object.keys(allSearchOptions.value).length === 0) {
+        allSearchOptions.value = filteredSearchOptions.value;
+    }
+}
 
 const totalResults = computed(() => {
     return report.length;
@@ -109,7 +120,6 @@ function updateSelectedTaxonomies(taxonomies) {
 }
 
 function getFilterOptions() {
-    console.log('filtering options');
     var options = {};
 
     for (const i in filteredSearchData.value) {
