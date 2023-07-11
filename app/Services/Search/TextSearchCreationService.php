@@ -62,7 +62,6 @@ class TextSearchCreationService
         }
 
         $this->extractAdvancedFields();
-        //$this->convertAdvancedFields();
 
         $search_data = [
             'textsearchstrings' => $this->search_strings,
