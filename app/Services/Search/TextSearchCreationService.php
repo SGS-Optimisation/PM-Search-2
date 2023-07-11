@@ -71,13 +71,7 @@ class TextSearchCreationService
         ];
 
         if(count($this->advanced_fields) > 0) {
-            //will add if condition here
-            $search_data['searchparameters']['advanced_search'] = 'N';
-            foreach ($this->advanced_fields as $term) {
-                $search_data['textsearchstrings'][] = $term;
-            }
-            //else part
-            //$search_data['fields'] = $this->advanced_fields;
+            $search_data['fields'] = $this->advanced_fields;
         }
 
         $working_data = [

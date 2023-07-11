@@ -36,12 +36,19 @@ class TextSearchWebService
         if ($this->search_string instanceof Searchable) {
             $data = $this->search_string->search_data;
 
-            if (isset($data->fields->printer_name)) {
+            foreach ($data->fields as $key => $value) {
+                $data->textsearchstrings[] = trim($value);
+            }
+            $data->searchparameters->advanced_search= 'N';
+            $data->fields = array();
+
+            //commenting this part until fixed from backend
+            /*if (isset($data->fields->printer_name)) {
                 $data->fields->customer_name = $data->fields->printer_name;
                 $data->fields->customer_type = 'Printer';
 
                 unset($data->fields->printer_name);
-            }
+            }*/
 
         } else {
             $data = [
@@ -55,14 +62,15 @@ class TextSearchWebService
 
                 $parsed_fields = $this->fields;
 
+                //commenting this part until fixed from backend
                 // custom behavior for printer name
-                if (isset($parsed_fields['printer_name'])) {
+                /*if (isset($parsed_fields['printer_name'])) {
                     logger('found printer name: ' . $parsed_fields['printer_name']);
                     $parsed_fields['customer_name'] = $parsed_fields['printer_name'];
                     $parsed_fields['customer_type'] = 'Printer';
 
                     unset($parsed_fields['printer_name']);
-                }
+                }*/
 
                 $data['searchparameters']['fields'] = $parsed_fields;
             }
