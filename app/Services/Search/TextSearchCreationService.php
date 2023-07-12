@@ -122,8 +122,8 @@ class TextSearchCreationService
             } else {
                 $this->search_strings[] = $segment;
             }
+            logger("search_strings: " . json_encode($segment));
         }
     }
-
 
 }
